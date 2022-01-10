@@ -15,15 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
+
 from django.conf import settings
 from django.conf.urls.static import static
-def home(request):
-    return HttpResponse("Hello, world. This is a django boilerplate!")
+from accounts.views import Home
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
-     path("", home, name="home"), 
+    path("anime/", include("anime.urls"), name="anime"), 
+     path("", Home.as_view(), name="home"), 
+
+     #path('anime/',include("anime.urls"))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
