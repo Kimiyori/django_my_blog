@@ -1,12 +1,13 @@
 from django.db import models
 import uuid 
 from django.contrib.auth import get_user_model
-
+from django.urls import reverse
 # Create your models here.
 
 class Studio(models.Model):
     studio = models.CharField(max_length=100,null=True,blank=True)
     image=models.ImageField(upload_to='studio_pic/',blank=True)
+    slug = models.SlugField(max_length=250,default='')
     class Meta:
         ordering = ('-studio',)
     def __str__(self):
@@ -15,6 +16,7 @@ class Studio(models.Model):
 
 class Type(models.Model):
     type = models.CharField(max_length=100,null=True,blank=True)
+    slug = models.SlugField(max_length=250,default='')
     class Meta:
         ordering = ('-type',)
     def __str__(self):
@@ -22,6 +24,7 @@ class Type(models.Model):
 
 class Demographic(models.Model):
     demographic=models.CharField(max_length=100,null=True,blank=True)
+    slug = models.SlugField(max_length=250,default='')
     class Meta:
         ordering = ('-demographic',)
     def __str__(self):
@@ -29,10 +32,13 @@ class Demographic(models.Model):
 
 class Genre(models.Model):
     genres=models.CharField(max_length=100,null=True,blank=True)
+    slug = models.SlugField(max_length=250,default='')
     class Meta:
         ordering = ('-genres',)
     def __str__(self):
         return self.genres
+    def get_absolute_url(self):
+        return reverse('anime_list_genre', args=[str(self.slug)])
 
 class Anime(models.Model):
     id = models.UUIDField(
