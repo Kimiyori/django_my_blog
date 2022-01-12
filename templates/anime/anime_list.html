@@ -1,15 +1,32 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
-{% block title %}Home{% endblock title %}
+{% block title %}Anime{% endblock title %}
 {% block content %}
 <h1><a href="{% url 'anime_list' %}">Anime</a></h1>
 {% for anime in anime_list %}
-<div>
-    {% thumbnail anime.image "200x200" format="PNG" as im  %}
-        <img class="bookcover" src="{{  im.url }}" alt="{{ anime.title }}">
-    {% endthumbnail %}
+<div class='flex-glow'>
     <h2><a href="{% url 'anime_detail' anime.pk %}">{{ anime.title }}</a></h2>
+    {% thumbnail anime.image "200x200" format="PNG" as im  %}
+        <img class="animeimg" src="{{  im.url }}" alt="{{ anime.title }}">
+    {% endthumbnail %}
 </div>
 {% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 {% endblock content %}

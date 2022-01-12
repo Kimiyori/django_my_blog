@@ -23,8 +23,8 @@ from accounts.views import Home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("anime/", include("anime.urls"), name="anime"), 
      path("", Home.as_view(), name="home"), 
+     path("", include("kind.urls"), name="kind"), 
 
      #path('anime/',include("anime.urls"))
 ]

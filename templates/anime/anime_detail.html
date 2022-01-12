@@ -5,15 +5,19 @@
 <h1><a href="{% url 'anime_list' %}">Anime</a></h1>
 
 <div>
-    {% thumbnail anime.image "200x200" format="PNG" as im  %}
-        <img class="bookcover" src="{{  im.url }}" alt="{{ anime.title }}">
+
+    {% thumbnail anime.image "300" crop='center' format="PNG" as small  %}
+    <a href="{{ anime.image.url }}">
+        <img src="{{ small.url }}" alt="{{ anime.title }}">
+    </a>
     {% endthumbnail %}
+
     <h2><a href="">{{ anime.title }}</a></h2>
     {% for genre in anime.genres.all %}
-    <h2><a href="">{{ genre }}</a></h2>
+    <h2><a href="{% url 'anime_list_genre' genre.slug %}">{{ genre }}</a></h2>
     {% endfor %}
     {% for studio in anime.studio.all %}
-    <h2><a href="">{{ studio.studio }}</a></h2>
+    <h2><a href="{% url 'studio_detail_list' studio.slug %}">{{ studio.studio }}</a></h2>
     {% endfor %}
     <h2><a href="">{{ anime.type }}</a></h2>
     <h2><a href="">{{ anime.episodes }}</a></h2>

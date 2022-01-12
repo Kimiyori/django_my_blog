@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}Anime{% endblock title %}
+{% block content %}
+<h1><a href="">Anime</a></h1>
+{% for item in list.kind.all %}
+<div class='flex-glow'>
+    <h2><a href="">{{ item.title }}</a></h2>
+    {% thumbnail item.image "200x200" format="PNG" as im  %}
+        <img class="animeimg" src="{{  im.url }}" alt="{{ item.title }}">
+    {% endthumbnail %}
+</div>
+{% endfor %}
+
+
+{% endblock content %}

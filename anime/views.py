@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView,DetailView
+"""from django.views.generic import ListView,DetailView
 from anime.models import Genre, Studio,Anime,Demographic
 # Create your views here.
 class StudiosList(ListView):
@@ -9,6 +9,7 @@ class StudiosList(ListView):
 
 class AnimeList(ListView):
     model = Anime
+    paginate_by=1 
     template_name='anime/anime_list.html'
     context_object_name = 'anime_list'
 
@@ -16,6 +17,7 @@ class AnimeDetail(DetailView):
     model= Anime
     template_name='anime/anime_detail.html'
     context_object_name = 'anime'
+    
 
 class GenreAnimeList(DetailView):
     model=Genre
@@ -31,3 +33,5 @@ class StudiosDetailList(DetailView):
     model=Studio
     template_name='anime/studios/detail.html'
     context_object_name = 'studio'
+"""
+
