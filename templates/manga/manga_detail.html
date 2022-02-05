@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+<h1><a href="{% url 'manga_list' %}">Manga</a></h1>
+
+<div>
+
+    {% thumbnail manga.image "300" crop='center' format="PNG" as small  %}
+    <a href="{{ manga.image.url }}">
+        <img src="{{ small.url }}" alt="{{ manga.title }}">
+    </a>
+    {% endthumbnail %}
+
+    <h2><a href="">{{ manga.title }}</a></h2>
+    {% for genre in manga.genres.all %}
+    <h2><a href="{% url 'genre_list' genre.slug %}">{{ genre }}</a></h2>
+    {% endfor %}
+    {% for name in manga.publisher.all %}
+    <h2><a href="">{{ name }}</a></h2>
+    {% endfor %}
+    <h2><a href="">{{ manga.type }}</a></h2>
+    <h2><a href="">{{ manga.chapters }}</a></h2>
+</div>
+
+
+{% endblock content %}

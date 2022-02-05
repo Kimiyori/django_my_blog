@@ -43,14 +43,10 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "allauth.socialaccount",
     "anime.apps.AnimeConfig",
+    "manga.apps.MangaConfig",
     'sorl.thumbnail',
     "post.apps.PostConfig",
-    "genre.apps.GenreConfig",
-    "studio.apps.StudioConfig",
-    "demographic.apps.DemographicConfig",
-    "type.apps.TypeConfig",
-    "item.apps.ItemConfig",
-    "kind.apps.KindConfig"
+
 ]
 
 MIDDLEWARE = [

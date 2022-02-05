@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.urls import reverse
-from genre.models import Genre
+"""from genre.models import Genre
 from type.models import Type
 from demographic.models import Demographic
 from studio.models import Studio
@@ -35,3 +35,4 @@ class Item(models.Model):
 
     def __str__(self):
         return self.title
+"""

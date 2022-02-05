@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}Anime{% endblock title %}
+{% block content %}
+<h1><a href="">Manga</a></h1>
+{% for manga in list.manga.all %}
+<div class='flex-glow'>
+    <h2><a href="">{{ manga.title }}</a></h2>
+    {% thumbnail manga.image "400x400" format="PNG" as im  %}
+        <img class="animeimg" src="{{  im.url }}" alt="{{ manga.title }}">
+    {% endthumbnail %}
+
+</div>
+{% endfor %}
+
+{% endblock content %}

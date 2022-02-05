@@ -1,41 +1,47 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link href="{% static "css/base.css" %}" rel="stylesheet">
+  <link href='{% static "css/base.css" %}' rel="stylesheet">
 </head>
+
 <body>
   <div id="header">
     <span class="logo">My blog</span>
-    {% if request.user.is_authenticated %}
     <ul class="menu">
-      <li {% if section == "home" %}class="selected"{% endif %}>
-        <a href="">Home</a>
+      <li {% if section == "blog" %}class="selected" {% endif %}>
+        <a href="">Blog</a>
       </li>
-      <li {% if section == "anime" %}class="selected"{% endif %}>
+      <li {% if section == "anime" %}class="selected" {% endif %}>
         <a href="">Anime</a>
       </li>
-      <li {% if section == "anime" %}class="selected"{% endif %}>
-        <a href="">Studios</a>
+      <li {% if section == "manga" %}class="selected" {% endif %}>
+        <a href="">Manga</a>
       </li>
     </ul>
-  {% endif %}
-  <span class="user">
-    {% if request.user.is_authenticated %}
-      Hello {{ request.user  }},
-      <a href="{% url "account_logout" %}">Logout</a>
-    {% else %}
-      <a href="{% url "account_login" %}">Log-in</a>
-    {% endif %}
-  </span>
+    <span class="user">
+      {% if request.user.is_authenticated %}
+      Hello {{ request.user }},
+      <a href='{% url "account_logout" %}'>Logout</a>
+      {% else %}
+      <a href='{% url "account_login" %}'>Log-in</a>
+      {% endif %}
+    </span>
+   <!--<form class="form-inline mt-2 mt-md-0" action="{% url 'manga_list' %}" method="get">
+      <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+    </form>
+    -->
+
   </div>
 
- 
+
 
   <div id="content">
     {% block content %}
     {% endblock %}
   </div>
 </body>
+
 </html>

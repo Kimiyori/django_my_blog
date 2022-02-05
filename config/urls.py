@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
      path("", Home.as_view(), name="home"), 
-     path("", include("kind.urls"), name="kind"), 
+    path('manga/',include('manga.urls'),name='manga')
 
      #path('anime/',include("anime.urls"))
 ]
