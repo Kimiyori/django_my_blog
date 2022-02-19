@@ -1,26 +1,127 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load thumbnail %}
-{% block title %}Home{% endblock title %}
+{% block title %}{{ manga.title }}{% endblock title %}
 {% block content %}
-<h1><a href="{% url 'manga_list' %}">Manga</a></h1>
 
-<div>
 
-    {% thumbnail manga.image "300" crop='center' format="PNG" as small  %}
-    <a href="{{ manga.image.url }}">
-        <img src="{{ small.url }}" alt="{{ manga.title }}">
-    </a>
-    {% endthumbnail %}
-
-    <h2><a href="">{{ manga.title }}</a></h2>
-    {% for genre in manga.genres.all %}
-    <h2><a href="{% url 'genre_list' genre.slug %}">{{ genre }}</a></h2>
-    {% endfor %}
-    {% for name in manga.publisher.all %}
-    <h2><a href="">{{ name }}</a></h2>
-    {% endfor %}
-    <h2><a href="">{{ manga.type }}</a></h2>
-    <h2><a href="">{{ manga.chapters }}</a></h2>
+<div id='manga-detail'>
+    <div class='main-info'>
+        <div class="upper-image">
+            {% if manga.image %}
+            <img src="{{ manga.image.url }}" alt="{{ manga.title }}">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+            {% endif %}
+        </div>
+        <div class="title-block">
+            <div class="title-block2">
+                <div class="main-image">
+                    {% if manga.image %}
+                        <img class='img2' src="{{ manga.image.url }}" alt="{{ manga.title }}">
+                        {% else %}
+                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+                        {% endif %}
+                </div>
+                <div class='title'>
+                    {% with manga.item as name %}
+                    <h4 class="main-title">{{name.original_name }}</h4>
+                    <h2>{{name.russian_name }}</h2>
+                    <h1>{{name.english_name }}</h1>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="info">
+        {% if manga.author %}
+        <div class="items">
+            <div class="name">Автор</div>
+            <div class="item-list">
+                <a class='item' href=""><span>{{ manga.author }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.type %}
+        <div class="items">
+            <div class="name">Тип</div>
+            <div class="item-list">
+                <a class='item' href=""><span>{{ manga.type }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.demographic %}
+        <div class="items">
+            <div class="name">Демография</div>
+            <div class="item-list">
+                <a class='item' href=""><span>{{ manga.demographic }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.publisher.all %}
+        <div class="items">
+            <div class="name">Издатель</div>
+            <div class="item-list">
+                {% for name in manga.publisher.all %}
+                <a class='item' href="">
+                    <span>
+                        {{ name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.magazine.all %}
+        <div class="items">
+            <div class="name">Журнал</div>
+            <div class="item-list">
+                {% for name in manga.magazine.all %}
+                <a class='item' href=""><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.genres.all %}
+        <div class="items">
+            <div class="name">Жанры</div>
+            <div class="item-list">
+                {% for name in manga.genres.all %}
+                <a class='item' href=""><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.themes.all %}
+        <div class="items">
+            <div class="name">Темы</div>
+            <div class="item-list">
+                {% for name in manga.themes.all %}
+                <a class='item' href=""><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if manga.volumes or manga.chapters %}
+        <div class="items">
+            <div class="name">Издано</div>
+            <div class="item-list">
+                <a class='item' href=""><span>{% if manga.volumes  %}
+                    {{ manga.volumes}} томов 
+                    {% endif %}
+                    {% if manga.chapters %}
+                    {{ manga.chapters}} главы
+                    {% endif %}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="desc">
+        <div class="name">Описание</div>
+        <p>{{manga.get_desc|linebreaks}}</p>
+  
+    </div>
 </div>
 
 

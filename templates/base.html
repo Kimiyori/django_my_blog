@@ -15,10 +15,10 @@
         <a href="">Blog</a>
       </li>
       <li {% if section == "anime" %}class="selected" {% endif %}>
-        <a href="">Anime</a>
+        <a href="{% url 'anime_list'  %}">Anime</a>
       </li>
       <li {% if section == "manga" %}class="selected" {% endif %}>
-        <a href="">Manga</a>
+        <a href="{% url 'manga_list'  %}">Manga</a>
       </li>
     </ul>
     <span class="user">
@@ -33,7 +33,6 @@
       <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
     </form>
     -->
-
   </div>
 
 

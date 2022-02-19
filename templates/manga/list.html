@@ -1,18 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load thumbnail %}
 {% block title %}Anime{% endblock title %}
 {% block content %}
-<h1><a href="">Manga</a></h1>
+<h1><a href="{% url 'manga_list' %}">Manga</a></h1>
+<hr>
 <div id='manga-list'>
 {% for manga in list %}
-<div class='manga-item'>
-    <a href="{% url 'manga_detail' manga.pk %}">
-    {% thumbnail manga.image "400x400" format="PNG" as im  %}
-        <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title }}">
-        <p>{{ manga.title }}</p>
+<div class='manga-item'> 
+    <a class='title' href="{% url 'manga_detail' manga.pk %}">
+    <span>{{ manga.title }}</span>
     </a>
-    {% endthumbnail %}
+    <div class='cover'>
+    <a class='test' href="{% url 'manga_detail' manga.pk %}">
+        {% if manga.image %}
+        {% thumbnail manga.image "600x600" format="PNG" as im  %}
+        <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title }}">
+        {% endthumbnail %}
+        {% else %}
+        <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+        {% endif %}
+    </a>
 </div>
+</div>
+
 {% endfor %}
 </div>
 {% endblock content %}

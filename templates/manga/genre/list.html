@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% block title %}Anime{% endblock title %}
 {% block content %}
-<h1><a href="">Manga</a></h1>
+<h1><a href="{% url 'manga_list' %}">Manga</a></h1>
 {% for manga in list.manga.all %}
 <div class='flex-glow'>
     <h2><a href="">{{ manga.title }}</a></h2>

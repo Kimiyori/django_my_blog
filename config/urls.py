@@ -24,9 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
      path("", Home.as_view(), name="home"), 
-    path('manga/',include('manga.urls'),name='manga')
-
-     #path('anime/',include("anime.urls"))
+    path('manga/',include('manga.urls'),name='manga'),
+    path('anime/',include('anime.urls'),name='anime'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
