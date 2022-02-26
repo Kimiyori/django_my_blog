@@ -9,6 +9,9 @@ psycopg2-binary = "*"
 django-allauth = "*"
 pillow = "*"
 sorl-thumbnail = "*"
+djangorestframework = "*"
+drf-writable-nested = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

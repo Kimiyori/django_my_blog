@@ -1,7 +1,8 @@
 from django.db import models
 import uuid
 from django.urls import reverse
-
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 
 
@@ -123,4 +124,11 @@ class Title(models.Model):
     english_name = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return self.original_name
+        if self.original_name:
+            return str(self.original_name)
+        elif self.english_name:
+            return str(self.english_name)
+        elif self.russian_name:
+            return str(self.russian_name)
+        else:
+            return 'Not name'

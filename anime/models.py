@@ -47,15 +47,16 @@ class Anime(models.Model):
     themes = models.ManyToManyField(
         Theme, related_name='anime', null=True, blank=True)
     image = models.ImageField(upload_to=image_path, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True,  blank=True)
 
 
 
     def __str__(self):
         try:
-            return self.item.original_name
+            return str(self.item.original_name)
         except Exception:
             return str(self.id) 
+            
     def get_desc(self):
         if self.description:
             return self.description

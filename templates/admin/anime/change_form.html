@@ -5,7 +5,8 @@
 {{ block.super }}
         <script>
                 const object = {
-                        pk: '{{manga.first.author}}',
+                        pk: '{{original.pk}}',
+                        csrf: '{{ csrf_token }}'
                 };
         </script>
 {% endblock %}

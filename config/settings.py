@@ -45,13 +45,17 @@ INSTALLED_APPS = [
     "anime.apps.AnimeConfig",
     "manga.apps.MangaConfig",
     'sorl.thumbnail',
+    'rest_framework', #
+    'api.apps.ApiConfig',
     "post.apps.PostConfig",
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -163,3 +167,14 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 AUTH_USER_MODEL = "accounts.CustomUser"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+CORS_ORIGIN_ORIGINS = (
+'http://localhost:3000',
+'http://localhost:8000',
+'http://127.0.0.1:8000',
+)
