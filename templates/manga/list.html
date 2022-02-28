@@ -9,16 +9,16 @@
 {% for manga in list %}
 <div class='manga-item'> 
     <a class='title' href="{% url 'manga_detail' manga.pk %}">
-    <span>{{ manga.title }}</span>
+    <span>{{ manga.title.original_name }}</span>
     </a>
     <div class='cover'>
     <a class='test' href="{% url 'manga_detail' manga.pk %}">
         {% if manga.image %}
         {% thumbnail manga.image "600x600" format="PNG" as im  %}
-        <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title }}">
+        <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title.original_name }}">
         {% endthumbnail %}
         {% else %}
-        <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+        <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ manga.title.original_name }}">
         {% endif %}
     </a>
 </div>

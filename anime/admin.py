@@ -6,13 +6,14 @@ from django.db import DataError
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.contrib.contenttypes.admin import  GenericStackedInline
-from manga.admin import TitleInline
+
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
-    inlines = [TitleInline]
+    autocomplete_fields=['title','source','type','author',]
+
     change_form_template = 'admin/anime/change_form.html'
 
-    def get_title_obj(self, obj):
+    """def get_title_obj(self, obj):
         return Title.objects.filter(manga=obj.source).first()
 
     def save_model(self, request, obj, form, change): 
@@ -44,12 +45,13 @@ class AnimeAdmin(admin.ModelAdmin):
             if prev_title:
                 prev_title.anime = None
                 prev_title.save()
-        super().save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)"""
 
 
 
 @admin.register(AnimeType)
 class AnimeTypeAdmin(admin.ModelAdmin):
+    search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
 
 

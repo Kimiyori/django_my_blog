@@ -1,4 +1,5 @@
-let source = document.querySelector('#id_source');
+let source = document.querySelector("#select2-id_source-container")
+console.log(source)
 let genres = document.querySelector('#id_genres');
 let themes = document.querySelector('#id_themes');
 let author = document.querySelector('#id_author');
@@ -30,6 +31,7 @@ source.addEventListener('change', function (e) {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
     }).then(data => {
+        console.log(source)
         for (item of genres.options) {
             if (data.genres.includes(item.text)) {
                 item.selected = true
@@ -77,10 +79,12 @@ source.addEventListener('change', function (e) {
             item.selected = false
             }
         author.selectedIndex = 0
+        /*
         description.value = ''
         original_name.value = ''
         english_name.value = ''
         russian_name.value = ''
+        */
     }
 
 })

@@ -2,8 +2,7 @@ from rest_framework import status,viewsets, permissions
 from anime.models import Anime
 from manga.models import Manga,Genre
 from .serializers import AnimeSerializer,MangaSerializer,GenreSerializer
-from rest_framework.decorators import action
-from rest_framework.response import Response
+
 
 class AnimeList(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,) 

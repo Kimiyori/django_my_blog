@@ -9,22 +9,22 @@
     <div class='main-info'>
         <div class="upper-image">
             {% if manga.image %}
-            <img src="{{ manga.image.url }}" alt="{{ manga.title }}">
+            <img src="{{ manga.image.url }}" alt="{{ manga.title.original_name }}">
             {% else %}
-            <img src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+            <img src="{% static 'img/no-image.png' %}" alt="{{ manga.title.original_name }}">
             {% endif %}
         </div>
         <div class="title-block">
             <div class="title-block2">
                 <div class="main-image">
                     {% if manga.image %}
-                        <img class='img2' src="{{ manga.image.url }}" alt="{{ manga.title }}">
+                        <img class='img2' src="{{ manga.image.url }}" alt="{{ manga.title.original_name }}">
                         {% else %}
-                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ manga.title.original_name }}">
                         {% endif %}
                 </div>
                 <div class='title'>
-                    {% with manga.item as name %}
+                    {% with manga.title as name %}
                     <h4 class="main-title">{{name.original_name }}</h4>
                     <h2>{{name.russian_name }}</h2>
                     <h1>{{name.english_name }}</h1>

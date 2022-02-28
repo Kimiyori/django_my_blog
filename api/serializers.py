@@ -6,7 +6,7 @@ from manga.models import Title,Manga,Author,Publisher,Demographic,MangaType,Genr
 class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
-        fields = ['anime','original_name', 'english_name', 'russian_name']
+        fields = ['original_name', 'english_name', 'russian_name']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,21 +38,16 @@ class MangaSerializer(serializers.ModelSerializer):
     magazine=serializers.StringRelatedField(many=True)
     demographic=serializers.StringRelatedField()
     type=serializers.StringRelatedField()
-    item  = TitleSerializer()
+    title  = TitleSerializer()
     class Meta:
         model = Manga
-        fields = ['id','type','author','publisher','premiere','volumes','chapters','genres','demographic','themes','image','magazine','description','item']
+        fields = ['id','title','type','author','publisher','premiere','volumes','chapters','genres','demographic','themes','image','magazine','description']
     
  
-    def update(self, instance, validated_data):
-        item_manga=validated_data.pop('item')
-        item_manga2=item_manga.get('anime')
-        instance.item.anime=item_manga2
-        instance.item.save()
-        return instance
+
 
 class AnimeSerializer(serializers.ModelSerializer):
-    item  = TitleSerializer()
+    title  = TitleSerializer()
     source=MangaSerializer()
     author=AuthorSerializer()
     genres=serializers.StringRelatedField(many=True)
@@ -62,10 +57,6 @@ class AnimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Anime
-        fields = ('id','source','type', 'author', 'studio','premiere','episodes','genres','themes','image','description','item')
+        fields = ('id','title','source','type', 'author', 'studio','premiere','episodes','genres','themes','image','description',)
 
-        def update(self, instance, validated_data):
-            source=validated_data.pop('source')
-            source_item=source.pop('item')
-            print(validated_data)
-            return instance
+

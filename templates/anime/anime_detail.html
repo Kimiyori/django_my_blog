@@ -9,22 +9,22 @@
     <div class='main-info'>
         <div class="upper-image">
             {% if anime.image %}
-            <img src="{{ anime.image.url }}" alt="{{ anime.item.original_name }}">
+            <img src="{{ anime.image.url }}" alt="{{ anime.title.original_name }}">
             {% else %}
-            <img src="{% static 'img/no-image.png' %}" alt="{{ anime.item.original_name}}">
+            <img src="{% static 'img/no-image.png' %}" alt="{{ anime.title.original_name}}">
             {% endif %}
         </div>
         <div class="title-block">
             <div class="title-block2">
                 <div class="main-image">
                     {% if anime.image %}
-                    <img class='img2' src="{{ anime.image.url }}" alt="{{  anime.item.original_name }}">
+                    <img class='img2' src="{{ anime.image.url }}" alt="{{  anime.title.original_name }}">
                     {% else %}
-                    <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{  anime.item.original_name }}">
+                    <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{  anime.title.original_name }}">
                     {% endif %}
                 </div>
                 <div class='title'>
-                    {% with anime.item as name %}
+                    {% with anime.title as name %}
                     <h4 class="main-title">{{name.original_name }}</h4>
                     <h2>{{name.russian_name }}</h2>
                     <h1>{{name.english_name }}</h1>

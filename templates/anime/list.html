@@ -9,7 +9,7 @@
 {% for anime in list %}
 <div class='manga-item'> 
     <a class='title' href="{% url 'anime_detail' anime.pk %}">
-    <span>{{ anime.item.original_name }}</span>
+    <span>{{ anime.title.original_name }}</span>
     </a>
     <div class='cover'>
     <a class='test' href="{% url 'anime_detail' anime.pk %}">

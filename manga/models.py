@@ -76,13 +76,32 @@ class Magazine(models.Model):
     def __str__(self):
         return self.name
 
+class Title(models.Model):
 
+    original_name = models.CharField(max_length=300, null=True, blank=True)
+    russian_name = models.CharField(max_length=300, null=True, blank=True)
+    english_name = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        if self.original_name:
+            return str(self.original_name)
+        elif self.english_name:
+            return str(self.english_name)
+        elif self.russian_name:
+            return str(self.russian_name)
+        else:
+            return 'Not name'
+
+def image_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'anime/{0}/{1}'.format(instance.title.original_name, filename)
 class Manga(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    title = models.CharField(max_length=500)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE,
+                             related_name='manga')
 
     type = models.ForeignKey(MangaType, on_delete=models.CASCADE,
                              related_name='manga', null=True, blank=True)
@@ -99,7 +118,7 @@ class Manga(models.Model):
         Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
     themes = models.ManyToManyField(
         Theme, related_name='manga', blank=True)
-    image = models.ImageField(upload_to='manga/', blank=True)
+    image = models.ImageField(upload_to=image_path, blank=True)
     magazine = models.ManyToManyField(
         Magazine, related_name='manga', blank=True)
     description = models.TextField( blank=True)
@@ -107,28 +126,17 @@ class Manga(models.Model):
         ordering = ('-title',)
 
     def __str__(self):
-        return self.title
+        if self.title.original_name:
+            return str(self.title.original_name)
+        elif self.title.english_name:
+            return str(self.title.english_name)
+        elif self.title.russian_name:
+            return str(self.title.russian_name)
+        else:
+            return 'Not name'
     def get_desc(self):
         if self.description:
             return self.description
         else:
             return "Нет описания"
 
-class Title(models.Model):
-    manga = models.OneToOneField(Manga, on_delete=models.CASCADE,
-                                 related_name='item', null=True, blank=True)
-    anime = models.OneToOneField('anime.Anime', on_delete=models.CASCADE,
-                                 related_name='item', null=True, blank=True)
-    original_name = models.CharField(max_length=300, null=True, blank=True)
-    russian_name = models.CharField(max_length=300, null=True, blank=True)
-    english_name = models.CharField(max_length=300, null=True, blank=True)
-
-    def __str__(self):
-        if self.original_name:
-            return str(self.original_name)
-        elif self.english_name:
-            return str(self.english_name)
-        elif self.russian_name:
-            return str(self.russian_name)
-        else:
-            return 'Not name'

@@ -27,14 +27,13 @@ class MangaTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Title)
 class TitleAdmin(admin.ModelAdmin):
+    search_fields = ['original_name','english_name','russian_name']
     pass
-class TitleInline(admin.StackedInline):
-    model = Title
-    fields=['original_name','english_name','russian_name']
+
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
-    inlines = [TitleInline]
-    autocomplete_fields=['type','author','demographic']
+    search_fields = ['title']
+    autocomplete_fields=['title','type','author','demographic']
     
 
 @admin.register(Magazine)
