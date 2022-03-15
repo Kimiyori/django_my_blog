@@ -12,6 +12,8 @@ sorl-thumbnail = "*"
 djangorestframework = "*"
 drf-writable-nested = "*"
 django-cors-headers = "*"
+django-cleanup = "*"
+django-embed-video = "*"
 
 [dev-packages]
 

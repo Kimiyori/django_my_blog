@@ -3,7 +3,7 @@
 {% load thumbnail %}
 {% block title %}Anime{% endblock title %}
 {% block content %}
-<h1><a href="{% url 'manga_list' %}">Manga</a></h1>
+<h1 id="name-list"><a href="{% url 'manga_list' %}">Manga</a></h1>
 <hr>
 <div id='manga-list'>
 {% for manga in list %}

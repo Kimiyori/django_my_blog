@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Blog{% endblock title %}
+{% block content %}
+
+<div class="post-wrap">
+    {% for post in list %}
+    <div class='post-item'>
+        <div class="shadow">
+            <a class='title' href="{% url 'post_detail' post.pk %}">
+                <span>{{ post.publish|date:" d M Y" }}</span>
+                <span>{{ post.title }}</span>
+            </a>
+        </div>
+        <div class='cover'>
+            <a class='test' href="{% url 'post_detail' post.pk %}">
+                {% if post.main_image %}
+                {% thumbnail post.main_image "1500" format="PNG" as im %}
+                <img class="mangaimg" src="{{  im.url }}" alt="{{ post.title}}">
+                {% endthumbnail %}
+                {% endif %}
+            </a>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% endblock content %}

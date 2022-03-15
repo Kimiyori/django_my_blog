@@ -10,7 +10,7 @@ from django.contrib.contenttypes.admin import  GenericStackedInline
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
     autocomplete_fields=['title','source','type','author',]
-
+    search_fields=['title']
     change_form_template = 'admin/anime/change_form.html'
 
     """def get_title_obj(self, obj):

@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     "post.apps.PostConfig",
     'corsheaders',
-
+'django_cleanup.apps.CleanupConfig',
+'embed_video',
 ]
 
 MIDDLEWARE = [
@@ -173,7 +174,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
-CORS_ORIGIN_ORIGINS = (
+CORS_ORIGIN_ORIGINS  = (
 'http://localhost:3000',
 'http://localhost:8000',
 'http://127.0.0.1:8000',

@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Coda&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap');
 
 body {
 
-    font-family:'Coda', sans-serif;
+    font-family:'Playfair Display', sans-serif;
 }
 
 #header {
@@ -57,9 +57,51 @@ body {
     max-width: 1200px;
     margin:0 auto;
     box-shadow: -12px 0 5px -10px rgba(0, 0, 0,0.4), 12px 0 5px -10px rgba(0, 0, 0,0.4);
-    height: 100vh;
     position:relative;
+    min-height: 100vh;
   }
+
+.detail-post {
+     display:block;
+}
+.detail-post * {
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.detail-post h2 {
+    padding:20px 20px 20px;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+}
+.detail-post .post-img{
+    overflow: hidden;
+
+ } 
+.detail-post  img{
+    display:block;
+    text-align: center;  
+    max-width:100%;
+    height: 50%;
+    max-height:800px;
+
+
+    object-fit: cover;
+    object-position: center center; 
+}
+.detail-post  p{
+    width:80%;
+
+    font-size:20px;
+}
+
+#content #name-list {
+    display: block;
+    font-size: 2em;
+    margin: 0px;
+    padding: 20px 20px 20px 20px;
+    font-weight: bold;
+}
 
 #manga-detail {
     margin-top: 0px;
@@ -128,7 +170,7 @@ body {
     margin-bottom: 40px;
     padding-top: 12px;
     padding-left: 30px;
-    padding-right: 30px;
+    padding-right: 30яpx;
  
     flex-basis: auto;
     flex-direction: row;
@@ -241,6 +283,54 @@ body {
  .desc .name{
     font-size: 30px;
  }
+
+.post-wrap {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    position: relative;
+}
+ .post-item{
+     display:block;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    position: relative;
+    margin:10px;
+    border-radius: 30px;
+    height: 500px;
+
+ }
+ .post-item .shadow{
+    background: linear-gradient(180deg,transparent,rgba(0,0,0,.7));
+    width:100%;
+    position: absolute;
+    bottom: 0px;
+    padding: 2em 0.5rem 0.5rem;
+ }
+ .post-item .title{
+    padding: 2rem 0.5rem 0.5rem;
+
+    text-shadow: 0 0 3px rgb(7, 7, 7);
+    color:white;
+    font-size: 200%;
+    text-decoration: none;
+
+
+ }
+.post-item .cover{
+    overflow: hidden;
+
+ } 
+.post-item .cover img{
+    display: block;
+    width:100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center center;
+ } 
 #manga-list {
     display: grid;
     padding:5px;
@@ -254,7 +344,7 @@ body {
     margin:5px;
     padding-bottom: 145%;
 }
-#manga-list .manga-item .cover{
+#manga-list .manga-item #cover{
     width: 100%;
     overflow: hidden;
     border-radius: 0.25rem;

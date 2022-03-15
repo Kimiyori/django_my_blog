@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}{{ post.title }}{% endblock title %}
+{% block content %}
+
+
+<div class="detail-post">
+    <h2>{{ post.title}} </h2>
+{% for block in post.contents.all %}
+    {{block.item.render}}
+{% endfor %}
+</div>
+{% endblock content %}
+<script>
+
+
+</script>
+{% block domready %}
+content=document.querySelector('#content')
+const textnode = document.createTextNode("Water");
+{% for block in post.contents.all %}
+   content.appendChild({{block.item.render}})
+    console.log({{block.type}})
+{% endfor %}
+console.log('333')
+ {% endblock %}

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a8c2d9da976909311464eec1f4675b8c28ee9eb4befb350e3057ad0fcbc3d2d9"
+            "sha256": "f9d695ae27e87e6364b57f352821b3b6446379b413e79cd5007cdd682b4b6820"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -142,6 +142,14 @@
             "index": "pypi",
             "version": "==0.49.0"
         },
+        "django-cleanup": {
+            "hashes": [
+                "sha256:922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a",
+                "sha256:997feab3b1f7a2e84f71c29e83b1d664459ec0d4b1924977b1fa25b5babb8703"
+            ],
+            "index": "pypi",
+            "version": "==6.0.0"
+        },
         "django-cors-headers": {
             "hashes": [
                 "sha256:a22be2befd4069c4fc174f11cf067351df5c061a3a5f94a01650b4e928b0372b",
@@ -149,6 +157,14 @@
             ],
             "index": "pypi",
             "version": "==3.11.0"
+        },
+        "django-embed-video": {
+            "hashes": [
+                "sha256:3ab98f69e47bf5f424ac716b0ccd27c9573806b7fc58fd36ea8c21f1ab55f305",
+                "sha256:fbf7c905ef6b38cf39e5d238fae610b3fa6b54afa456a204e41b50f9eb5633d1"
+            ],
+            "index": "pypi",
+            "version": "==1.4.1"
         },
         "djangorestframework": {
             "hashes": [
