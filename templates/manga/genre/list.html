@@ -14,3 +14,63 @@
 {% endfor %}
 
 {% endblock content %}
+<div class="detail-post">
+    {% if instance.item.get_model_name == 'image' %}
+   <div class="post-img">
+        <img src="/media/{{contact.image.value}}">
+        </div>
+        <input type="file" name="image" accept="image/*" id="id_image">
+        {% csrf_token %}
+        <div class="content-types">
+            <a class="del"  data-id={{instance.id}}><img  src="{% static 'img/del.png' %}" ></a>
+            <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
+            <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
+            Text</a>
+            <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
+            Image</a>
+            <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
+            Video</a>
+        </div>
+    {% elif instance.item.get_model_name == 'text' %}
+    {{ contact.text}}
+    {% csrf_token %}
+    <div class="content-types">
+        <a class="del"  data-id={{instance.id}}><img  src="{% static 'img/del.png' %}" ></a>
+        <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
+        Text</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
+        Image</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
+        Video</a>
+    </div>
+    {% elif instance.item.get_model_name == 'video' %}
+    {% csrf_token %}
+    {% video contact.video.value "100% x 700" %}
+    {{ contact.video }}
+    <div class="content-types">
+        <a class="del"  data-id={{instance.id}}><img  src="{% static 'img/del.png' %}" ></a>
+        <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
+        Text</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
+        Image</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
+        Video</a>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="content-types">
+    <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
+    <a href="{% url 'module_content_create' object.id 'text' %}">
+    Text</a>
+    <a href="{% url 'module_content_create' object.id 'image' %}">
+    Image</a>
+    <a href="{% url 'module_content_create' object.id   'video' %}">
+    Video</a>
+</div>
+{% endif %}
+<p><input type="submit" value="Save content"></p>
+</form>

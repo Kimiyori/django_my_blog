@@ -70,6 +70,7 @@ class Content(models.Model):
                                                                                                         'file')})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
+
     order = OrderField(blank=True, for_fields=['post'])
     class Meta:
         ordering = ['order']
@@ -90,6 +91,9 @@ class ItemBase(models.Model):
         abstract = True
     def __str__(self):
         return f'{self.__class__.__name__} from {self.post}'
+    
+    def get_model_name(self):
+        return self._meta.model_name
     def render(self):
         return render_to_string(
         f'post/content/{self._meta.model_name}.html',
