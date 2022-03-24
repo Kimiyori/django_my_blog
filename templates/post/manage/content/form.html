@@ -11,6 +11,7 @@ Add new content
 {% endif %}
 {% endblock %}
 {% block content %}
+
 <h1>
     {% if object %}
     Edit content "{{ object }}"
@@ -19,121 +20,135 @@ Add new content
     {% endif %}
 </h1>
 <div class="module">
-    <form action="" method="post" enctype="multipart/form-data">
-        <div class="detail-post">
-        {{main.title}}
-        <div class="post-img">
-        <img src="/media/{{main.main_image.value}}" >
-        <input type="file" name="main_image" accept="image/*" id="id_main_image">
-        </div>
-        {{main.related_to}}
-        </div>
-
-        {% if form %}
-        {% for instance, contact in form.items %}
-        <div class="form">
-                {{contact.as_p}}
+    <div class="detail-post">
+    {% if form|length > 1 %}
+    {% for instance, contact in form.items %}
+    {% if instance != 'main' %}
+        {% if instance.item.get_model_name == 'image' %}
+            <div class="post-img">
+                <img src="/media/{{contact.image.value}}">
+            </div>
+            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/*" id="id_image">
                 {% csrf_token %}
-                <div class="content-types">
-                    <a class="del"  data-id={{instance.id}}><img  src="{% static 'img/del.png' %}" ></a>
-                    <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
-                    <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
-                    Text</a>
-                    <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
-                    Image</a>
-                    <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
-                    Video</a>
-                </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <div class="content-types">
-            <a class="plus"  ><img  src="{% static 'img/plus.png' %}" ></a>
-            <a href="{% url 'module_content_create' object.id 'text' %}">
-            Text</a>
-            <a href="{% url 'module_content_create' object.id 'image' %}">
-            Image</a>
-            <a href="{% url 'module_content_create' object.id   'video' %}">
-            Video</a>
-        </div>
+            </form>
+
+        {% elif instance.item.get_model_name == 'text' %}
+            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
+                {{ contact.text}}
+                {% csrf_token %}
+            </form>
+        {% elif instance.item.get_model_name == 'video' %}
+            {% video contact.video.value "100% x 700" %}
+            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
+                {{ contact.video }}
+                {% csrf_token %}
+            </form>
         {% endif %}
-        <p><input type="submit" value="Save content"></p>
+        <div class="content-types">
+            <a class="del" data-id={{instance.id}}><img src="{% static 'img/del.png' %}"></a>
+            <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+            <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
+                Text</a>
+            <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
+                Image</a>
+            <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
+                Video</a>
+        </div>
+    {% else %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {{contact.title}}
+            {% csrf_token %}
+        </form>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{contact.main_image}}
+            {% csrf_token %}
+        </form>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{contact.related_to}}
+            {% csrf_token %}
+        </form>
+    {% endif %}
+    {% endfor %}
+
+    {% else %}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {{form.main.title}}
+        {% csrf_token %}
     </form>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{form.main.main_image}}
+        {% csrf_token %}
+    </form>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{form.main.related_to}}
+        {% csrf_token %}
+    </form>
+    <div class="content-types">
+        <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+        <a href="{% url 'module_content_create' object.id 'text' 0 %}">
+            Text</a>
+        <a href="{% url 'module_content_create' object.id 'image' 0 %}">
+            Image</a>
+        <a href="{% url 'module_content_create' object.id   'video' 0 %}">
+            Video</a>
+    </div>
+    <p><input type="submit" value="Save content"></p>
+    {% endif %}
+    </div>
 </div>
 
 {% endblock %}
 {% block script %}
-let post_id='{{ object.id }}'
-const items=['text','image','video']
-const create_url='http://127.0.0.1:8000/blog/' + post_id + '/content/create/'
-let items_create = document.getElementsByClassName("item-create")
-for (let i = 0; i < items_create.length; i++) {
-    items_create[i].addEventListener('click', function (e) {
 
-        let index=Array.from(this.parentNode.parentNode.parentNode.children).indexOf(this.parentNode.parentNode)-3
-        let item=items[Array.from(this.parentNode.children).indexOf(this)-2]
-        const url_item=create_url+item+'/'+index+'/'
-        
-    })}
+function getCookie(name) { 
+    let cookieValue=null; 
+    if (document.cookie && document.cookie !=='' ) { 
+        const cookies=document.cookie.split(';'); 
+        for (let i=0; i < cookies.length; i++) { 
+            const cookie=cookies[i].trim(); 
+            // Does this cookie string begin with the name we want? 
+            if (cookie.substring(0, name.length + 1)===(name + '=' )) { 
+                cookieValue=decodeURIComponent(cookie.substring(name.length + 1)); 
+                break; 
+            } 
+        } 
+    } 
+    return cookieValue; 
+} 
 
+let parent = document.querySelector('.detail-post').getElementsByTagName('form')
 
-let pluses = document.querySelectorAll(".plus ")
-let getSiblings = function (e) {
-    // for collecting siblings
-    let siblings = []; 
-    // if no parent, return no sibling
-    if(!e.parentNode) {
-        return siblings;
-    }
-    // first child of the parent node
-    let sibling  = e.parentNode.firstChild;
-    
-    // collecting siblings
-    while (sibling) {
-        if (sibling.nodeType === 1 && sibling !== e) {
-            siblings.push(sibling);
-        }
-        sibling = sibling.nextSibling;
-    }
-    return siblings;}
+let forms = parent
+console.log(forms)
 
-
-let elements = document.getElementsByClassName("del")
-
-for (let i = 0; i < elements.length; i++) {
-    elements[i].addEventListener('click', function (e) {
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        const csrftoken = getCookie('csrftoken');
-
-        let id1   = this.getAttribute('data-id');
-        data = JSON.stringify({
-            id:id1})
-        let url= 'http://127.0.0.1:8000/blog/content/' + id1 +'/delete/'
-        let source_url = fetch(url, {
-            method: 'POST',
-            data:data,
-            headers:{"X-CSRFToken": csrftoken }
-        }).then(response => {
-            if (!response.ok) throw Error(response.statusText);
-            this.parentElement.parentElement.remove()
-            return response.json();
-        })
-        });
+for (let i=0; i < forms.length; i++) {
+    forms[i].addEventListener('change', function (e) { 
+    this.submit()
+    })
 }
 
 
-{% endblock %}
+
+let elements = document.getElementsByClassName(" del") 
+for (let i=0; i < elements.length; i++) {
+    elements[i].addEventListener('click', function (e) { 
+    const csrftoken=getCookie('csrftoken'); 
+    let id1=this.getAttribute('data-id'); 
+    data=JSON.stringify({ id:id1}) ;
+    let url='http://127.0.0.1:8000/blog/content/' + id1 +'/delete/' ;
+    let source_url=fetch(url, { 
+        method: 'POST' , 
+        data:data, 
+        headers:{"X-CSRFToken": csrftoken }
+    }).then(response=> {
+    if (!response.ok) throw Error(response.statusText);
+    this.parentElement.parentElement.remove()
+    return response.json();
+    })
+    });
+    }
+
+
+    {% endblock %}

@@ -9,6 +9,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, UpdateView
 from django.http import QueryDict
 from .forms import PostForm
+
 # Create your views here.
 
 
@@ -115,75 +116,32 @@ class PostDetailChange(TemplateResponseMixin, View):
 
     def get(self, request, pk):
         self.contents = Content.objects.filter(post=self.module)
-        main= PostForm(instance=self.module)
-        d = {}
-        #list_of_forms = [PostForm(instance=self.module)]
+        d={'main':PostForm(instance=self.module)}
         for x in range(len(self.contents)):
             model = self.get_model(self.contents[x].item._meta.model_name)
             self.obj = get_object_or_404(model,
                                          id=self.contents[x].item.id,
                                          post=self.module)
             form = self.get_form(model, instance=self.obj)
-            #list_of_forms.append(form)
             d[self.contents[x]] = form
-        return self.render_to_response({'main':main,
-            'form': d,
+        return self.render_to_response({'form': d,
                                         'object': self.module})
 
-
+    def get_main_form(self,model, field, *args, **kwargs):
+            Form = modelform_factory(model, fields=[field])
+            return Form(*args, **kwargs)
     def post(self, request, pk):
-        def query(model_name,model,request,index,obj):
-            
-            try:
-                query_dict = QueryDict('', mutable=True)
-                query_dict.update({model_name: dict(request)[model_name][index]})
-                if model_name!='image':
-                    form = self.get_form(model,
-                                            instance=obj,
-                                            data=query_dict)
-                else:
-                    form = self.get_form(model,
-                                            instance=obj,
-                                            files=query_dict)
-                if form.is_valid():
-                        obj1 = form.save(commit=False)
-                        obj1.post = self.module
-                        obj1.save()
-            except Exception as e:
-                print(e)
-
-        self.contents = Content.objects.filter(post=self.module)
-        self.text_i = 0
-        self.img_i = 0
-        self.video_i = 0
-        print(request.POST)
-        for x in range(len(self.contents)):
-            model_name = self.contents[x].item._meta.model_name
-            model = self.get_model(model_name)
-            obj = get_object_or_404(model,
-                                         id=self.contents[x].item.id,
-                                         post=self.module)
-            if model_name == 'text':
-                query(model_name,model,request.POST,self.text_i,obj)
-                self.text_i+=1
-            elif model_name == 'image':
-                query(model_name,model,request.FILES,self.img_i,obj)
-                self.img_i+=1
-            elif model_name == 'video':
-                query(model_name,model,request.POST,self.video_i,obj)
-                self.video_i+=1
-        query_dict = QueryDict('', mutable=True)
-        query_dict.update({'title': dict(request.POST)[
-                          'title'][0], 'related_to': dict(request.POST)['related_to'][0]})
-        try:
-            img_query_dict = QueryDict('', mutable=True)
-            img_query_dict.update(
-                {'main_image': dict(request.FILES)['main_image'][0]})
-        except Exception as e:
-            print(e)
-        main = PostForm(query_dict, instance=self.module, files=img_query_dict)
-        if main.is_valid():
-            main.save()
+        field=list(request.POST.keys())[0]
+        if field!='csrfmiddlewaretoken':
+            form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
+        else:
+            field=list(request.FILES.keys())[0]
+            print(field)
+            form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            print(form.errors)
         return redirect('post_detail_change', self.module.id)
 
 
