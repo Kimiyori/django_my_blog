@@ -8,10 +8,32 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, UpdateView
 from django.http import QueryDict
-from .forms import PostForm
-
+from .forms import PostForm, SearchForm
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank,SearchHeadline
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models.functions import Greatest
 # Create your views here.
 
+
+class SearchResultsList(ListView):
+        model = Post
+        context_object_name = "list"
+        template_name = "post/search.html"
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            query = self.request.GET.get("q")
+            context.update({'query': query})
+            return context
+        def get_queryset(self):
+            query = self.request.GET.get("q") 
+            search_vector = SearchVector('title')
+            search_query = SearchQuery(query)
+            results= Post.objects.annotate(
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by("-rank")
+            return results
 
 class PostList(ListView):
     model = Post

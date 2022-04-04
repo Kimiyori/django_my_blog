@@ -29,10 +29,18 @@
       <a href='{% url "account_login" %}'>Log-in</a>
       {% endif %}
     </span>
-   <!--<form class="form-inline mt-2 mt-md-0" action="{% url 'manga_list' %}" method="get">
-      <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-    </form>
-    -->
+    <div class="search">
+      <form action="{% url 'post_search' %}" method="get">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search by name or quote..."
+          class="form-control"
+        />
+      </form>
+    </div>
+
+    
   </div>
 
 

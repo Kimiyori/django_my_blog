@@ -17,9 +17,9 @@ User=get_user_model()
 
 
 class Related(models.Model):
-    manga = models.OneToOneField(Manga, null=True, blank=True,
+    manga = models.OneToOneField(Manga, related_name='related',null=True, blank=True,
                                  on_delete=models.CASCADE)
-    anime = models.OneToOneField(Anime, null=True, blank=True,
+    anime = models.OneToOneField(Anime,related_name='related', null=True, blank=True,
                                  on_delete=models.CASCADE)
     
     def __str__(self):
@@ -43,7 +43,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=500)
     main_image = models.ImageField(upload_to=main_path)
-    related_to=models.ForeignKey(Related, on_delete=models.CASCADE,blank=True,null=True)
+    related_to=models.ForeignKey(Related, related_name='post', on_delete=models.CASCADE,blank=True,null=True)
     id = models.UUIDField(
                             primary_key=True,
                             default=uuid.uuid4,

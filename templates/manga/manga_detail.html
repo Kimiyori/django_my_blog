@@ -120,9 +120,34 @@
     <div class="desc">
         <div class="name">Описание</div>
         <p>{{manga.get_desc|linebreaks}}</p>
-  
     </div>
+    {% if  manga.related.post.all %}
+    <div class="related-blog">
+        <div class="name">Блог</div>
+        <div id='manga-list'>
+            {% for manga in manga.related.post.all %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ manga.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% url 'post_detail' manga.pk %}">
+                    {% if manga.main_image %}
+                    {% thumbnail manga.main_image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ manga.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    {% endif %}
 </div>
+
+
 
 
 {% endblock content %}

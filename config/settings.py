@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.sites",
+    'django.contrib.postgres',
     "allauth",
     "allauth.account",
     "accounts.apps.AccountsConfig",
@@ -49,8 +50,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     "post.apps.PostConfig",
     'corsheaders',
-'django_cleanup.apps.CleanupConfig',
-'embed_video',
+    'django_cleanup.apps.CleanupConfig',
+    'embed_video',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
+            'libraries': {
+            'urlparams': 'post.templatetags.urlparams'
+         }
+        }
     },
 ]
 

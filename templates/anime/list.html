@@ -3,7 +3,10 @@
 {% load static %}
 {% block title %}Anime{% endblock title %}
 {% block content %}
-<h1 id="name-list"><a href="{% url 'anime_list' %}">Anime</a></h1>
+{% block search %}
+
+{% endblock search %}
+
 <hr>
 <div id='manga-list'>
 {% for anime in list %}

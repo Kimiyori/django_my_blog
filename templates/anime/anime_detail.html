@@ -98,6 +98,48 @@
         <p>{{anime.get_desc|linebreaks}}</p>
   
     </div>
+    {% if  anime.related.post.all or anime.source.related.post.all %}
+    <div class="related-blog">
+        <div class="name">Блог</div>
+        <div id='manga-list'>
+            {% for anime in anime.related.post.all %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ anime.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="">
+                    {% if anime.main_image %}
+                    {% thumbnail anime.main_image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ anime.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ anime.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+            {% for anime in anime.source.related.post.all %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ anime.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% url 'post_detail' anime.pk %}">
+                    {% if anime.main_image %}
+                    {% thumbnail anime.main_image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ anime.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ anime.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div> 
+    {% endif %}
 </div>
 
 

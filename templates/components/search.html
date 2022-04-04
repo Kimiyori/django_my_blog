@@ -1,0 +1,10 @@
+{% load urlparams %}
+<div class="search">
+
+      <a href="{% url 'post_search' %}{% urlparams q=query %}">Blog</a>
+
+      <a href="{% url 'anime_search' %}{% urlparams q=query %}">Anime</a>
+
+      <a href="{% url 'manga_search' %}{% urlparams q=query %}">Manga</a>
+
+</div>

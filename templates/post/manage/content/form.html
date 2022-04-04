@@ -12,56 +12,68 @@ Add new content
 {% endblock %}
 {% block content %}
 
-<h1>
-    {% if object %}
-    Edit content "{{ object }}"
-    {% else %}
-    Add new content
-    {% endif %}
-</h1>
+
 <div class="module">
     <div class="detail-post">
     {% if form|length > 1 %}
     {% for instance, contact in form.items %}
     {% if instance != 'main' %}
+    <div class='item-change'>
+    <div class="content-types">
+        <a class="del" data-id={{instance.id}}><img src="{% static 'img/del.png' %}"></a>
+        <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
+            Text</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
+            Image</a>
+        <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
+            Video</a>
+    </div>
         {% if instance.item.get_model_name == 'image' %}
+        <div class="img-main">
             <div class="post-img">
-                <img src="/media/{{contact.image.value}}">
+                <a  href="/media/{{contact.image.value}}">
+                {% thumbnail contact.image.value "1500"  quality=99 as im  %}
+                <img src="/media/{{im}}">
+                {% endthumbnail %}
+                </a>
             </div>
             <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
-                <input type="file" name="image" accept="image/*" id="id_image">
+                <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
                 {% csrf_token %}
             </form>
-
+        </div>
         {% elif instance.item.get_model_name == 'text' %}
             <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
                 {{ contact.text}}
                 {% csrf_token %}
             </form>
         {% elif instance.item.get_model_name == 'video' %}
+        <div class="video-main">
             {% video contact.video.value "100% x 700" %}
             <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
                 {{ contact.video }}
                 {% csrf_token %}
             </form>
+            </div>
         {% endif %}
-        <div class="content-types">
-            <a class="del" data-id={{instance.id}}><img src="{% static 'img/del.png' %}"></a>
-            <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-            <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
-                Text</a>
-            <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
-                Image</a>
-            <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
-                Video</a>
         </div>
     {% else %}
+    <div class="edit-title">
         <form action="" method="post" enctype="multipart/form-data">
             {{contact.title}}
             {% csrf_token %}
         </form>
+    </div>
+        <div class="post-img">
+            <a  href="/media/{{contact.main_image.value}}">
+            {% thumbnail contact.main_image.value "1500"  quality=99 as im  %}
+            <img src='/media/{{im}}'>
+            {% endthumbnail %}
+            </a>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
-            {{contact.main_image}}
+            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
             {% csrf_token %}
         </form>
         <form action="" method="post" enctype="multipart/form-data">
@@ -72,13 +84,21 @@ Add new content
     {% endfor %}
 
     {% else %}
-
+        <div class="'edit-title">
     <form action="" method="post" enctype="multipart/form-data">
         {{form.main.title}}
         {% csrf_token %}
     </form>
+</div>
+    <div class="post-img">
+            <a  href="/media/{{form.main.main_image.value}}">
+            {% thumbnail form.main.main_image.value "1500"  quality=99 as im  %}
+            <img src='/media/{{im}}'>
+            {% endthumbnail %}
+            </a>
+    </div>
     <form action="" method="post" enctype="multipart/form-data">
-        {{form.main.main_image}}
+        <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
         {% csrf_token %}
     </form>
     <form action="" method="post" enctype="multipart/form-data">
@@ -118,6 +138,19 @@ function getCookie(name) {
     return cookieValue; 
 } 
 
+let textarea_elements=document.getElementsByTagName('textarea')
+console.log(textarea_elements)
+Object.keys(textarea_elements).forEach(function(e) {
+    textarea_elements[e].style.height = 'auto';
+    textarea_elements[e].style.height = textarea_elements[e].scrollHeight +100+ 'px';
+});
+for (let i=0; i < textarea_elements.length; i++) {
+    textarea_elements[i].addEventListener('input', function (e) { 
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    })
+}
+
 let parent = document.querySelector('.detail-post').getElementsByTagName('form')
 
 let forms = parent
@@ -129,7 +162,12 @@ for (let i=0; i < forms.length; i++) {
     })
 }
 
-
+let links = document.querySelector('.post-img').getElementsByTagName('a')
+for (let i=0; i < links.length; i++) {
+    links[i].addEventListener('click', function (e) { 
+    e.preventDefault()
+    })
+}
 
 let elements = document.getElementsByClassName(" del") 
 for (let i=0; i < elements.length; i++) {

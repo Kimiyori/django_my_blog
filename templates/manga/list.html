@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load thumbnail %}
-{% block title %}Anime{% endblock title %}
+{% block title %}Manga{% endblock title %}
 {% block content %}
-<h1 id="name-list"><a href="{% url 'manga_list' %}">Manga</a></h1>
+{% block search %}
+{% endblock search %}
+
 <hr>
 <div id='manga-list'>
 {% for manga in list %}

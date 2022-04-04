@@ -3,7 +3,9 @@
 {% load thumbnail %}
 {% block title %}Blog{% endblock title %}
 {% block content %}
+{% block search %}
 
+{% endblock search %}
 <div class="post-wrap">
     {% for post in list %}
     <div class='post-item'>
@@ -12,6 +14,11 @@
                 <span>{{ post.publish|date:" d M Y" }}</span>
                 <span>{{ post.title }}</span>
             </a>
+            {% if request.user == post.author %}
+            <a class='title' href="{% url 'post_detail_change' post.pk %}">
+                <span>Change</span>
+            </a>
+            {% endif %}
         </div>
         <div class='cover'>
             <a class='test' href="{% url 'post_detail' post.pk %}">

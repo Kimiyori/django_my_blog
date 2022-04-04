@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import MangaList,GenreList,MangaDetail
+from .views import MangaList,GenreList,MangaDetail,SearchResultsList
 urlpatterns = [path('', MangaList.as_view(),name='manga_list'),
               path('<uuid:pk>',MangaDetail.as_view(), name='manga_detail'),
-              path('genre/<slug:slug>', GenreList.as_view(),name='genre_list')
+              path('genre/<slug:slug>', GenreList.as_view(),name='genre_list'),
+              path('search/', SearchResultsList.as_view(), name='manga_search'),
 ]
 """urlpatterns = [
   
