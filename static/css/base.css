@@ -73,6 +73,11 @@ justify-content: space-evenly;
     margin-bottom: 25px;
     margin-left: auto;
     margin-right: auto;
+    
+}
+.detail-post > * {
+    border: 1px solid black;
+    border-radius: 12px;
 }
 .detail-post h2 {
     padding:20px 20px 20px;
@@ -404,6 +409,11 @@ justify-content: space-evenly;
     justify-content: flex-start;
     align-items: flex-start;
     align-content: center;
+   
+}
+.over {
+    background-color: #eaeaea;
+    overflow:visible;
    
 }
 .item-change form {

@@ -18,7 +18,7 @@ Add new content
     {% if form|length > 1 %}
     {% for instance, contact in form.items %}
     {% if instance != 'main' %}
-    <div class='item-change'>
+    <div class='item-change' data-order="{{instance.order}}" draggable="true">
     <div class="content-types">
         <a class="del" data-id={{instance.id}}><img src="{% static 'img/del.png' %}"></a>
         <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
@@ -59,12 +59,13 @@ Add new content
         {% endif %}
         </div>
     {% else %}
-    <div class="edit-title">
+    <div class="edit-title ">
         <form action="" method="post" enctype="multipart/form-data">
             {{contact.title}}
             {% csrf_token %}
         </form>
     </div>
+    <div class="img-main">
         <div class="post-img">
             <a  href="/media/{{contact.main_image.value}}">
             {% thumbnail contact.main_image.value "1500"  quality=99 as im  %}
@@ -76,10 +77,13 @@ Add new content
             <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
             {% csrf_token %}
         </form>
+        </div>
+        <div class="related">
         <form action="" method="post" enctype="multipart/form-data">
             {{contact.related_to}}
             {% csrf_token %}
         </form>
+        </div>
     {% endif %}
     {% endfor %}
 
@@ -118,9 +122,11 @@ Add new content
     {% endif %}
     </div>
 </div>
-
 {% endblock %}
+
 {% block script %}
+
+
 
 function getCookie(name) { 
     let cookieValue=null; 
@@ -138,8 +144,73 @@ function getCookie(name) {
     return cookieValue; 
 } 
 
+const draggable = document.querySelectorAll('.item-change')
+let dragStartIndex;
+let dragEndIndex;
+
+function dragStart() {
+
+  dragStartIndex = this.closest('.item-change')
+
+  }
+function dragEnter() {
+    // console.log('Event: ', 'dragenter');
+
+
+    this.classList.add('over');
+  }
+  
+  function dragLeave() {
+    // console.log('Event: ', 'dragleave');
+    this.classList.remove('over');
+  }
+  
+  function dragOver(e) {
+    // console.log('Event: ', 'dragover');
+    e.preventDefault();
+  }
+  
+  function dragDrop() {
+    // console.log('Event: ', 'drop');
+    dragEndIndex = this
+
+    swapItems(dragStartIndex, dragEndIndex);
+    this.classList.remove('over');
+  }
+  function swapItems(fromIndex, toIndex) {
+    const first_order=fromIndex.getAttribute('data-order');
+    const sec_order=toIndex.getAttribute('data-order');
+    let data={};
+    data[fromIndex.querySelector('.del').getAttribute('data-id')]=toIndex.getAttribute('data-order')
+    data[toIndex.querySelector('.del').getAttribute('data-id')]=fromIndex.getAttribute('data-order')
+    data1=JSON.stringify(data)
+    url='http://127.0.0.1:8000/blog/content/order/'
+    const csrftoken=getCookie('csrftoken'); 
+    let switch_url=fetch(url, { 
+        method: 'POST' , 
+        body:data1, 
+        mode:'cors',
+        headers:{'Content-Type':'application/json', 
+                'X-CSRFToken':'{{csrf_token}}'}
+    }).then(response=> {
+    if (!response.ok) throw Error(response.statusText);
+    return response.json();
+    });
+    const first=Array.from(toIndex.children);
+    const second=Array.from(fromIndex.children);
+    fromIndex.replaceChildren(...first);
+    toIndex.replaceChildren(...second);
+  }
+draggable.forEach(item => {
+    item.addEventListener('dragstart', dragStart);
+    item.addEventListener('dragover', dragOver);
+    item.addEventListener('drop', dragDrop);
+    item.addEventListener('dragenter', dragEnter);
+    item.addEventListener('dragleave', dragLeave);
+  });
+
 let textarea_elements=document.getElementsByTagName('textarea')
-console.log(textarea_elements)
+
 Object.keys(textarea_elements).forEach(function(e) {
     textarea_elements[e].style.height = 'auto';
     textarea_elements[e].style.height = textarea_elements[e].scrollHeight +100+ 'px';
@@ -154,7 +225,6 @@ for (let i=0; i < textarea_elements.length; i++) {
 let parent = document.querySelector('.detail-post').getElementsByTagName('form')
 
 let forms = parent
-console.log(forms)
 
 for (let i=0; i < forms.length; i++) {
     forms[i].addEventListener('change', function (e) { 

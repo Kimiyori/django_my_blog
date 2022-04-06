@@ -1,4 +1,4 @@
-
+import json
 from django.shortcuts import render
 from django.forms.models import modelform_factory
 from django.forms import formset_factory
@@ -14,6 +14,14 @@ from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models.functions import Greatest
 # Create your views here.
 
+class ContentOrderView(View):
+    def post(self, request):
+        d=request.body.decode('utf-8')
+        d=json.loads(d)
+        for id, order in d.items():
+            Content.objects.filter(id=id,
+            post__author=request.user).update(order=order)
+        return redirect('post_list')
 
 class SearchResultsList(ListView):
         model = Post
