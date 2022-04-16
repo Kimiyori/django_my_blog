@@ -1,0 +1,20 @@
+<div class="filter">
+    <form action="{% url 'manga_list' %}" id='filter_form' method="get" >
+        {% for name,queryset in filter.items %}
+            <div class="filter_item">
+                <div class="name_filter">{{name}}</div>
+                <div class="item-list">
+                    {% for item in queryset %}
+                        <label >
+                            <input name='{{name|lower}}'  value='{{item.name}}' type="checkbox">
+                            <div class="item-list-name">
+                            <span >{{item.name}}</span>
+                            </div>
+                        </label>  
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    <button type="submit" >Submit</button>
+    </form>
+    </div>

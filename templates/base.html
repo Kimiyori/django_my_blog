@@ -29,16 +29,7 @@
       <a href='{% url "account_login" %}'>Log-in</a>
       {% endif %}
     </span>
-    <div class="search">
-      <form action="{% url 'post_search' %}" method="get">
-        <input
-          type="search"
-          name="q"
-          placeholder="Search by name or quote..."
-          class="form-control"
-        />
-      </form>
-    </div>
+
 
     
   </div>
@@ -51,6 +42,7 @@
   </div>
   <script>
 {% block script %}
+
     {% endblock %}
 </script>
 

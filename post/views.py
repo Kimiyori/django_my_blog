@@ -4,6 +4,7 @@ from django.forms.models import modelform_factory
 from django.forms import formset_factory
 from django.apps import apps
 from .models import Post, Content
+from manga.models import Genre
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, UpdateView
@@ -47,6 +48,8 @@ class PostList(ListView):
     model = Post
     template_name = 'post/list.html'
     context_object_name = 'list'
+
+
 
 
 class PostDetail(DetailView):
@@ -166,7 +169,6 @@ class PostDetailChange(TemplateResponseMixin, View):
             form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
         else:
             field=list(request.FILES.keys())[0]
-            print(field)
             form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
         if form.is_valid():
             form.save()

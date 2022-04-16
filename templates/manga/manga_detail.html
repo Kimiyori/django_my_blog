@@ -82,21 +82,21 @@
             </div>
         </div>
         {% endif %}
-        {% if manga.genres.all %}
+        {% if manga.genre.all %}
         <div class="items">
             <div class="name">Жанры</div>
             <div class="item-list">
-                {% for name in manga.genres.all %}
+                {% for name in manga.genre.all %}
                 <a class='item' href=""><span>{{ name}}</span></a>
                 {% endfor %}
             </div>
         </div>
         {% endif %}
-        {% if manga.themes.all %}
+        {% if manga.theme.all %}
         <div class="items">
             <div class="name">Темы</div>
             <div class="item-list">
-                {% for name in manga.themes.all %}
+                {% for name in manga.theme.all %}
                 <a class='item' href=""><span>{{ name}}</span></a>
                 {% endfor %}
             </div>

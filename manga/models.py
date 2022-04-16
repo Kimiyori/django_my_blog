@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 # Create your models here.
@@ -112,11 +113,11 @@ class Manga(models.Model):
     premiere = models.DateField(blank=True)
     volumes = models.IntegerField(null=True, blank=True)
     chapters = models.IntegerField(null=True, blank=True)
-    genres = models.ManyToManyField(
+    genre = models.ManyToManyField(
         Genre, related_name='manga', blank=True)
     demographic = models.ForeignKey(
         Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
-    themes = models.ManyToManyField(
+    theme = models.ManyToManyField(
         Theme, related_name='manga', blank=True)
     image = models.ImageField(upload_to=image_path, blank=True)
     magazine = models.ManyToManyField(
@@ -139,4 +140,6 @@ class Manga(models.Model):
             return self.description
         else:
             return "Нет описания"
+    def get_absolute_url(self):
+        return reverse('manga_detail', kwargs={'pk':str(self.id)})
 

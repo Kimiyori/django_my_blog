@@ -5,16 +5,30 @@
 {% block content %}
 {% block search %}
 {% endblock search %}
-
+<div class="search">
+    <form action="{% url 'post_search' %}" method="get">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search by name or quote..."
+        class="form-control"
+      />
+    </form>
+  </div>
+  <button class='filter-button' type="button">
+      <span>Filter</span>
+  </button>
+{% include "components/filter.html" %}
 <hr>
 <div id='manga-list'>
 {% for manga in list %}
+
 <div class='manga-item'> 
-    <a class='title' href="{% url 'manga_detail' manga.pk %}">
-    <span>{{ manga.title.original_name }}</span>
+    <a class='title' href="{% url 'manga_detail' manga.id %}">
+    <span>{{ manga.title__original_name }}</span>
     </a>
     <div class='cover'>
-    <a class='test' href="{% url 'manga_detail' manga.pk %}">
+    <a class='test' href="{% url 'manga_detail' manga.id %}">
         {% if manga.image %}
         {% thumbnail manga.image "600x600" format="PNG" as im  %}
         <img class="mangaimg" src="{{  im.url }}" alt="{{ manga.title.original_name }}">
@@ -29,3 +43,35 @@
 {% endfor %}
 </div>
 {% endblock content %}
+{% block script %}
+    let filter_button =  document.getElementsByClassName("filter-button");
+    filter_button[0].addEventListener('click',function(e) {
+      let body =  document.getElementsByTagName("body")[0]
+      let div = document.createElement('div');
+      div.classList.add("popup")
+      body.appendChild(div)
+      document.getElementsByClassName("filter")[0].style.display = "block";
+    })
+
+    document.addEventListener('mouseup', function(e) {
+      let container = document.getElementsByClassName("filter")[0];
+      if (!container.contains(e.target)) {
+        let body =  document.getElementsByTagName("body")[0];
+        let popup = document.getElementsByClassName("popup")[0];
+        popup.remove();
+          container.style.display = 'none';
+      }
+  });
+const params = new URLSearchParams(window.location.search);
+const filter_list = ['genre','theme','demographic','type','publisher'];
+filter_list.forEach(name=> {
+    let a=params.getAll(name)
+    let list_items=document.getElementsByName(name);
+    for(i=0;i<(list_items.length);i++){
+        if(a.includes(list_items[i].value)){
+            list_items[i].checked=true;
+        }
+      }
+})
+
+{% endblock %}

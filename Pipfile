@@ -14,6 +14,7 @@ drf-writable-nested = "*"
 django-cors-headers = "*"
 django-cleanup = "*"
 django-embed-video = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

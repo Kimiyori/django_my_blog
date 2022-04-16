@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
     'embed_video',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -183,3 +185,6 @@ CORS_ORIGIN_ORIGINS  = (
 'http://localhost:8000',
 'http://127.0.0.1:8000',
 )
+import socket
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
