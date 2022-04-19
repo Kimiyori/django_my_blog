@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "accounts.apps.AccountsConfig",
     "allauth.socialaccount",
-    "anime.apps.AnimeConfig",
-    "manga.apps.MangaConfig",
+    "titles.apps.TitlesConfig",
     'sorl.thumbnail',
     'rest_framework', #
     'api.apps.ApiConfig',
@@ -82,7 +81,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
-            'urlparams': 'post.templatetags.urlparams'
+            'urlparams': 'post.templatetags.urlparams',
+            'dynamic_url': 'post.templatetags.dynamic_url'
          }
         }
     },

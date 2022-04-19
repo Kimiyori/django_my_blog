@@ -1,7 +1,7 @@
 # posts/serializers.py
 from rest_framework import serializers
-from anime.models import Anime
-from manga.models import Title,Manga,Author,Publisher,Demographic,MangaType,Genre
+from titles.models import Anime,Title,Manga,Author,Publisher,Demographic,MangaType,Genre
+
 
 class TitleSerializer(serializers.ModelSerializer):
     class Meta:

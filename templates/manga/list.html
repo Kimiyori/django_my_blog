@@ -5,20 +5,25 @@
 {% block content %}
 {% block search %}
 {% endblock search %}
-<div class="search">
-    <form action="{% url 'post_search' %}" method="get">
-      <input
-        type="search"
-        name="q"
-        placeholder="Search by name or quote..."
-        class="form-control"
-      />
-    </form>
-  </div>
+<div class="filter-wrap">
+
+  
+  <form class='search-form' action="{% url 'manga_list' %}" method="get">
+    <input
+      type="search"
+      name="q"
+      placeholder="Search"
+      class="search-input"
+    />
+  </form>
+
   <button class='filter-button' type="button">
       <span>Filter</span>
   </button>
+
 {% include "components/filter.html" %}
+
+</div>
 <hr>
 <div id='manga-list'>
 {% for manga in list %}
@@ -52,13 +57,15 @@
       body.appendChild(div)
       document.getElementsByClassName("filter")[0].style.display = "block";
     })
-
+    
     document.addEventListener('mouseup', function(e) {
       let container = document.getElementsByClassName("filter")[0];
       if (!container.contains(e.target)) {
         let body =  document.getElementsByTagName("body")[0];
         let popup = document.getElementsByClassName("popup")[0];
+        if (typeof popup !== 'undefined') {
         popup.remove();
+        }
           container.style.display = 'none';
       }
   });
@@ -73,5 +80,6 @@ filter_list.forEach(name=> {
         }
       }
 })
+let search_form =  document.getElementsByClassName("search-form")[0];
 
 {% endblock %}

@@ -1,9 +1,9 @@
+
 from django.db import models
 import uuid 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from manga.models import Manga
-from anime.models import Anime
+from titles.models import Manga,Anime
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,  GenericRelation
 from .fields import OrderField

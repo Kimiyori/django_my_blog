@@ -1,6 +1,6 @@
 from rest_framework import status,viewsets, permissions
-from anime.models import Anime
-from manga.models import Manga,Genre
+from titles.models import Anime,Manga,Genre
+
 from .serializers import AnimeSerializer,MangaSerializer,GenreSerializer
 
 

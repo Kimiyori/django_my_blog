@@ -25,8 +25,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path('api/', include('api.urls')),
      path("", Home.as_view(), name="home"), 
-    path('manga/',include('manga.urls'),name='manga'),
-    path('anime/',include('anime.urls'),name='anime'),
+    path('',include('titles.urls'),name='titles'),
     path('blog/',include('post.urls'),name='blog'),
 ]
 if settings.DEBUG:

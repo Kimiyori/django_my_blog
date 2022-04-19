@@ -4,7 +4,6 @@ from django.forms.models import modelform_factory
 from django.forms import formset_factory
 from django.apps import apps
 from .models import Post, Content
-from manga.models import Genre
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, UpdateView

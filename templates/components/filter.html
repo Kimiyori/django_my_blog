@@ -1,5 +1,12 @@
+{% load dynamic_url %}
 <div class="filter">
-    <form action="{% url 'manga_list' %}" id='filter_form' method="get" >
+    <form action="{% dynamic_url type=model %}" id='filter_form' method="get" >
+        <input
+        type="search"
+        name="q"
+        placeholder="Search"
+        class="search-input"
+      />
         {% for name,queryset in filter.items %}
             <div class="filter_item">
                 <div class="name_filter">{{name}}</div>
@@ -15,6 +22,6 @@
                 </div>
             </div>
         {% endfor %}
-    <button type="submit" >Submit</button>
+    <button class='filter_button' type="submit" >Submit</button>
     </form>
     </div>
