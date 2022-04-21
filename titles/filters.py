@@ -1,5 +1,5 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-
+from .models import Manga,Anime
 class Filter:
     def __call__(self,name:str,item):
         return {
@@ -13,3 +13,5 @@ def filter_by_name(query,item):
         search=search_vector,
         rank=SearchRank(search_vector, search_query)
     ).filter(search=search_query).order_by("-rank")
+
+    

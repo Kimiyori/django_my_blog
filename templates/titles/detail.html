@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dynamic_url %}
+{% load urlparams %}
+{% load thumbnail %}
+{% block title %}{{ item.title }}{% endblock title %}
+{% block content %}
+
+
+<div id='manga-detail'>
+    <div class='main-info'>
+        <div class="upper-image">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.title.original_name }}">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" alt="{{ item.title.original_name }}">
+            {% endif %}
+        </div>
+        <div class="title-block">
+            <div class="title-block2">
+                <div class="main-image">
+                    {% if item.image %}
+                        <img class='img2' src="{{ item.image.url }}" alt="{{ item.title.original_name }}">
+                        {% else %}
+                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ item.title.original_name }}">
+                        {% endif %}
+                </div>
+                <div class='title'>
+                    {% with item.title as name %}
+                    <h4 class="main-title">{{name.original_name }}</h4>
+                    <h2>{{name.russian_name }}</h2>
+                    <h1>{{name.english_name }}</h1>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="info">
+        {% if item.author %}
+        <div class="items">
+            <div class="name">Автор</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.author %}"><span>{{ item.author }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.type %}
+        <div class="items">
+            <div class="name">Тип</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type %}"><span>{{ item.type }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.source %}
+        {% with source=item.source %}
+        <div class="items">
+            <div class="name">Источник</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams source=item.source %}"><span>{{ source }}</span></a>
+            </div>
+        </div>
+        {% if source.demographic %}
+        <div class="items">
+            <div class="name">Демография</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=source.demographic %}"><span>{{ source.demographic }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% endif %}
+        {% if item.demographic %}
+        <div class="items">
+            <div class="name">Демография</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=item.demographic %}"><span>{{ item.demographic }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.studio %}
+        <div class="items">
+            <div class="name">Студия</div>
+            <div class="item-list">
+                {% for name in item.studio.all %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams studio=name %}">
+                    <span>
+                        {{ name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.publisher %}
+        <div class="items">
+            <div class="name">Издатель</div>
+            <div class="item-list">
+                {% for name in item.publisher.all %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams publisher=name %}">
+                    <span>
+                        {{ name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.magazine.all %}
+        <div class="items">
+            <div class="name">Журнал</div>
+            <div class="item-list">
+                {% for name in item.magazine.all %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams magazine=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.genre.all %}
+        <div class="items">
+            <div class="name">Жанры</div>
+            <div class="item-list">
+                {% for name in item.genre.all %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams genre=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.theme.all %}
+        <div class="items">
+            <div class="name">Темы</div>
+            <div class="item-list">
+                {% for name in item.theme.all %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams theme=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.volumes or item.chapters %}
+        <div class="items">
+            <div class="name">Издано</div>
+            <div class="item-list">
+                <a class='item' ><span>{% if item.volumes  %}
+                    {{ item.volumes}} томов 
+                    {% endif %}
+                    {% if item.chapters %}
+                    {{ item.chapters}} главы
+                    {% endif %}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.premiere %}
+        <div class="items">
+            <div class="name">Дата начала</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {{ item.premiere}}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.episodes %}
+        <div class="items">
+            <div class="name">Эпизоды</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {{ item.episodes}}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="desc">
+        <div class="name">Описание</div>
+        <p>{{item.get_desc|linebreaks}}</p>
+    </div>
+    {% if  item.related.post.all %}
+    <div class="related-blog">
+        <div class="name">Блог</div>
+        <div id='manga-list'>
+            {% for item in item.related.post.all %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ item.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% url 'post_detail' item.pk %}">
+                    {% if item.main_image %}
+                    {% thumbnail item.main_image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
+
+
+{% endblock content %}

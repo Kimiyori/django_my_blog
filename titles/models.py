@@ -88,7 +88,7 @@ class Title(models.Model):
         elif self.russian_name:
             return str(self.russian_name)
         else:
-            return 'Not name'
+            return "Doesn't have name"
 
 def image_path_manga(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>

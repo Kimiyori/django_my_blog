@@ -3,6 +3,7 @@
 body {
     margin: 0px;
     font-family: 'Playfair Display', sans-serif;
+    background-color: rgb(253, 253, 253);
 }
 
 #header {
@@ -61,6 +62,7 @@ body {
 }
 
 #content {
+    background-color: rgb(255, 255, 255);
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
