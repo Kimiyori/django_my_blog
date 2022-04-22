@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "accounts.apps.AccountsConfig",
     "allauth.socialaccount",
-    "titles.apps.TitlesConfig",
+"titles.apps.TitlesConfig",
     'sorl.thumbnail',
     'rest_framework', #
     'api.apps.ApiConfig',

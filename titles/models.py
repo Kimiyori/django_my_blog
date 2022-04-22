@@ -92,7 +92,7 @@ class Title(models.Model):
 
 def image_path_manga(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'anime/{0}/{1}'.format(instance.title.original_name, filename)
+    return 'manga/{0}/{1}'.format(instance.id, filename)
 class Manga(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -155,7 +155,7 @@ class AnimeType(models.Model):
 
 class Studio(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
-    image = models.ImageField(upload_to='manga/', blank=True)
+    image = models.ImageField(upload_to='studios/', blank=True)
     slug = models.SlugField(max_length=250, default='')
 
     class Meta:
@@ -166,7 +166,7 @@ class Studio(models.Model):
 
 def image_path_anime(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'anime/{0}/{1}'.format(instance.title.original_name, filename)
+    return 'anime/{0}/{1}'.format(instance.id, filename)
 
 class Anime(models.Model):
     id = models.UUIDField(
