@@ -36,11 +36,19 @@
         </div>
     </div>
     <div class="info">
-        {% if item.author %}
+        {% if item.authors.author %}
         <div class="items">
             <div class="name">Автор</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.author %}"><span>{{ item.author }}</span></a>
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.authors.author %}"><span>{{ item.authors.author }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.authors.artist %}
+        <div class="items">
+            <div class="name">Художник</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams artist=item.authors.artist %}"><span>{{ item.authors.artist }}</span></a>
             </div>
         </div>
         {% endif %}
@@ -52,14 +60,21 @@
             </div>
         </div>
         {% endif %}
-        {% if item.source %}
-        {% with source=item.source %}
+        {% if item.adaptation %}
+        {% with sources=item.adaptation.all %}
         <div class="items">
             <div class="name">Источник</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams source=item.source %}"><span>{{ source }}</span></a>
+                {% for source in sources %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams source=source.based_on %}">
+                    <span>
+                        {{ source.based_on }}
+                    </span>
+                </a>
+                {% endfor %}
             </div>
         </div>
+
         {% if source.demographic %}
         <div class="items">
             <div class="name">Демография</div>

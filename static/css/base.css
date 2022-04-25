@@ -290,7 +290,7 @@ body {
 
 .info .items {
     display: block;
-    max-width: 25%;
+    max-width: 30%;
 }
 
 .info .items .name {
@@ -303,6 +303,7 @@ body {
     display: flex;
     flex-wrap: wrap;
 
+
 }
 
 .info .item-list .item {
@@ -312,7 +313,7 @@ body {
     display: flex;
     align-items: center;
     transition: all .1s ease-out;
-    font-size: 20px;
+    font-size: 18px;
     text-decoration: none;
     color: #000000;
 

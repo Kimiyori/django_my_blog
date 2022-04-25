@@ -281,73 +281,122 @@
   }
 },
 {
-  "model": "titles.author",
+  "model": "titles.authortable",
+  "pk": 1,
+  "fields": {
+    "name": "Urushibara Yuki",
+    "pseudonym": "urushibara-yuki",
+    "photo": ""
+  }
+},
+{
+  "model": "titles.authortable",
+  "pk": 2,
+  "fields": {
+    "name": "Yoshino Satsuki",
+    "pseudonym": "yoshino-satsuki",
+    "photo": ""
+  }
+},
+{
+  "model": "titles.authortable",
   "pk": 3,
   "fields": {
-    "name": "Nakamura",
-    "surname": "Hinata",
-    "pseudonym": "nakamura-hinata",
-    "photo": ""
-  }
-},
-{
-  "model": "titles.author",
-  "pk": 4,
-  "fields": {
-    "name": "Takano",
-    "surname": "Hitomi",
-    "pseudonym": "takano-hitomi",
-    "photo": ""
-  }
-},
-{
-  "model": "titles.author",
-  "pk": 5,
-  "fields": {
-    "name": "Soon",
-    "surname": "Ki",
-    "pseudonym": "soon-ki",
-    "photo": ""
-  }
-},
-{
-  "model": "titles.author",
-  "pk": 6,
-  "fields": {
-    "name": "Sahara",
-    "surname": "Mizu",
+    "name": "Sahara Mizu",
     "pseudonym": "sahara-mizu",
     "photo": ""
   }
 },
 {
-  "model": "titles.author",
-  "pk": 7,
+  "model": "titles.authortable",
+  "pk": 4,
   "fields": {
-    "name": "Asano",
-    "surname": "Inio",
+    "name": "Asano Inio",
     "pseudonym": "asano-inio",
     "photo": ""
   }
 },
 {
-  "model": "titles.author",
-  "pk": 8,
+  "model": "titles.authortable",
+  "pk": 5,
   "fields": {
-    "name": "Makoto",
-    "surname": "Shinkai",
-    "pseudonym": "makoto-shinkai",
+    "name": "Soon-Ki",
+    "pseudonym": "soon-ki",
     "photo": ""
   }
 },
 {
-  "model": "titles.author",
-  "pk": 9,
+  "model": "titles.authortable",
+  "pk": 6,
   "fields": {
-    "name": "Satsuki",
-    "surname": "Yoshino",
-    "pseudonym": "satsuki-yoshino",
+    "name": "Takano Hitomi",
+    "pseudonym": "takano-hitomi",
     "photo": ""
+  }
+},
+{
+  "model": "titles.authortable",
+  "pk": 7,
+  "fields": {
+    "name": "Nakamura Hinata",
+    "pseudonym": "nakamura-hinata",
+    "photo": ""
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 1,
+  "fields": {
+    "author": 1,
+    "artist": 1
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 2,
+  "fields": {
+    "author": 2,
+    "artist": 2
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 3,
+  "fields": {
+    "author": 3,
+    "artist": 3
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 4,
+  "fields": {
+    "author": 4,
+    "artist": 4
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 5,
+  "fields": {
+    "author": 5,
+    "artist": 5
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 6,
+  "fields": {
+    "author": 6,
+    "artist": 6
+  }
+},
+{
+  "model": "titles.authors",
+  "pk": 7,
+  "fields": {
+    "author": 7,
+    "artist": 7
   }
 },
 {
@@ -452,6 +501,14 @@
   "fields": {
     "name": "Iyashikei",
     "slug": "iyashikei"
+  }
+},
+{
+  "model": "titles.theme",
+  "pk": 15,
+  "fields": {
+    "name": "Historical",
+    "slug": "historical"
   }
 },
 {
@@ -591,6 +648,14 @@
   }
 },
 {
+  "model": "titles.magazine",
+  "pk": 19,
+  "fields": {
+    "name": "Afternoon",
+    "slug": "afternoon"
+  }
+},
+{
   "model": "titles.title",
   "pk": 3,
   "fields": {
@@ -663,6 +728,33 @@
   }
 },
 {
+  "model": "titles.title",
+  "pk": 12,
+  "fields": {
+    "original_name": "Mushishi",
+    "russian_name": "Мастер Муши",
+    "english_name": "Mushishi"
+  }
+},
+{
+  "model": "titles.title",
+  "pk": 13,
+  "fields": {
+    "original_name": "Mushishi: Hihamukage",
+    "russian_name": "Мастер муiи: Тень, поглотившая Солнце",
+    "english_name": "Mushishi: Hihamukage"
+  }
+},
+{
+  "model": "titles.title",
+  "pk": 14,
+  "fields": {
+    "original_name": "Mushishi Zoku Shou",
+    "russian_name": "Мастер муши: Следующая глава",
+    "english_name": "Mushishi Zoku Shou"
+  }
+},
+{
   "model": "titles.adaptation",
   "pk": 2,
   "fields": {
@@ -671,12 +763,60 @@
   }
 },
 {
+  "model": "titles.adaptation",
+  "pk": 3,
+  "fields": {
+    "adaptation": "e7caf378-7016-48a6-9663-07fd4d856e43",
+    "based_on": "ea892fe2-85cc-4659-8cd8-fa210a246c61"
+  }
+},
+{
+  "model": "titles.adaptation",
+  "pk": 4,
+  "fields": {
+    "adaptation": "9c760f94-62ed-4dc3-9101-314c5f29e1c0",
+    "based_on": "ea892fe2-85cc-4659-8cd8-fa210a246c61"
+  }
+},
+{
+  "model": "titles.adaptation",
+  "pk": 5,
+  "fields": {
+    "adaptation": "c69631fe-e8ca-422e-9871-41a19d3b25f8",
+    "based_on": "ea892fe2-85cc-4659-8cd8-fa210a246c61"
+  }
+},
+{
+  "model": "titles.sequelprequelanime",
+  "pk": 1,
+  "fields": {
+    "sequel": "9c760f94-62ed-4dc3-9101-314c5f29e1c0",
+    "prequel": "e7caf378-7016-48a6-9663-07fd4d856e43"
+  }
+},
+{
+  "model": "titles.sequelprequelanime",
+  "pk": 2,
+  "fields": {
+    "sequel": "c69631fe-e8ca-422e-9871-41a19d3b25f8",
+    "prequel": "9c760f94-62ed-4dc3-9101-314c5f29e1c0"
+  }
+},
+{
+  "model": "titles.sequelprequelanime",
+  "pk": 3,
+  "fields": {
+    "sequel": "c69631fe-e8ca-422e-9871-41a19d3b25f8",
+    "prequel": "e7caf378-7016-48a6-9663-07fd4d856e43"
+  }
+},
+{
   "model": "titles.manga",
   "pk": "01d3a4b9-5487-4bbe-85c2-0bccd8855b84",
   "fields": {
     "title": 6,
     "type": 1,
-    "author": 6,
+    "authors": 3,
     "premiere": "2007-01-01",
     "volumes": 1,
     "chapters": 5,
@@ -707,7 +847,7 @@
   "fields": {
     "title": 8,
     "type": 1,
-    "author": 6,
+    "authors": 3,
     "premiere": "2011-01-01",
     "volumes": 6,
     "chapters": 27,
@@ -739,7 +879,7 @@
   "fields": {
     "title": 5,
     "type": 2,
-    "author": 5,
+    "authors": 5,
     "premiere": "2010-01-01",
     "volumes": 10,
     "chapters": 210,
@@ -770,7 +910,7 @@
   "fields": {
     "title": 4,
     "type": 1,
-    "author": 4,
+    "authors": 6,
     "premiere": "2015-01-01",
     "volumes": 9,
     "chapters": 43,
@@ -802,7 +942,7 @@
   "fields": {
     "title": 11,
     "type": 1,
-    "author": 9,
+    "authors": 2,
     "premiere": "2009-01-01",
     "volumes": 18,
     "chapters": 186,
@@ -832,7 +972,7 @@
   "fields": {
     "title": 7,
     "type": 1,
-    "author": 7,
+    "authors": 4,
     "premiere": "2005-01-01",
     "volumes": 2,
     "chapters": 29,
@@ -863,7 +1003,7 @@
   "fields": {
     "title": 3,
     "type": 1,
-    "author": 3,
+    "authors": 7,
     "premiere": "2018-01-01",
     "volumes": 3,
     "chapters": 14,
@@ -884,6 +1024,37 @@
     ],
     "magazine": [
       10
+    ]
+  }
+},
+{
+  "model": "titles.manga",
+  "pk": "ea892fe2-85cc-4659-8cd8-fa210a246c61",
+  "fields": {
+    "title": 12,
+    "type": 1,
+    "authors": 1,
+    "premiere": "1991-01-01",
+    "volumes": 10,
+    "chapters": 50,
+    "demographic": 3,
+    "image": "manga/ea892fe2-85cc-4659-8cd8-fa210a246c61/882edbc2-a233-4960-9c26-a00e00ce24da.jpg",
+    "description": "They exist in the most unexpected places – be it within your eyes and ears, under the floor and roof of your house, or the trees and flowers in your garden. They are everywhere and yet nowhere at the same time. Are they alive or not? Perhaps it is more apt to say they are beings who transcend the concept of life and death itself…\r\nThey are mushi.\r\nSome wreak havoc in the lives of humans; while others bring them deliverance from suffering. Mushi are neither good, nor evil; for just like any other creature, they are merely striving to survive in this harsh, competitive world.\r\nGinko - a lone wanderer with a reclusive personality, offers help and guidance to those plagued by mushi. This is the tale of his travels and exploits in a wondrous world populated by these mysterious entities.",
+    "publisher": [
+      1
+    ],
+    "genre": [
+      16,
+      12,
+      6,
+      5,
+      2
+    ],
+    "theme": [
+      11
+    ],
+    "magazine": [
+      19
     ]
   }
 },
@@ -922,14 +1093,6 @@
 {
   "model": "titles.animetype",
   "pk": 5,
-  "fields": {
-    "name": "Special",
-    "slug": "special"
-  }
-},
-{
-  "model": "titles.animetype",
-  "pk": 6,
   "fields": {
     "name": "Special",
     "slug": "special"
@@ -1088,6 +1251,15 @@
   }
 },
 {
+  "model": "titles.studio",
+  "pk": 18,
+  "fields": {
+    "name": "Artland",
+    "image": "",
+    "slug": "artland"
+  }
+},
+{
   "model": "titles.anime",
   "pk": "142fd1f9-e310-4787-b8fa-0ca3b14d496a",
   "fields": {
@@ -1128,6 +1300,84 @@
     ],
     "theme": [
       1
+    ]
+  }
+},
+{
+  "model": "titles.anime",
+  "pk": "9c760f94-62ed-4dc3-9101-314c5f29e1c0",
+  "fields": {
+    "title": 13,
+    "type": 5,
+    "premiere": "2014-01-04",
+    "episodes": 1,
+    "image": "anime/9c760f94-62ed-4dc3-9101-314c5f29e1c0/59315l.jpg",
+    "description": "The entire countryside comes to a halt midday to witness a rare solar eclipse that is rumored to allow the average person to see Mushi. Unable to avert their gaze, the air is full of awe and wonder—but those who know the Mushi are preparing for the eclipse's aftermath.\r\n\r\nBased on a prediction from Tanyuu Karibusa, the cursed recorder, Mushishi Ginko finds himself in a very unlucky farming village. Immediately following the solar eclipse, a strange black cloud begins to gather in the sky and blocks the sun once more. Suspecting it to be the work of a Mushi known as Hihami, Ginko seeks to liberate the village from perpetual darkness. However, it seems that not all of the villagers are eager to return to the light.",
+    "studio": [
+      18
+    ],
+    "genre": [
+      16,
+      12,
+      6,
+      2
+    ],
+    "theme": [
+      11,
+      14,
+      15
+    ]
+  }
+},
+{
+  "model": "titles.anime",
+  "pk": "c69631fe-e8ca-422e-9871-41a19d3b25f8",
+  "fields": {
+    "title": 14,
+    "type": null,
+    "premiere": "2014-04-05",
+    "episodes": 10,
+    "image": "anime/c69631fe-e8ca-422e-9871-41a19d3b25f8/58533l.jpg",
+    "description": "Perceived as strange and feared by man, over time the misshapen ones came to be known as Mushi. Although they harbor no ill intentions towards humans, many suffer from the side effects of their existence and strange nature; exploiting the Mushi without understanding them, even unintentionally, can lead to disaster and strife for any involved. Mushishi Zoku Shou continues the story of Mushishi Ginko on his journey to help the visible world to coexist with the Mushi.\r\n\r\nDuring his travels, Ginko discovers various gifted individuals—those cursed by circumstance and those maintaining a fragile symbiosis with the Mushi—inevitably confronting the question of whether humanity, talented and tortured alike, can manage the responsibility of the unseen. Moreover, as a Mushishi, Ginko must learn more about these strange beings and decide if he has the right to interfere with the complex relationships between Mushi and mankind.",
+    "studio": [
+      18
+    ],
+    "genre": [
+      16,
+      12,
+      6,
+      2
+    ],
+    "theme": [
+      11,
+      14,
+      15
+    ]
+  }
+},
+{
+  "model": "titles.anime",
+  "pk": "e7caf378-7016-48a6-9663-07fd4d856e43",
+  "fields": {
+    "title": 12,
+    "type": 1,
+    "premiere": "2005-10-23",
+    "episodes": 26,
+    "image": "anime/e7caf378-7016-48a6-9663-07fd4d856e43/73862l.jpg",
+    "description": "\"Mushi\": the most basic forms of life in the world. They exist without any goals or purposes aside from simply \"being.\" They are beyond the shackles of the words \"good\" and \"evil.\" Mushi can exist in countless forms and are capable of mimicking things from the natural world such as plants, diseases, and even phenomena like rainbows.\r\n\r\nThis is, however, just a vague definition of these entities that inhabit the vibrant world of Mushishi, as to even call them a form of life would be an oversimplification. Detailed information on Mushi is scarce because the majority of humans are unaware of their existence.\r\n\r\nSo what are Mushi and why do they exist? This is the question that a \"Mushishi,\" Ginko, ponders constantly. Mushishi are those who research Mushi in hopes of understanding their place in the world's hierarchy of life.\r\n\r\nGinko chases rumors of occurrences that could be tied to Mushi, all for the sake of finding an answer.\r\n\r\nIt could, after all, lead to the meaning of life itself.",
+    "studio": [
+      18
+    ],
+    "genre": [
+      16,
+      12,
+      6,
+      2
+    ],
+    "theme": [
+      11,
+      14,
+      15
     ]
   }
 }

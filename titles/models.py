@@ -49,16 +49,20 @@ class MangaType(models.Model):
         return self.name
 
 
-class Author(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
-    surname = models.CharField(max_length=200, null=True, blank=True)
+class AuthorTable(models.Model):
+    name=models.CharField(max_length=200, null=True, blank=True)
     pseudonym = models.CharField(max_length=200, null=True, blank=True)
     photo = models.ImageField(upload_to='authors/', blank=True)
 
     def __str__(self):
-        return f'{self.name}  {self.surname}'
+        return f'{self.name}'
 
+class Authors(models.Model):
+    author= models.ForeignKey(AuthorTable, on_delete=models.CASCADE,related_name='authors_author', null=True, blank=True)
+    artist= models.ForeignKey(AuthorTable, on_delete=models.CASCADE,related_name='authors_artist', null=True, blank=True)
 
+    def __str__(self):
+        return f'Author-{self.author} Artist-{self.artist}'
 class Theme(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     slug = models.SlugField(max_length=150, default='')
@@ -110,12 +114,7 @@ class RelatedItem(models.Model):
             return self.anime
         else:
             return 'Does Not Exist'
-"""class RelatedTitles(models.Model):
-    adaptation=models.ManyToManyField(RelatedItem, related_name='adaptation', blank=True)
-    sequel=models.ManyToManyField(RelatedItem, related_name='sequel', blank=True)
-    prequel=models.ManyToManyField(RelatedItem, related_name='prequel', blank=True)
-    spin_off=models.ManyToManyField(RelatedItem, related_name='spin_off', blank=True)
-    based_on=models.ManyToManyField(RelatedItem, related_name='based_on', blank=True) """  
+
 
 class Adaptation(models.Model):
     adaptation= models.ForeignKey('Anime', on_delete=models.CASCADE,
@@ -147,8 +146,7 @@ class Manga(models.Model):
 
     type = models.ForeignKey(MangaType, on_delete=models.CASCADE,
                              related_name='manga', null=True, blank=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE,
-                               related_name='manga', null=True, blank=True)
+    authors = models.ForeignKey(Authors, on_delete=models.CASCADE,related_name='manga', null=True, blank=True)
 
     publisher = models.ManyToManyField(
         Publisher, related_name='manga', blank=True)

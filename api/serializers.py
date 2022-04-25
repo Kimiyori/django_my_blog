@@ -1,6 +1,6 @@
 # posts/serializers.py
 from rest_framework import serializers
-from titles.models import Anime,Title,Manga,Author,Publisher,Demographic,MangaType,Genre
+from titles.models import Anime,Title,Manga,AuthorTable,Publisher,Demographic,MangaType,Genre
 
 
 class TitleSerializer(serializers.ModelSerializer):
@@ -10,8 +10,8 @@ class TitleSerializer(serializers.ModelSerializer):
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Author
-        fields = ['name','surname','photo']
+        model = AuthorTable
+        fields = ['name','photo']
 
 
 

@@ -3,6 +3,9 @@ from django.views.generic import ListView, DetailView
 from .models import Genre, Studio, Anime,Manga, Demographic, AnimeType,MangaType, Publisher, Theme
 from django.db.models import Count
 from .filters import Filter,filter_by_name
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+
 # Create your views here.
 class TitleList(ListView):
     template_name='titles/list.html'
@@ -11,19 +14,22 @@ class TitleList(ListView):
     def get_queryset(self):
         def filter(instance,name):
             temp=name.split('__')[-1]
-            list=self.request.GET.getlist(temp)
-            if list:
-                
-                for item in list:
-                    instance=instance.filter(**filter_func(name=name,item=item))
+            if temp in captured_value:
+                list=self.request.GET.getlist(temp)
+                if list:
+                    for item in list:
+                        instance=instance.filter(**filter_func(name=name,item=item))
             return instance
         url=self.request.build_absolute_uri().split('/')[3]
+        url1 = self.request.build_absolute_uri()
+        parsed_url = urlparse(url1)
+        captured_value = parse_qs(parsed_url.query).keys()
         if url=='manga':
             model=Manga.objects.select_related('title')
-            list_filter=['genre','theme','demographic','type','publisher']
+            list_filter=['genre','theme','demographic','type','publisher','magazine','authors__artist','authors__author']
         elif url=='anime':
             model=Anime.objects.select_related('title')
-            list_filter=['genre','theme','source__demographic','type','studio']
+            list_filter=['genre','theme','type','studio']
         filter_func=Filter()
         for item in list_filter:
             model=filter(model,item)
@@ -57,10 +63,9 @@ class TitleDetail(DetailView):
         url=self.request.build_absolute_uri().split('/')[3]
         id=self.request.build_absolute_uri().split('/')[4]
         if url=='manga':
-            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher').select_related('title','demographic','type','author').filter(id=id)
+            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher').select_related('title','demographic','type','authors').filter(id=id)
         elif url=='anime':
-            model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','source','type','author').filter(id=id)
-
+            model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','source','type','authors').filter(id=id)
         return model
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
