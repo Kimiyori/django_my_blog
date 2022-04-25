@@ -248,6 +248,15 @@
   }
 },
 {
+  "model": "titles.publisher",
+  "pk": 10,
+  "fields": {
+    "name": "Square Enix",
+    "image": "",
+    "slug": "square-enix"
+  }
+},
+{
   "model": "titles.mangatype",
   "pk": 1,
   "fields": {
@@ -328,6 +337,16 @@
     "name": "Makoto",
     "surname": "Shinkai",
     "pseudonym": "makoto-shinkai",
+    "photo": ""
+  }
+},
+{
+  "model": "titles.author",
+  "pk": 9,
+  "fields": {
+    "name": "Satsuki",
+    "surname": "Yoshino",
+    "pseudonym": "satsuki-yoshino",
     "photo": ""
   }
 },
@@ -548,6 +567,30 @@
   }
 },
 {
+  "model": "titles.magazine",
+  "pk": 16,
+  "fields": {
+    "name": "Gangan Powered",
+    "slug": "gangan-powered"
+  }
+},
+{
+  "model": "titles.magazine",
+  "pk": 17,
+  "fields": {
+    "name": "Gangan Online",
+    "slug": "gangan-online"
+  }
+},
+{
+  "model": "titles.magazine",
+  "pk": 18,
+  "fields": {
+    "name": "Shounen Gangan",
+    "slug": "shounen-gangan"
+  }
+},
+{
   "model": "titles.title",
   "pk": 3,
   "fields": {
@@ -612,11 +655,19 @@
 },
 {
   "model": "titles.title",
-  "pk": 10,
+  "pk": 11,
   "fields": {
-    "original_name": "ばらかもん",
+    "original_name": "Barakamon",
     "russian_name": "Баракамон",
     "english_name": "Barakamon"
+  }
+},
+{
+  "model": "titles.adaptation",
+  "pk": 2,
+  "fields": {
+    "adaptation": "5e2c3cc5-9106-459b-a203-f877298fca80",
+    "based_on": "7a3654e2-e7f7-4036-bbe9-0d1c1a35af15"
   }
 },
 {
@@ -742,6 +793,36 @@
     "magazine": [
       11,
       7
+    ]
+  }
+},
+{
+  "model": "titles.manga",
+  "pk": "7a3654e2-e7f7-4036-bbe9-0d1c1a35af15",
+  "fields": {
+    "title": 11,
+    "type": 1,
+    "author": 9,
+    "premiere": "2009-01-01",
+    "volumes": 18,
+    "chapters": 186,
+    "demographic": 1,
+    "image": "manga/7a3654e2-e7f7-4036-bbe9-0d1c1a35af15/b27f48c1-3957-4f7d-a294-09df1abea732.jpg",
+    "description": "Handa Seishuu, a young and handsome calligrapher, is sent to Japan's westernmost island after a certain incident. On the very first day of his new life in the countryside, Sensei, as he comes to be called, meets the simple and innocent Naru, a native kid.\r\nFollow the (mis)adventures of this city-bred, hot-and-cold Sensei as he deals with his new neighbors' never-ending antics.",
+    "publisher": [
+      10
+    ],
+    "genre": [
+      16,
+      3
+    ],
+    "theme": [
+      1
+    ],
+    "magazine": [
+      16,
+      17,
+      18
     ]
   }
 },
@@ -990,15 +1071,6 @@
 },
 {
   "model": "titles.studio",
-  "pk": 15,
-  "fields": {
-    "name": "Ufotable",
-    "image": "",
-    "slug": "ufotable"
-  }
-},
-{
-  "model": "titles.studio",
   "pk": 16,
   "fields": {
     "name": "Ufotable",
@@ -1020,9 +1092,7 @@
   "pk": "142fd1f9-e310-4787-b8fa-0ca3b14d496a",
   "fields": {
     "title": 9,
-    "source": null,
     "type": 2,
-    "author": 8,
     "premiere": "2007-01-01",
     "episodes": 3,
     "image": "anime/142fd1f9-e310-4787-b8fa-0ca3b14d496a/db2c5206881d37ff23f027988e1116091362702997_main.jpg",
@@ -1041,15 +1111,13 @@
 },
 {
   "model": "titles.anime",
-  "pk": "b323380a-485f-495a-9b0b-b2ca2734a03a",
+  "pk": "5e2c3cc5-9106-459b-a203-f877298fca80",
   "fields": {
-    "title": 10,
-    "source": null,
+    "title": 11,
     "type": 1,
-    "author": null,
-    "premiere": "2014-07-06",
+    "premiere": "2014-08-14",
     "episodes": 12,
-    "image": "anime/b323380a-485f-495a-9b0b-b2ca2734a03a/111248l.jpg",
+    "image": "anime/5e2c3cc5-9106-459b-a203-f877298fca80/111248l.jpg",
     "description": "Seishuu Handa is an up-and-coming calligrapher: young, handsome, talented, and unfortunately, a narcissist to boot. When a veteran labels his award-winning piece as \"unoriginal,\" Seishuu quickly loses his cool with severe repercussions.\r\n\r\nAs punishment, and also in order to aid him in self-reflection, Seishuu's father exiles him to the Goto Islands, far from the comfortable Tokyo lifestyle the temperamental artist is used to. Now thrown into a rural setting, Seishuu must attempt to find new inspiration and develop his own unique art style—that is, if boisterous children (headed by the frisky Naru Kotoishi), fujoshi middle schoolers, and energetic old men stop barging into his house! The newest addition to the intimate and quirky Goto community only wants to get some work done, but the islands are far from the peaceful countryside he signed up for. Thanks to his wacky neighbors who are entirely incapable of minding their own business, the arrogant calligrapher learns so much more than he ever hoped to.",
     "studio": [
       17
@@ -1059,7 +1127,7 @@
       3
     ],
     "theme": [
-      14
+      1
     ]
   }
 }

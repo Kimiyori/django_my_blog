@@ -2,48 +2,43 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Demographic,Author,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType
+from .models import Demographic,Author,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,SequelPrequelAnime,SequelPrequelManga
 # Register your models here.
 
+class AdaptationInline(admin.TabularInline):
+    model = Adaptation
+    autocomplete_fields=['adaptation','based_on']
+    extra=1
+class PrequelAnimeInline(admin.TabularInline):
+    model = SequelPrequelAnime
+    autocomplete_fields=['prequel']
+    fk_name='sequel'
+    extra=1
+class SequelAnimeInline(admin.TabularInline):
+    model = SequelPrequelAnime
+    autocomplete_fields=['sequel']
+    fk_name='prequel'
+    extra=1
+class PrequelMangaInline(admin.TabularInline):
+    model = SequelPrequelManga
+    autocomplete_fields=['prequel']
+    fk_name='sequel'
+    extra=1
+class SequelMangaInline(admin.TabularInline):
+    model = SequelPrequelManga
+    autocomplete_fields=['sequel']
+    fk_name='prequel'
+    extra=1
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
-    autocomplete_fields=['title','source','type','author',]
+    inlines = [
+       AdaptationInline,
+       PrequelAnimeInline,SequelAnimeInline
+    ]
+    filter_horizontal=['genre','studio','theme',]
+    autocomplete_fields=['title','type',]
     search_fields=['title']
     change_form_template = 'admin/anime/change_form.html'
-
-    """def get_title_obj(self, obj):
-        return Title.objects.filter(manga=obj.source).first()
-
-    def save_model(self, request, obj, form, change): 
-        prev_anime = Anime.objects.filter(id=obj.id).first()
-        if obj.source:
-            cur_title = self.get_title_obj(obj)
-            if prev_anime and prev_anime.source != obj.source:
-                if prev_anime.source != None:
-                    prev_title = self.get_title_obj(prev_anime)
-                    if prev_title:
-                        prev_title.anime = None
-                        prev_title.save()
-                if cur_title:
-                    if cur_title.anime != None:
-                        cur_title.anime = None
-                        cur_title.save()
-                    cur_title.anime = obj
-                    cur_title.save()
-            else:
-                if cur_title:
-                    if cur_title.anime != None:
-                        cur_title.anime = None
-                        cur_title.save()
-                    obj.save()
-                    cur_title.anime = obj
-                    cur_title.save()
-        elif not obj.source:
-            prev_title = self.get_title_obj(prev_anime)
-            if prev_title:
-                prev_title.anime = None
-                prev_title.save()
-        super().save_model(request, obj, form, change)"""
 
 
 
@@ -88,6 +83,11 @@ class TitleAdmin(admin.ModelAdmin):
 
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
+    inlines = [
+       AdaptationInline,
+       SequelMangaInline,PrequelMangaInline
+    ]
+    filter_horizontal=['genre','publisher','magazine','theme',]
     search_fields = ['title']
     autocomplete_fields=['title','type','author','demographic']
     
