@@ -36,7 +36,7 @@ class TitleList(ListView):
         query = self.request.GET.get("q")
         if query:
             model= filter_by_name(query,model)
-        model=model.values('id','title__original_name','image').annotate(relevance=Count('id')).order_by('-relevance','title__original_name') 
+        model=model.values('id','title__original_name','image').alias(relevance=Count('id')).order_by('-relevance','title__original_name') 
         return model
 
     def get_context_data(self, **kwargs):
@@ -63,9 +63,12 @@ class TitleDetail(DetailView):
         url=self.request.build_absolute_uri().split('/')[3]
         id=self.request.build_absolute_uri().split('/')[4]
         if url=='manga':
-            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher').select_related('title','demographic','type','authors').filter(id=id)
+            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher',).\
+            select_related('title','demographic','type','authors__author','authors__artist',).\
+                filter(id=id)
         elif url=='anime':
-            model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','source','type','authors').filter(id=id)
+            model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','type').filter(id=id)
+        print(model)
         return model
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -36,6 +36,10 @@
         </div>
     </div>
     <div class="info">
+        <div class="desc">
+            <div class="name">Описание</div>
+            <p>{{item.get_desc}}</p>
+        </div>
         {% if item.authors.author %}
         <div class="items">
             <div class="name">Автор</div>
@@ -60,18 +64,16 @@
             </div>
         </div>
         {% endif %}
-        {% if item.adaptation %}
-        {% with sources=item.adaptation.all %}
+        {% if item.based_on.first.based_on %}
+        {% with source=item.based_on.first %}
         <div class="items">
-            <div class="name">Источник</div>
+            <div class="name">Демография</div>
             <div class="item-list">
-                {% for source in sources %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams source=source.based_on %}">
                     <span>
-                        {{ source.based_on }}
+                        {{ source.based_on.demographic }}
                     </span>
                 </a>
-                {% endfor %}
             </div>
         </div>
 
@@ -185,10 +187,6 @@
             </div>
         </div>
         {% endif %}
-    </div>
-    <div class="desc">
-        <div class="name">Описание</div>
-        <p>{{item.get_desc|linebreaks}}</p>
     </div>
     {% if  item.related.post.all %}
     <div class="related-blog">
