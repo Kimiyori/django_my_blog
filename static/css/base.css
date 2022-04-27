@@ -227,6 +227,10 @@ body {
     display: flex;
     flex-basis: auto;
     box-sizing: border-box;
+    margin-left: auto;
+}
+.title-block2 div:last-child {
+    margin-left: auto;
 }
 
 .title-block .main-image {
@@ -245,6 +249,14 @@ body {
 
 }
 
+.tabs {
+    display: flex;
+    flex-basis: auto;
+    margin-right:5px;
+    gap:1rem;
+    flex-direction: column;
+
+}
 
 .title {
     display: flex;
@@ -306,6 +318,17 @@ body {
     flex-wrap: wrap;
 
 
+}
+.item {
+    background-color: #f3f3f3;
+    border-radius: 0.25rem;
+    padding: 0.3125rem 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: all .1s ease-out;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000000;
 }
 
 .info .item-list .item {

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Genre, Studio, Anime,Manga, Demographic, AnimeType,MangaType, Publisher, Theme
+from .models import Adaptation, Genre, Studio, Anime,Manga, Demographic, AnimeType,MangaType, Publisher, Theme
 from django.db.models import Count
 from .filters import Filter,filter_by_name
 from urllib.parse import urlparse
@@ -62,13 +62,16 @@ class TitleDetail(DetailView):
     def get_queryset(self):
         url=self.request.build_absolute_uri().split('/')[3]
         id=self.request.build_absolute_uri().split('/')[4]
+        url1 = self.request.build_absolute_uri()
+        parsed_url = urlparse(url1)
+        captured_value = parse_qs(parsed_url.query)
+        print(Manga.objects.filter(id=id).values('adaptation','based_on'))
         if url=='manga':
-            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher',).\
+            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher','adaptation').\
             select_related('title','demographic','type','authors__author','authors__artist',).\
                 filter(id=id)
         elif url=='anime':
             model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','type').filter(id=id)
-        print(model)
         return model
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,5 +80,9 @@ class TitleDetail(DetailView):
             model='Manga'
         elif url=='anime':
            model='Anime'
-        context.update({'model':model})
+        url1 = self.request.build_absolute_uri()
+        parsed_url = urlparse(url1)
+        captured_value = parse_qs(parsed_url.query)
+        tab=captured_value['tab'][0]
+        context.update({'model':model,'tab':tab})
         return context

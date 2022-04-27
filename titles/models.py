@@ -94,26 +94,7 @@ class Title(models.Model):
         else:
             return "Doesn't have name"
 
-class RelatedItem(models.Model):
-    manga = models.OneToOneField('Manga', related_name='related_item',null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    anime = models.OneToOneField('Anime',related_name='related_item', null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    
-    def __str__(self):
-        if self.manga:
-            return self.manga.title.original_name
-        elif self.anime:
-            return self.anime.title.original_name
-        else:
-             return 'Not related'
-    def get_model(self):
-        if self.manga:
-            return self.manga
-        elif self.anime:
-            return self.anime
-        else:
-            return 'Does Not Exist'
+
 
 
 class Adaptation(models.Model):
@@ -121,6 +102,9 @@ class Adaptation(models.Model):
                                related_name='based_on', null=True, blank=True)
     based_on= models.ForeignKey('Manga', on_delete=models.CASCADE,
                                related_name='adaptation', null=True, blank=True)
+
+
+
 
 class SequelPrequelAnime(models.Model):
     sequel= models.ForeignKey('Anime', on_delete=models.CASCADE,
@@ -250,4 +234,5 @@ class Anime(models.Model):
             return self.description
         else:
             return "Нет описания"
-
+    def get_absolute_url(self):
+        return reverse('anime_detail', kwargs={'pk':str(self.id)})

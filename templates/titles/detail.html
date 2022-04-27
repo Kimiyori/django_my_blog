@@ -32,9 +32,19 @@
                     <h1>{{name.english_name }}</h1>
                     {% endwith %}
                 </div>
+                <div class="tabs">
+                    <a class="item" href="?tab=info">
+                        <span>Info</span>
+                    </a>
+                    <a class="item" href="?tab=related">
+                        <span>Related</span>
+                    </a>
+                </div>
             </div>
+            
         </div>
     </div>
+    {% if tab == 'info' %}
     <div class="info">
         <div class="desc">
             <div class="name">Описание</div>
@@ -211,10 +221,118 @@
         </div>
             {% endfor %}
     </div>
-    {% endif %}
+    
 </div>
+{% endif %}
+{% endif %}
+{% if tab == 'related' %}
+{% if  item.adaptation.all %}
+    <div class="related-blog">
+        <div class="name">Adaptation</div>
+        <div id='manga-list'>
+            {% for item in item.adaptation.all %}
+            <div class='manga-item'> 
+                <a class='title' href="{{ item.adaptation.get_absolute_url }}{% urlparams tab='info' %}">
+                <span>{{ item.adaptation.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{{ item.adaptation.get_absolute_url }}{% urlparams tab='info' %}">
+                    {% if item.adaptation.image %}
+                    {% thumbnail item.adaptation.image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
 
+{% if  item.based_on.all %}
+    <div class="related-blog">
+        <div class="name">Based on</div>
+        <div id='manga-list'>
+            {% for item in item.based_on.all %}
+            <div class='manga-item'> 
+                <a class='title' href="{{ item.based_on.get_absolute_url }}{% urlparams tab='info' %}">
+                <span>{{ item.based_on.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{{ item.based_on.get_absolute_url }}{% urlparams tab='info' %}">
+                    {% if item.based_on.image %}
+                    {% thumbnail item.based_on.image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
 
+{% if  item.sequel.all %}
+    <div class="related-blog">
+        <div class="name">Sequel</div>
+        <div id='manga-list'>
+            {% for item in item.sequel.all %}
+            <div class='manga-item'> 
+                <a class='title' href="{{ item.sequel.get_absolute_url }}{% urlparams tab='info' %}">
+                <span>{{ item.sequel.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{{ item.sequel.get_absolute_url }}{% urlparams tab='info' %}">
+                    {% if item.sequel.image %}
+                    {% thumbnail item.sequel.image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
 
+{% if  item.prequel.all %}
+    <div class="related-blog">
+        <div class="name">Prequel</div>
+        <div id='manga-list'>
+            {% for item in item.prequel.all %}
+            <div class='manga-item'> 
+                <a class='title' href="{{ item.prequel.get_absolute_url }}{% urlparams tab='info' %}">
+                <span>{{ item.prequel.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{{ item.prequel.get_absolute_url }}{% urlparams tab='info' %}">
+                    {% if item.prequel.image %}
+                    {% thumbnail item.prequel.image "600x600" format="PNG" as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
+                    {% endthumbnail %}
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
 
+{% endif %}
 {% endblock content %}

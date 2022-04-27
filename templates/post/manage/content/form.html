@@ -201,6 +201,9 @@ function dragEnter() {
     fromIndex.replaceChildren(...first);
     toIndex.replaceChildren(...second);
   }
+ 
+
+
 draggable.forEach(item => {
     item.addEventListener('dragstart', dragStart);
     item.addEventListener('dragover', dragOver);
@@ -208,7 +211,7 @@ draggable.forEach(item => {
     item.addEventListener('dragenter', dragEnter);
     item.addEventListener('dragleave', dragLeave);
   });
-
+ 
 let textarea_elements=document.getElementsByTagName('textarea')
 
 Object.keys(textarea_elements).forEach(function(e) {

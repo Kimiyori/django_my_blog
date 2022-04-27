@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load dynamic_url %}
+{% load urlparams %}
 {% load thumbnail %}
 {% block title %} {{ model }} {% endblock title %}
 {% block content %}
@@ -34,7 +35,7 @@
     <span>{{ item.title__original_name }}</span>
     </a>
     <div class='cover'>
-    <a class='test url-detail' href="{% dynamic_url type=model id=item.id %}">
+    <a class='test url-detail' href="{% dynamic_url type=model id=item.id %}{% urlparams tab='info' %}">
         {% if item.image %}
         {% thumbnail item.image "600x600" format="PNG" as im  %}
         <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title.original_name }}">
