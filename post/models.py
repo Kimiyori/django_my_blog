@@ -100,10 +100,18 @@ class ItemBase(models.Model):
         {'item': self})
 class Text(ItemBase):
     text = models.TextField()
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='text')
     
 class File(ItemBase):
     file = models.FileField(upload_to=path)
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='file')
 class Image(ItemBase):
     image = models.ImageField(upload_to=path)
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='image')
 class Video(ItemBase):
     video = models.URLField()
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='video')

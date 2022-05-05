@@ -103,7 +103,11 @@ class Adaptation(models.Model):
     based_on= models.ForeignKey('Manga', on_delete=models.CASCADE,
                                related_name='adaptation', null=True, blank=True)
 
-
+class AdaptationReverse(models.Model):
+    adaptation= models.ForeignKey('Manga', on_delete=models.CASCADE,
+                               related_name='based_on', null=True, blank=True)
+    based_on= models.ForeignKey('Anime', on_delete=models.CASCADE,
+                               related_name='adaptation', null=True, blank=True)
 
 
 class SequelPrequelAnime(models.Model):
