@@ -11,14 +11,39 @@ Add new content
 {% endif %}
 {% endblock %}
 {% block content %}
-
 <div class="module">
 
 
     <div class="detail-post">
-    {% if items|length > 1 %}
+    {% if main_form %}
+    <div class="edit-title ">
+        <form action="" method="post" enctype="multipart/form-data">
+            {{main_form.title}}
+            {% csrf_token %}
+        </form>
+    </div>
+    <div class="img-main">
+        <div class="post-img">
+            <a  href="/media/{{item.main_image.value}}">
+            {% thumbnail main_form.main_image.value "1500"  quality=99 as im  %}
+            <img  src='/media/{{im}}'>
+            {% endthumbnail %}
+            </a>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
+            {% csrf_token %}
+        </form>
+        </div>
+        <div class="related">
+        <form action="" method="post" enctype="multipart/form-data">
+            {{main_form.related_to}}
+            {% csrf_token %}
+        </form>
+        </div>
+    {% endif %}
+    {% if items %}
     {% for item in items %}
-    {% if item|length > 1  %}
     <div class='item-change' data-order="{{item.order}}" draggable="true">
     <div class="content-types" data-id={{item.id}}>
         <a class="del" ><img src="{% static 'img/del.png' %}"></a>
@@ -58,63 +83,25 @@ Add new content
                 {{ item.form.video }}
                 {% csrf_token %}
             </form>
-            </div>
+        </div>
         {% endif %}
-        </div>
-    {% else %}
-    <div class="edit-title ">
-        <form action="" method="post" enctype="multipart/form-data">
-            {{item.title}}
-            {% csrf_token %}
-        </form>
     </div>
-    <div class="img-main">
-        <div class="post-img">
-            <a  href="/media/{{item.main_image.value}}">
-            {% thumbnail item.main_image.value "1500"  quality=99 as im  %}
-            <img  src='/media/{{im}}'>
-            {% endthumbnail %}
-            </a>
+        {% endfor %}
+        {% else %}
+        <div class="content-types" data-id={{item.id}}>
+            <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+            <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+            <div class='item-create' data-model='text'  data-url="{% url 'module_content_create' object.id 'text' 0 %}" role="link" aria-disabled="true">
+                Text</div>
+            <div class='item-create' data-model='image' data-url="{% url 'module_content_create' object.id 'image' 0 %}" role="link" aria-disabled="true" >
+                Image </div>
+            <div class='item-create' data-model='video'  data-url="{% url 'module_content_create' object.id 'image' 0%}" role="link" aria-disabled="true" >
+                Video</div>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
-            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
-            {% csrf_token %}
-        </form>
-        </div>
-        <div class="related">
-        <form action="" method="post" enctype="multipart/form-data">
-            {{item.related_to}}
-            {% csrf_token %}
-        </form>
-        </div>
-    {% endif %}
-    {% endfor %}
-
-    {% else %}
-        <div class="'edit-title">
-    <form action="" method="post" enctype="multipart/form-data">
-        {{item.main.title}}
-        {% csrf_token %}
-    </form>
-</div>
-    <div class="post-img">
-            <a  href="/media/{{form.main.main_image.value}}">
-            {% thumbnail item.main_image.value "1500"  quality=99 as im  %}
-            <img src='/media/{{im}}'>
-            {% endthumbnail %}
-            </a>
-    </div>
-    <form action="" method="post" enctype="multipart/form-data">
-        <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
-        {% csrf_token %}
-    </form>
-    <form action="" method="post" enctype="multipart/form-data">
-        {{item.related_to}}
-        {% csrf_token %}
-    </form>
+        {% endif %}
 
     <p><input type="submit" value="Save content"></p>
-    {% endif %}
+
     </div>
 </div>
 {% endblock %}

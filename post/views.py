@@ -186,7 +186,7 @@ class PostDetailChange(TemplateResponseMixin, View):
          When(file__gte=1,then=ArrayAgg(Array(Cast(F('file__id'),output_field=CharField()),F('file__file'),Value('file'),output_field=TextField()))),
           When(video__gte=1,then=ArrayAgg(Array(Cast(F('video__id'),output_field=CharField()),F('video__video'),Value('video'),output_field=TextField()))))).\
             values('id','order','content').order_by('order')
-        list_of_values=[PostForm(instance=self.module)]
+        list_of_values=[]
         for x in self.contents.iterator():
             name_model=x['content'][0][2]
             data=x['content'][0][1]
@@ -198,8 +198,8 @@ class PostDetailChange(TemplateResponseMixin, View):
             x['form']=form
             del x['content']
             list_of_values.append(x)
-
-        return self.render_to_response({
+        main_form=PostForm(instance=self.module)
+        return self.render_to_response({'main_form':main_form,
                                         'object': self.module,
                                         'items':list_of_values})
 

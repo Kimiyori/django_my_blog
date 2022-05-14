@@ -19,7 +19,7 @@ from django.apps import apps
 class TitleList(ListView):
     template_name='titles/list.html'
     context_object_name = 'list'
-
+    paginate_by = 10
     def get_queryset(self):
         def filter(instance,name):
             list=self.request.GET.getlist(name)

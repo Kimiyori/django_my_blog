@@ -684,3 +684,28 @@ textarea:focus {
     pointer-events: none;
     user-select: none;
 }
+
+.pagination__list{
+    list-style: none;
+    margin: 10px;
+
+	font-family: sans-serif;
+}
+.pagination__item {
+    display:block;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+	float:left;
+	margin:5px;
+    border-radius: 5px;
+    background-color: rgb(245, 245, 245);
+}
+.pagination__item .pagination__link{
+	display:block;
+	padding:3px;
+	text-decoration:none;
+	background-color:inherit;
+	color:rgb(0, 0, 0);
+}

@@ -211,7 +211,9 @@
                 <div class='cover'>
                 <a class='test' href="{% url 'post_detail' item.0 %}">
                     {% if item.2 %}
-                    <img class="mangaimg" src="{{  item.2 }}" alt="{{ item.1 }}">
+                    {% thumbnail item.2 "400"   as im  %}
+                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.2 }}">
+                    {% endthumbnail %}
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.1 }}">
                     {% endif %}
