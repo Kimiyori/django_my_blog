@@ -10,6 +10,7 @@ class OrderField(models.PositiveIntegerField):
             if self.for_fields:
                 query = {field: getattr(model_instance, field) for field in self.for_fields}
                 qs = qs.filter(**query)
+
                 cur_max=int(model_instance.order)
                 for item in qs:
                     if (item.order - cur_max) in [0,1]:

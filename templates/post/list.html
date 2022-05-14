@@ -7,22 +7,24 @@
 
 {% endblock search %}
 <hr>
+
 <div class="post-wrap">
     {% for post in list %}
     <div class='post-item'>
         <div class="shadow">
-            <a class='title' href="{% url 'post_detail' post.pk %}">
+            <a class='title' href="{% url 'post_detail' post.id %}">
                 <span>{{ post.publish|date:" d M Y" }}</span>
                 <span>{{ post.title }}</span>
             </a>
-            {% if request.user == post.author %}
-            <a class='title' href="{% url 'post_detail_change' post.pk %}">
+            
+            {% if request.user.id == post.author %}
+            <a class='title' href="{% url 'post_detail_change' post.id %}">
                 <span>Change</span>
             </a>
             {% endif %}
         </div>
         <div class='cover'>
-            <a class='test' href="{% url 'post_detail' post.pk %}">
+            <a class='test' href="{% url 'post_detail' post.id %}">
                 {% if post.main_image %}
                 {% thumbnail post.main_image "1500" format="PNG" as im %}
                 <img class="mangaimg" src="{{  im.url }}" alt="{{ post.title}}">

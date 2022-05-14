@@ -121,9 +121,20 @@ class SequelPrequelManga(models.Model):
                                related_name='prequel', null=True, blank=True)
     prequel= models.ForeignKey('Manga', on_delete=models.CASCADE,
                                related_name='sequel', null=True, blank=True)
-def image_path_manga(instance, filename):
+def image_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'manga/{0}/{1}'.format(instance.id, filename)
+    return f'{instance._meta.model_name}/{instance.id}/original/{filename}'
+def image_thumb_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return f'{instance._meta.model_name}/{instance.id}/thumbnail/{filename}'
+class Image(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
+    image = models.ImageField(upload_to=image_path, max_length=300,blank=True)
+    thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
+
 class Manga(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -147,7 +158,8 @@ class Manga(models.Model):
         Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
     theme = models.ManyToManyField(
         Theme, related_name='manga', blank=True)
-    image = models.ImageField(upload_to=image_path_manga, blank=True)
+    image = models.ForeignKey(
+        Image, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
     magazine = models.ManyToManyField(
         Magazine, related_name='manga', blank=True)
     description = models.TextField( blank=True)
@@ -195,9 +207,6 @@ class Studio(models.Model):
     def __str__(self):
         return self.name
 
-def image_path_anime(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'anime/{0}/{1}'.format(instance.id, filename)
 
 class Anime(models.Model):
     id = models.UUIDField(
@@ -216,7 +225,8 @@ class Anime(models.Model):
         Genre, related_name='anime', blank=True)
     theme = models.ManyToManyField(
         Theme, related_name='anime', blank=True)
-    image = models.ImageField(upload_to=image_path_anime, blank=True)
+    image = models.ForeignKey(
+        Image, on_delete=models.CASCADE, related_name='anime', null=True, blank=True)
     description = models.TextField(null=True,  blank=True)
 
 

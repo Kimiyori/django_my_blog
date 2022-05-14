@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load embed_video_tags %}
 {% load thumbnail %}
 {% block title %}{{ post.title }}{% endblock title %}
 {% block content %}
-
-
 <div class="detail-post">
     <h2>{{ post.title}} </h2>
     <div class="post-img">
         <img src="/media/{{post.main_image}}">
     </div>
-{% for block in post.contents.all %}
-    {{block.item.render}}
+{% for block in content %}
+    {% if block.cont.0.1 == 'text' %}
+    <div class="text">
+        {{ block.cont.0.0 | safe | center:"15"  | linebreaks}}
+        </div>
+    {% elif block.cont.0.1 == 'image' %}
+    <div class="post-img">
+        {% thumbnail block.cont.0.0 "1200"  as im %}
+        <a href="/media/{{ block.cont.0.0 }}" ><img src="/media/{{ im }}" ></a>
+        {% endthumbnail %}
+        </div>
+    {% elif block.cont.0.1 == 'file' %}
+    <p><a href="{{ block.cont.0.0 }}" class="button">Download file</a></p>
+    {% elif block.cont.0.1 == 'video' %}
+            {% video block.cont.0.0 "100% x 700" %}
+
+    {% endif %}
+
 {% endfor %}
 </div>
 {% endblock content %}

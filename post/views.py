@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.forms.models import modelform_factory,modelformset_factory
 from django.forms import formset_factory
 from django.apps import apps
+from django.http import JsonResponse
 from .models import Post, Content,Related,Text,File,Image,Video
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import redirect, get_object_or_404
@@ -18,10 +19,11 @@ from django.forms.models import inlineformset_factory
 from django.contrib.contenttypes.forms import  generic_inlineformset_factory
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models.expressions import Func
-from django.db.models.fields import CharField,UUIDField,TextField,IntegerField
-from django.db.models.functions import Cast
+from django.db.models.fields import CharField,UUIDField,TextField,IntegerField,FilePathField,URLField
+from django.db.models.functions import Cast,Coalesce
 from django.db.models import F
 from django.db.models import Exists, OuterRef,Count,Case,When,Value
+from embed_video.backends import YoutubeBackend
 # Create your views here.
 
 class ContentOrderView(View):
@@ -57,14 +59,28 @@ class PostList(ListView):
     model = Post
     template_name = 'post/list.html'
     context_object_name = 'list'
+    def get_queryset(self):
+        post=Post.objects.all().values('id','publish','title','main_image','author')
+        return post
+
+class Array(Func):
+    template = '%(function)s[%(expressions)s]'
+    function = 'ARRAY'
 
 
-
-
-class PostDetail(DetailView):
-    model = Post
+class PostDetail(TemplateResponseMixin,View):
+    model=Post
     template_name = 'post/manage/detail.html'
     context_object_name = 'post'
+    def get(self,request,pk):
+        post=Post.objects.filter(id=pk).only('id','title','main_image').first()
+        content = Content.objects.filter(post=post).annotate(cont=Case(
+        When(text__gte=1,then=ArrayAgg(Array(F('text__text'),Value('text')))),
+        When(image__gte=1,then=ArrayAgg(Array(F('image__image'),Value('image')))),
+         When(file__gte=1,then=ArrayAgg(Array(F('file__file'),Value('file')))),
+          When(video__gte=1,then=ArrayAgg(Array(F('video__video'),Value('video')))),output_field=TextField())).\
+            order_by('order').values('cont')
+        return self.render_to_response({'post':post,'content':content})
 
 
 class PostUpdate(UpdateView):
@@ -77,7 +93,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     post = None
     model = None
     obj = None
-    template_name = 'post/manage/content/form_test.html'
+    template_name = 'post/manage/content/form_add.html'
 
     def get_model(self, model_name):
         if model_name in ['text', 'video', 'image', 'file']:
@@ -110,6 +126,8 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                                         'object': self.obj})
 
     def post(self, request, post_id, model_name, id=None,order=None):
+        data={}
+        data['user_id']=request.user.id
         form = self.get_form(self.model,
                              instance=self.obj,
                              data=request.POST,
@@ -120,24 +138,30 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             obj.save()
             if not id:
                 if not order:
-                    Content.objects.create(post=self.post_obj,
+                    content=Content.objects.create(post=self.post_obj,
                                         item=obj)
                 else:
                     order=str(int(order)+1)
-                    Content.objects.create(post=self.post_obj,
+                    content=Content.objects.create(post=self.post_obj,
                                         order=order,
                                         item=obj)
-        return redirect('post_detail_change', self.post_obj.id)
+                    data['id']=content.id
+                    data['order']=int(order)
+        else:
+            print(form.errors)
+        if isinstance(obj,Video):
+            y=YoutubeBackend(url=obj.video)
+            data['url']=y.get_url()
 
-class Array(Func):
-    template = '%(function)s[%(expressions)s]'
-    function = 'ARRAY'
+        return JsonResponse(data)
+
+
 class PostDetailChange(TemplateResponseMixin, View):
     module = None
     model = None
     obj = None
     contents = None
-    template_name = 'post/manage/content/form.html'
+    template_name = 'post/manage/content/form_test.html'
 
     def get_model(self, model_name):
         if model_name in ['text', 'video', 'image', 'file']:
@@ -156,37 +180,28 @@ class PostDetailChange(TemplateResponseMixin, View):
         return super().dispatch(request, pk)
 
     def get(self, request, pk):
-        self.contents = Content.objects.filter(post=self.module)
-        a=modelform_factory(Text, exclude=['post',
-                                                 'created',
-                                                 'updated'])
-        e=['text__text','text__id','image__image','image__id','file__file','file__id','video__video','video__id']
-        #n=Content.objects.filter(post=self.module).annotate(item1=ArrayAgg(Array(Cast(F('text__id'),output_field=CharField()),F('text__text'),output_field=TextField()),distinct=True)).values('id','item1','order',)
-        n=Content.objects.filter(post=self.module).annotate(content=Case(
-        When(text__gte=1,then=ArrayAgg(Array(Cast(F('text__id'),output_field=CharField()),F('text__text'),Value('text'),output_field=TextField()),distinct=True)),
-        When(image__gte=1,then=ArrayAgg(Array(Cast(F('image__id'),output_field=CharField()),F('image__image'),Value('image'),output_field=TextField()),distinct=True)),
-         When(file__gte=1,then=ArrayAgg(Array(Cast(F('file__id'),output_field=CharField()),F('file__file'),Value('file'),output_field=TextField()),distinct=True)),
-          When(video__gte=1,then=ArrayAgg(Array(Cast(F('video__id'),output_field=CharField()),F('video__video'),Value('video'),output_field=TextField()),distinct=True)))).\
-            values('id','order','content')
-
-        q={'main':PostForm(instance=self.module)}
-
-        for x in n:
-            model = self.get_model(x['content'][0][2])
-            form = self.get_form(model, initial={x['content'][0][2]:x['content'][0][1]})
-            x['form']=form
-            x['model']=x['content'][0][2]
-            q[x['id']]=x
-        #print(q)
-        d={'main':PostForm(instance=self.module)}
+        self.contents = Content.objects.filter(post=self.module).select_related('text').annotate(content=Case(
+        When(text__gte=1,then=ArrayAgg(Array(Cast(F('text__id'),output_field=CharField()),F('text__text'),Value('text'),output_field=TextField()))),
+        When(image__gte=1,then=ArrayAgg(Array(Cast(F('image__id'),output_field=CharField()),F('image__image'),Value('image'),output_field=TextField()))),
+         When(file__gte=1,then=ArrayAgg(Array(Cast(F('file__id'),output_field=CharField()),F('file__file'),Value('file'),output_field=TextField()))),
+          When(video__gte=1,then=ArrayAgg(Array(Cast(F('video__id'),output_field=CharField()),F('video__video'),Value('video'),output_field=TextField()))))).\
+            values('id','order','content').order_by('order')
+        list_of_values=[PostForm(instance=self.module)]
         for x in self.contents.iterator():
-            a=x.item
-            model = self.get_model(a._meta.model_name)
-            form = self.get_form(model, instance=a)
-            d[x] = form  
-        return self.render_to_response({'form': d,
+            name_model=x['content'][0][2]
+            data=x['content'][0][1]
+            item_id=x['content'][0][0]
+            model = self.get_model(name_model)
+            form = self.get_form(model, initial={name_model:data})
+            x['model']=name_model
+            x['item_id']=item_id
+            x['form']=form
+            del x['content']
+            list_of_values.append(x)
+
+        return self.render_to_response({
                                         'object': self.module,
-                                        })
+                                        'items':list_of_values})
 
     def get_main_form(self,model, field, *args, **kwargs):
             Form = modelform_factory(model, fields=[field])

@@ -86,7 +86,7 @@ body {
 .detail-post>* {
     /*border: 1px solid black;*/
    
-    border-radius: 12px;
+
 }
 
 .detail-post h2 {
@@ -465,6 +465,7 @@ body {
 
 .item-create {
     display: block;
+
 }
 
 .item-change {
@@ -550,7 +551,7 @@ textarea:focus {
 }
 
 .custom-file-input::before {
-    content: 'Select some files';
+    content: 'Change image';
     color: black;
     display: inline-block;
     background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);

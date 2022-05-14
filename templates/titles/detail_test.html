@@ -11,8 +11,8 @@
 <div id='manga-detail'>
     <div class='main-info'>
         <div class="upper-image">
-            {% if item.image %}
-            <img src="/media/{{ item.image }}" alt="{{ item.title__original_name }}">
+            {% if item.image__image %}
+            <img src="/media/{{ item.image__image }}" alt="{{ item.title__original_name }}">
             {% else %}
             <img src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name}}">
             {% endif %}
@@ -20,8 +20,8 @@
         <div class="title-block">
             <div class="title-block2">
                 <div class="main-image">
-                    {% if item.image %}
-                        <img class='img2' src="/media/{{ item.image }}" alt="{{item.title__original_name }}">
+                    {% if item.image__image %}
+                        <img class='img2' src="/media/{{ item.image__image }}" alt="{{item.title__original_name }}">
                         {% else %}
                         <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name }}">
                         {% endif %}
@@ -211,9 +211,7 @@
                 <div class='cover'>
                 <a class='test' href="{% url 'post_detail' item.0 %}">
                     {% if item.2 %}
-                    {% thumbnail item.2 "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.1 }}">
-                    {% endthumbnail %}
+                    <img class="mangaimg" src="{{  item.2 }}" alt="{{ item.1 }}">
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.1 }}">
                     {% endif %}
@@ -239,9 +237,8 @@
                 <div class='cover'>
                 <a class='test' href="{% dynamic_url  type='anime' id=item.0 %}{% urlparams tab='info' %}">
                     {% if item.1 %}
-                    {% thumbnail item.1 "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="/media/{{  im }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                     {% endif %}
@@ -266,9 +263,8 @@
                 <div class='cover'>
                 <a class='test' href="{% dynamic_url  type='manga' id=item.0 %}{% urlparams tab='info' %}">
                     {% if item.1 %}
-                    {% thumbnail item.1 "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="/media/{{  im }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                     {% endif %}
@@ -293,9 +289,7 @@
             <div class='cover'>
             <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
                 {% if item.1 %}
-                {% thumbnail item.1 "600x600" format="PNG" as im  %}
-                <img class="mangaimg" src="/media/{{  im }}" alt="{{ item.title }}">
-                {% endthumbnail %}
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
                 {% else %}
                 <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                 {% endif %}
@@ -320,9 +314,9 @@
             <div class='cover'>
             <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
                 {% if item.1 %}
-                {% thumbnail item.1 "600x600" format="PNG" as im  %}
-                <img class="mangaimg" src="/media/{{  im }}" alt="{{ item.title }}">
-                {% endthumbnail %}
+
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
                 {% else %}
                 <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                 {% endif %}

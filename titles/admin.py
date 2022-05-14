@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable
+from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable,Image
 # Register your models here.
 
 class AdaptationInline(admin.TabularInline):
@@ -60,7 +60,9 @@ class DemoAdmin(admin.ModelAdmin):
 class DemoAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
-
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    pass
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}

@@ -17,29 +17,47 @@
       placeholder="Search"
       class="search-input"
     />
-  </form>
+    <div class="filter">
+      {% for name,queryset in filter.items %}
+          <div class="filter_item">
+              <div class="name_filter">{{name}}</div>
+              <div class="item-list">
+                  {% for item in queryset %}
+                      <label >
+                          <input name='{{name|lower}}'  value='{{item.name}}' type="checkbox">
+                          <div class="item-list-name">
+                          <span >{{item.name}}</span>
+                          </div>
+                      </label>  
+                  {% endfor %}
+              </div>
+          </div>
+      {% endfor %}
+  <button class='filter_button' type="submit" >Submit</button>
+
+  </div>
+</form>
 
   <button class='filter-button' type="button">
       <span>Filter</span>
   </button>
 
-{% include "components/filter.html" %}
-
+  
 </div>
 <hr>
 <div id='manga-list'>
 {% for item in list %}
 
 <div class='manga-item'> 
-    <a class='title url-detail' href="{% dynamic_url type=model id=item.id %}">
+    <a class='title url-detail' href="{% dynamic_url type=model id=item.id %}{% urlparams tab='info' %}">
     <span>{{ item.title__original_name }}</span>
     </a>
     <div class='cover'>
     <a class='test url-detail' href="{% dynamic_url type=model id=item.id %}{% urlparams tab='info' %}">
-        {% if item.image %}
-        {% thumbnail item.image "600x600" format="PNG" as im  %}
-        <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title.original_name }}">
-        {% endthumbnail %}
+        {% if item.image__thumbnail %}
+
+        <img class="mangaimg" src="/media/{{  item.image__thumbnail }}" alt="{{ item.title.original_name }}">
+
         {% else %}
         <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title.original_name }}">
         {% endif %}
@@ -83,6 +101,11 @@ filter_list.forEach(name=> {
         }
       }
 })
+{% if query %}
 let search_form =  document.getElementsByClassName("search-form")[0];
-
+let search_input=search_form.getElementsByClassName("search-input")[0];
+let search_field ='{{query}}'
+console.log(search_input)
+search_input.value=search_field
+{% endif %}
 {% endblock %}

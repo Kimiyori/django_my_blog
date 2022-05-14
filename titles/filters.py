@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.fields import CharField,UUIDField,TextField
 from django.db.models.functions import Cast
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import F
+from django.db.models import F,Q
 from django.db.models.expressions import Func
 class Filter:
     def __call__(self,name:str,item)-> str:
@@ -13,13 +13,7 @@ class Filter:
         }
 
 def filter_by_name(query,item):
-    search_vector = SearchVector('title__original_name', 'title__russian_name', 'title__english_name')
-    search_query = SearchQuery(query)
-    return item.annotate(
-        search=search_vector,
-        rank=SearchRank(search_vector, search_query)
-    ).filter(search=search_query).order_by("-rank")
-
+    return item.filter(Q(title__original_name__icontains=query)| Q(title__russian_name__icontains=query)| Q(title__english_name__icontains=query))
 
 class Array(Func):
     template = '%(function)s[%(expressions)s]'
@@ -47,10 +41,10 @@ def annotate_acc(type,tab)-> dict:
                                     'magazines':['magazine__name'],
                                     'related_posts':['related__post__id','related__post__title','related__post__main_image']},
                             'related':
-                                    {'adaptations':['adaptation__adaptation__id','adaptation__adaptation__image','adaptation__adaptation__title__original_name'],
-                                    'based_ons':['based_on__based_on__id','based_on__based_on__image','based_on__based_on__title__original_name'],
-                                    'sequels':['sequel__sequel__id','sequel__sequel__image','sequel__sequel__title__original_name'],
-                                    'prequels':['prequel__prequel__id','prequel__prequel__image','prequel__prequel__title__original_name']}},
+                                    {'adaptations':['adaptation__adaptation__id','adaptation__adaptation__image__thumbnail','adaptation__adaptation__title__original_name'],
+                                    'based_ons':['based_on__based_on__id','based_on__based_on__image__thumbnail','based_on__based_on__title__original_name'],
+                                    'sequels':['sequel__sequel__id','sequel__sequel__image__thumbnail','sequel__sequel__title__original_name'],
+                                    'prequels':['prequel__prequel__id','prequel__prequel__image__thumbnail','prequel__prequel__title__original_name']}},
             'anime_detail':{
                             'info':
                                     {'genres':['genre__name'],
@@ -58,10 +52,10 @@ def annotate_acc(type,tab)-> dict:
                                     'studios':['studio__name'],
                                     'related_posts':['related__post__id','related__post__title','related__post__main_image']},
                             'related':
-                                    {'adaptations':['adaptation__adaptation__id','adaptation__adaptation__image','adaptation__adaptation__title__original_name'],
-                                    'based_ons':['based_on__based_on__id','based_on__based_on__image','based_on__based_on__title__original_name'],
-                                    'sequels':['sequel__sequel__id','sequel__sequel__image','sequel__sequel__title__original_name'],
-                                    'prequels':['prequel__prequel__id','prequel__prequel__image','prequel__prequel__title__original_name']}
+                                    {'adaptations':['adaptation__adaptation__id','adaptation__adaptation__image__thumbnail','adaptation__adaptation__title__original_name'],
+                                    'based_ons':['based_on__based_on__id','based_on__based_on__image__thumbnail','based_on__based_on__title__original_name'],
+                                    'sequels':['sequel__sequel__id','sequel__sequel__image__thumbnail','sequel__sequel__title__original_name'],
+                                    'prequels':['prequel__prequel__id','prequel__prequel__image__thumbnail','prequel__prequel__title__original_name']}
                     },
             
     }
@@ -72,14 +66,14 @@ def values_acc(type,tab):
     d_values={'manga_detail':{
                             'info':['id','description','title__original_name', 'title__russian_name',
                                     'title__english_name','type__name','authors__author__name','authors__artist__name','premiere',
-                                    'volumes','chapters','demographic__name','image','genres','publishers','themes','magazines','related_posts'],
-                            'related':['id','image','title__original_name', 'title__russian_name',
+                                    'volumes','chapters','demographic__name','image__image','genres','publishers','themes','magazines','related_posts'],
+                            'related':['id','image__image','title__original_name', 'title__russian_name',
                                         'title__english_name','adaptations','based_ons','sequels','prequels']},
                     'anime_detail':{
                                 'info':['id','description','title__original_name', 'title__russian_name',
                                         'title__english_name','type__name','premiere',
-                                        'episodes','image','genres','themes','studios','related_posts'],
-                                'related':['id','image','title__original_name', 'title__russian_name',
+                                        'episodes','image__image','genres','themes','studios','related_posts'],
+                                'related':['id','image__image','title__original_name', 'title__russian_name',
                                         'title__english_name','adaptations','based_ons','sequels','prequels']},
                     }
     return d_values[type][tab]

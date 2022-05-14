@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from requests import request
 from .models import Adaptation, Genre, Studio, Anime,Manga, Demographic, AnimeType,MangaType, Publisher, Theme
 from django.db.models import Count
 from .filters import Filter,filter_by_name,annotate_acc,values_acc
@@ -21,30 +22,29 @@ class TitleList(ListView):
 
     def get_queryset(self):
         def filter(instance,name):
-            temp=name.split('__')[-1]
-            if temp in captured_value:
-                list=self.request.GET.getlist(temp)
-                if list:
-                    for item in list:
-                        instance=instance.filter(**filter_func(name=name,item=item))
+            list=self.request.GET.getlist(name)
+            if list:
+                for item in list:
+                    instance=instance.filter(**filter_func(name=name,item=item))
             return instance
         url1 = self.request.build_absolute_uri()
         parsed_url = urlparse(url1)
         captured_value = parse_qs(parsed_url.query).keys()
         type=self.request.resolver_match.url_name
         if type=='manga_list':
-            list_filter=['genre','theme','demographic','type','publisher','magazine','authors__artist','authors__author']
+            list_filter=['genre','theme','demographic','type','publisher','magazine',]
         elif type=='anime_list':
             list_filter=['genre','theme','type','studio']
         model=apps.get_model(app_label='titles',
                                   model_name=type.split('_')[0]).objects.all()
         filter_func=Filter()
-        for item in list_filter:
+        for item in  list_filter:
             model=filter(model,item)
         query = self.request.GET.get("q")
         if query:
             model= filter_by_name(query,model)
-        model=model.values('id','title__original_name','image').alias(relevance=Count('id')).order_by('-relevance','title__original_name') 
+        model=model.values('id','title__original_name','image__thumbnail').alias(relevance=Count('id')).order_by('-relevance','title__original_name') 
+
         return model
 
     def get_context_data(self, **kwargs):

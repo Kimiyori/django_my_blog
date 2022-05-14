@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.apps import apps
 from django_cleanup import cleanup
 
+
 # Create your models here.
 User=get_user_model()
 
