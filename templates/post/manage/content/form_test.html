@@ -494,7 +494,7 @@ for (let i = 0; i < add_item.length; i++) {
             const csrftoken = getCookie('csrftoken');
             let id1 = this.parentElement.getAttribute('data-id');
             data = JSON.stringify({ id: id1 });
-            console.log(data)
+
             let url = 'http://127.0.0.1:8000/blog/content/' + id1 + '/delete/';
             let source_url = fetch(url, {
                 method: 'POST',

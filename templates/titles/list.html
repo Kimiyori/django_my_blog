@@ -34,7 +34,7 @@
           </div>
       {% endfor %}
   <button class='filter_button' type="submit" >Submit</button>
-
+  <button class='filter_button' type="reset" >Reset</button>
   </div>
 </form>
 
@@ -94,9 +94,10 @@
       }
   });
 const params = new URLSearchParams(window.location.search);
-const filter_list = ['genre','theme','demographic','type','publisher'];
+const filter_list = ['genre','theme','demographic','type','publisher','studio'];
 filter_list.forEach(name=> {
     let a=params.getAll(name)
+    console.log(a)
     let list_items=document.getElementsByName(name);
     for(i=0;i<(list_items.length);i++){
         if(a.includes(list_items[i].value)){
@@ -108,7 +109,6 @@ filter_list.forEach(name=> {
 let search_form =  document.getElementsByClassName("search-form")[0];
 let search_input=search_form.getElementsByClassName("search-input")[0];
 let search_field ='{{query}}'
-console.log(search_input)
 search_input.value=search_field
 {% endif %}
 {% endblock %}

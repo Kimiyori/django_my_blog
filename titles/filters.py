@@ -1,7 +1,6 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from .models import Manga,Anime
+
 from django.contrib.postgres.fields import ArrayField
-from django.db.models.fields import CharField,UUIDField,TextField
+from django.db.models.fields import CharField,TextField
 from django.db.models.functions import Cast
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F,Q
@@ -59,6 +58,7 @@ def annotate_acc(type,tab)-> dict:
                     },
             
     }
+ 
     annotate_dict={key:lst(value) for (key,value) in d_anno[type][tab].items()}
     return annotate_dict
 
@@ -77,3 +77,16 @@ def values_acc(type,tab):
                                         'title__english_name','adaptations','based_ons','sequels','prequels']},
                     }
     return d_values[type][tab]
+
+def filter_by_models(request,type,instance):
+    fil=Filter()
+    if type=='manga_list':
+            list_filter=['genre','theme','demographic','type','publisher','magazine',]
+    elif type=='anime_list':
+        list_filter=['genre','theme','type','studio']
+    for model in  list_filter:
+        list=request.GET.getlist(model)
+        if list:
+            for item in list:
+                instance=instance.filter(**fil(name=model,item=item))
+    return instance

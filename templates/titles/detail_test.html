@@ -70,33 +70,12 @@
         <div class="items">
             <div class="name">Тип</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type %}"><span>{{ item.type__name }}</span></a>
+                
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type__name %}"><span>{{ item.type__name }}</span></a>
             </div>
         </div>
         {% endif %}
-        {% if item.based_on.first.based_on %}
-        {% with source=item.based_on.first %}
-        <div class="items">
-            <div class="name">Демография</div>
-            <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams source=source.based_on %}">
-                    <span>
-                        {{ source.based_on.demographic }}
-                    </span>
-                </a>
-            </div>
-        </div>
-
-        {% if source.demographic %}
-        <div class="items">
-            <div class="name">Демография</div>
-            <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=source.demographic %}"><span>{{ source.demographic }}</span></a>
-            </div>
-        </div>
-        {% endif %}
-        {% endwith %}
-        {% endif %}
+    
         {% if item.demographic__name %}
         <div class="items">
             <div class="name">Демография</div>
@@ -105,11 +84,11 @@
             </div>
         </div>
         {% endif %}
-        {% if item.studio %}
+        {% if item.studios %}
         <div class="items">
             <div class="name">Студия</div>
             <div class="item-list">
-                {% for name in item.studio.all %}
+                {% for name in item.studios %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams studio=name %}">
                     <span>
                         {{ name }}

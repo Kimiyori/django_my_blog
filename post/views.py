@@ -141,12 +141,12 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                     content=Content.objects.create(post=self.post_obj,
                                         item=obj)
                 else:
-                    order=str(int(order)+1)
+                    order=int(order)+1
                     content=Content.objects.create(post=self.post_obj,
                                         order=order,
                                         item=obj)
                     data['id']=content.id
-                    data['order']=int(order)
+                    data['order']=order
         else:
             print(form.errors)
         if isinstance(obj,Video):

@@ -455,6 +455,8 @@ body {
     padding: 2rem 0.5rem 0.5rem;
     background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .7));
     text-shadow: 0 0 3px rgb(7, 7, 7);
+    text-decoration: none;
+    color:#ebebeb;
 }
 
 .content-types {
@@ -615,7 +617,23 @@ textarea:focus {
     transform: translate(-50%, -50%);
     width: 50%;
     box-shadow: 0 5px 30px #000000;
+    padding:20px;
 }
+
+.filter .filter_button {
+    background-color: #ebebeb; /* Green */
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-right: 15px;
+    
+}
+
 
 #filter_form {
     display: flex;
@@ -626,12 +644,13 @@ textarea:focus {
 
 .filter_item .name_filter {
     font-size: 20px;
-    margin-bottom: 0.25rem;
+
 }
 
 .filter_item .item-list {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom:5px;
 }
 
 .filter_item .item-list label .item-list-name {

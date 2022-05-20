@@ -38,9 +38,11 @@ class PublishedManager(models.Manager):
 def main_path(instance, filename):
     return 'post/{0}/{1}/{2}/{3}'.format(instance.author.id,instance.id,'image', filename)
 class Post(models.Model):
+    DRAFT='draft'
+    PUBLISHED='published'
     STATUS_CHOICES = (
-    ('draft', 'Draft'),
-    ('published', 'Published'),
+    (DRAFT, 'Draft'),
+    (PUBLISHED, 'Published'),
     )
     title = models.CharField(max_length=500)
     main_image = models.ImageField(upload_to=main_path)
@@ -53,7 +55,7 @@ class Post(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=DRAFT)
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
     class Meta:
@@ -76,8 +78,20 @@ class Content(models.Model):
     class Meta:
         ordering = ['order']
 
+    def __str__(self):
+        return f'{self.post.title} {self.order}'
     
-    
+    def refresh_from_db(self, using=None, fields=None, **kwargs):
+        # fields contains the name of the deferred field to be
+        # loaded.
+        if fields is not None:
+            fields = set(fields)
+            deferred_fields = self.get_deferred_fields()
+            # If any deferred field is going to be loaded
+            if fields.intersection(deferred_fields):
+                # then load all of them
+                fields = fields.union(deferred_fields)
+        super().refresh_from_db(using, fields, **kwargs)
 
 def path(instance, filename):
     return 'post/{0}/{1}/{2}/{3}'.format(instance.post.author.id,instance.post.id,instance._meta.model_name, filename)

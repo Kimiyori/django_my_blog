@@ -15,6 +15,7 @@ django-cors-headers = "*"
 django-cleanup = "*"
 django-embed-video = "*"
 django-debug-toolbar = "*"
+coverage = "*"
 
 [dev-packages]
 
