@@ -81,17 +81,7 @@ class Content(models.Model):
     def __str__(self):
         return f'{self.post.title} {self.order}'
     
-    def refresh_from_db(self, using=None, fields=None, **kwargs):
-        # fields contains the name of the deferred field to be
-        # loaded.
-        if fields is not None:
-            fields = set(fields)
-            deferred_fields = self.get_deferred_fields()
-            # If any deferred field is going to be loaded
-            if fields.intersection(deferred_fields):
-                # then load all of them
-                fields = fields.union(deferred_fields)
-        super().refresh_from_db(using, fields, **kwargs)
+
 
 def path(instance, filename):
     return 'post/{0}/{1}/{2}/{3}'.format(instance.post.author.id,instance.post.id,instance._meta.model_name, filename)

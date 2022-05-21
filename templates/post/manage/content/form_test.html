@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load embed_video_tags %}
-{% load cache %}
+
 {% load thumbnail %}
 {% block title %}
 {% if object %}
@@ -17,10 +17,9 @@ Add new content
     <div class="detail-post">
     {% if main_form %}
     <div class="edit-title ">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="{% url 'post_detail_change' object.id %}" method="post" enctype="multipart/form-data">
             {{main_form.title}}
-            {% csrf_token %}
-        </form>
+
     </div>
     <div class="img-main">
         <div class="post-img">
@@ -30,13 +29,11 @@ Add new content
             {% endthumbnail %}
             </a>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
             <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
-            {% csrf_token %}
-        </form>
+
         </div>
         <div class="related">
-        <form action="" method="post" enctype="multipart/form-data">
+
             {{main_form.related_to}}
             {% csrf_token %}
         </form>
@@ -100,7 +97,7 @@ Add new content
         </div>
         {% endif %}
 
-    <p><input type="submit" value="Save content"></p>
+    
 
     </div>
 </div>
@@ -301,8 +298,9 @@ for (let i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', function (e) {
         const csrftoken = getCookie('csrftoken');
         let id1 = this.parentElement.getAttribute('data-id');
-        data = JSON.stringify({ id: id1 });
-        let url = 'http://127.0.0.1:8000/blog/content/' + id1 + '/delete/';
+        let post_id1='{{object.id}}'
+        let url = 'http://127.0.0.1:8000/blog/content/' +post_id1 +'/' + id1 + '/delete/';
+        data = JSON.stringify({ id: id1 ,post_id:post_id1});
         let source_url = fetch(url, {
             method: 'POST',
             data: data,
@@ -493,9 +491,10 @@ for (let i = 0; i < add_item.length; i++) {
         del.addEventListener('click', function (e) {
             const csrftoken = getCookie('csrftoken');
             let id1 = this.parentElement.getAttribute('data-id');
-            data = JSON.stringify({ id: id1 });
+            let post_id1='{{object.id}}'
+            data = JSON.stringify({ id: id1 ,post_id:post_id1});
 
-            let url = 'http://127.0.0.1:8000/blog/content/' + id1 + '/delete/';
+            let url = 'http://127.0.0.1:8000/blog/content/' +post_id1 +'/' + id1 + '/delete/';
             let source_url = fetch(url, {
                 method: 'POST',
                 data: data,
@@ -509,5 +508,66 @@ for (let i = 0; i < add_item.length; i++) {
         
     })
 }
+
+let edit_title=document.querySelector('.edit-title input')
+edit_title.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let title=edit_title.value
+    let url='{% url 'post_detail_change' object.id %}'
+    let form = new FormData();
+    form.append('title', title);
+    form.append('type','title')
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response)
+        return response.json();
+    })
+})
+let edit_main_img=document.querySelector('.img-main input')
+edit_main_img.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let main_image=edit_main_img.files[0]
+    let url='{% url 'post_detail_change' object.id %}'
+    //let data=JSON.stringify({'main_image':main_image})
+    let form = new FormData();
+    form.append('main_image', main_image);
+    form.append('type','main_image')
+    //let data=JSON.stringify({'main_image':form})
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response)
+        return response.json();
+    })
+})
+let related=document.querySelector('.related select')
+related.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let value=related.value
+    let url='{% url 'post_detail_change' object.id %}'
+
+    let form = new FormData();
+    form.append('related_to', value);
+    form.append('type','related_to')
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response)
+        return response.json();
+    })
+})
 
     {% endblock %}

@@ -33,27 +33,9 @@ class ContentOrderView(View):
         for id, order in d.items():
             Content.objects.filter(id=id,
             post__author=request.user).update(order=order)
-        return redirect('post_list')
+        return JsonResponse({'response':'yes'})
 
-class SearchResultsList(ListView):
-        model = Post
-        context_object_name = "list"
-        template_name = "post/search.html"
 
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            query = self.request.GET.get("q")
-            context.update({'query': query})
-            return context
-        def get_queryset(self):
-            query = self.request.GET.get("q") 
-            search_vector = SearchVector('title')
-            search_query = SearchQuery(query)
-            results= Post.objects.annotate(
-                search=search_vector,
-                rank=SearchRank(search_vector, search_query)
-            ).filter(search=search_query).order_by("-rank")
-            return results
 
 class PostList(ListView):
     model = Post
@@ -120,10 +102,10 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                                          post=self.post_obj)
         return super().dispatch(request, post_id, model_name, id,order)
 
-    def get(self, request, post_id, model_name, id=None,order=None):
-        form = self.get_form(self.model, instance=self.obj)
-        return self.render_to_response({'form': form,
-                                        'object': self.obj})
+    #def get(self, request, post_id, model_name, id=None,order=None):
+        #form = self.get_form(self.model, instance=self.obj)
+        #return self.render_to_response({'form': form,
+                                        #'object': self.obj})
 
     def post(self, request, post_id, model_name, id=None,order=None):
         data={}
@@ -134,7 +116,8 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                              files=request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
-            obj.post = self.post_obj
+            if not hasattr(obj,'post'):
+                obj.post = self.post_obj
             obj.save()
             if not id:
                 if not order:
@@ -204,30 +187,30 @@ class PostDetailChange(TemplateResponseMixin, View):
                                         'items':list_of_values})
 
     def get_main_form(self,model, field, *args, **kwargs):
-            Form = modelform_factory(model, fields=[field])
-            return Form(*args, **kwargs)
+        Form = modelform_factory(model, fields=[field])
+        return Form(*args, **kwargs)
     def post(self, request, pk):
-        field=list(request.POST.keys())[0]
-        if field!='csrfmiddlewaretoken':
-            form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
-        else:
-            field=list(request.FILES.keys())[0]
-            form=self.get_main_form(Post,field,instance=self.module,data=request.POST,files=request.FILES)
+        form=self.get_main_form(Post,request.POST['type'],instance=self.module,data=request.POST,files=request.FILES)
         if form.is_valid():
             form.save()
         else:
             print(form.errors)
-        return redirect('post_detail_change', self.module.id)
+
+
+        return JsonResponse({'responce':'ok'})
 
 
 class ContentDeleteView(View):
 
-    def post(self, request, id):
+    def post(self, request,post_id, id):
+        post=get_object_or_404(Post,
+                                    id=post_id,)
+
         content = get_object_or_404(Content,
                                     id=id,
                                     post__author=request.user)
 
-        module = content.post
+
         content.item.delete()
         content.delete()
-        return redirect('post_detail_change', module.id)
+        return JsonResponse({'answer':'yes'})
