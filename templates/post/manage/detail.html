@@ -6,6 +6,9 @@
 {% block content %}
 
 <div class="detail-post">
+    <span class="count">
+        {{ total_views }} view{{ total_views|pluralize }}
+       </span>
     <h2>{{ post.title}} </h2>
     <div class="post-img">
         <img src="/media/{{post.main_image}}">
@@ -29,6 +32,7 @@
     {% endif %}
 
 {% endfor %}
+
 </div>
 {% endblock content %}
 <script>

@@ -18,9 +18,9 @@ User=get_user_model()
 
 
 class Related(models.Model):
-    manga = models.OneToOneField(Manga, related_name='related',null=True, blank=True,
+    manga = models.ForeignKey(Manga, related_name='related',null=True, blank=True,
                                  on_delete=models.CASCADE)
-    anime = models.OneToOneField(Anime,related_name='related', null=True, blank=True,
+    anime = models.ForeignKey(Anime,related_name='related', null=True, blank=True,
                                  on_delete=models.CASCADE)
     
     def __str__(self):

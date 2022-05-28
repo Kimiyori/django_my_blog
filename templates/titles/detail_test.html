@@ -7,7 +7,7 @@
 {% block title %}{{ item.title__original_name  }}{% endblock title %}
 {% block content %}
 
-
+{% with item.0 as item %}
 <div id='manga-detail'>
     <div class='main-info'>
         <div class="upper-image">
@@ -212,11 +212,12 @@
         <div id='manga-list'>
             {% for item in item.adaptations %}
             <div class='manga-item'> 
-                <a class='title' href="{% dynamic_url  type='anime' id=item.0 %}{% urlparams tab='info' %}">
+                
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
                 <span>{{ item.2  }}</span>
                 </a>
                 <div class='cover'>
-                <a class='test' href="{% dynamic_url  type='anime' id=item.0 %}{% urlparams tab='info' %}">
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
                     {% if item.1 %}
                     <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
 
@@ -238,11 +239,11 @@
         <div id='manga-list'>
             {% for item in item.based_ons %}
             <div class='manga-item'> 
-                <a class='title' href="{% dynamic_url  type='manga' id=item.0 %}{% urlparams tab='info' %}">
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
                 <span>{{ item.2  }}</span>
                 </a>
                 <div class='cover'>
-                <a class='test' href="{% dynamic_url  type='manga' id=item.0 %}{% urlparams tab='info' %}">
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
                     {% if item.1 %}
                     <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
 
@@ -311,4 +312,5 @@
 {% endif %}
 
 {% endif %}
+{% endwith %}
 {% endblock content %}

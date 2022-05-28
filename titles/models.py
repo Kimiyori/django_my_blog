@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.urls import reverse
-
+from django_cleanup import cleanup
 # Create your models here.
 
 class Demographic(models.Model):
@@ -20,7 +20,7 @@ class Genre(models.Model):
     slug = models.SlugField(max_length=250, default='')
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -127,6 +127,8 @@ def image_path(instance, filename):
 def image_thumb_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return f'{instance._meta.model_name}/{instance.id}/thumbnail/{filename}'
+
+
 class Image(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -164,7 +166,10 @@ class Manga(models.Model):
         Magazine, related_name='manga', blank=True)
     description = models.TextField( blank=True)
     class Meta:
-        ordering = ('-title',)
+        ordering = ('title',)
+        indexes = [
+            models.Index(fields=['id',]),
+        ]
 
     def __str__(self):
         if self.title.original_name:
@@ -231,7 +236,10 @@ class Anime(models.Model):
 
 
     class Meta:
-        ordering = ('-title',)
+        ordering = ('title',)
+        indexes = [
+            models.Index(fields=['id',]),
+        ]
         
     def __str__(self):
         if self.title.original_name:

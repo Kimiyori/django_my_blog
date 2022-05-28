@@ -18,13 +18,14 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import Home
+from post.views import PostList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('users/', include('accounts.urls')),
     path("accounts/", include("allauth.urls")),
     path('api/', include('api.urls')),
-     path("", Home.as_view(), name="home"), 
+     path("", PostList.as_view(), name="home"), 
     path('',include('titles.urls'),name='titles'),
     path('blog/',include('post.urls'),name='blog'),
 ]

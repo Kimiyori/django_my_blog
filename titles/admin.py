@@ -2,11 +2,15 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable,Image
+from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,AdaptationReverse,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable,Image
 # Register your models here.
 
 class AdaptationInline(admin.TabularInline):
     model = Adaptation
+    autocomplete_fields=['adaptation','based_on']
+    extra=1
+class AdaptationReverseInline(admin.TabularInline):
+    model = AdaptationReverse
     autocomplete_fields=['adaptation','based_on']
     extra=1
 class PrequelAnimeInline(admin.TabularInline):
@@ -32,7 +36,7 @@ class SequelMangaInline(admin.TabularInline):
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
     inlines = [
-       AdaptationInline,
+       AdaptationInline,AdaptationReverseInline,
        PrequelAnimeInline,SequelAnimeInline
     ]
     filter_horizontal=['genre','studio','theme',]
@@ -90,7 +94,7 @@ class TitleAdmin(admin.ModelAdmin):
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
     inlines = [
-       AdaptationInline,
+       AdaptationInline,AdaptationReverseInline,
        SequelMangaInline,PrequelMangaInline
     ]
     filter_horizontal=['genre','publisher','magazine','theme',]

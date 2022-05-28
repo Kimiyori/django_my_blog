@@ -102,6 +102,14 @@ DATABASES = {
         'PASSWORD': 'postgres', #development settings, will change in production
         'HOST': 'db',
         'PORT': 5432
+    },
+    'test_db': {
+        'ENGINE': 'django.db.backends.postgresql', #changed from sqlite
+        'NAME': 'test_db', #development settings, will change in production
+        'USER': 'postgres', #development settings, will change in production
+        'PASSWORD': 'postgres', #development settings, will change in production
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 
@@ -156,25 +164,29 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID = 1     #all-auth supports multiple sites
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend", #this how admins will log in to the admin site
-    "allauth.account.auth_backends.AuthenticationBackend", #this how users log in
-]
-LOGIN_REDIRECT_URL = "home"   #change to desired url name
-LOGOUT_REDIRECT_URL = "home" #change to desired url name
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
+#LOGIN_REDIRECT_URL = "home"   #change to desired url name
+#LOGOUT_REDIRECT_URL = "home" #change to desired url name
 ACCOUNT_SESSION_REMEMBER = True #remember user via sessions
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False #preferred UX
-ACCOUNT_AUTHENTICATION_METHOD = "username_email" 
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"  
 ACCOUNT_EMAIL_REQUIRED = True #required for email authentication
 ACCOUNT_UNIQUE_EMAIL = True #required for email authentication
 ACCOUNT_EMAIL_VERIFICATION = "optional" #can use as a welcome email as well
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 36400
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 AUTH_USER_MODEL = "accounts.CustomUser"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
-
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.SignupForm'
+    }
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -189,3 +201,20 @@ CORS_ORIGIN_ORIGINS  = (
 import socket
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379',
+    }
+}
+
+REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_BROKER_URL = "redis://redis:6379"
+
+CELERY_RESULT_BACKEND = "redis://redis:6379"

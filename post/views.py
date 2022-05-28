@@ -1,3 +1,4 @@
+from functools import cache
 import json
 from django.forms.models import modelform_factory
 from django.apps import apps
@@ -9,14 +10,15 @@ from django.views.generic import ListView, UpdateView
 from .forms import PostForm
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models.expressions import Func
 from django.db.models.fields import CharField, TextField
 from django.db.models.functions import Cast
-from django.db.models import F
 from django.db.models import Case, When, Value
 from embed_video.backends import YoutubeBackend
 from titles.filters import Array
+import redis
+from django.conf import settings
+from django.core.cache import cache
+from titles.paginator import LargeTablePaginator
 # Create your views here.
 
 
@@ -31,10 +33,11 @@ class ContentOrderView(View):
 
 
 class PostList(ListView):
-    model = Post
-    template_name = 'post/list.html'
+    #model = Post
+    template_name = 'post/list.html' 
     context_object_name = 'list'
-
+    paginate_by=10
+    paginator=LargeTablePaginator
     def get_queryset(self):
         post = Post.objects.all().values('id', 'publish', 'title', 'main_image', 'author')
         return post
@@ -46,18 +49,30 @@ class PostDetail(TemplateResponseMixin, View):
     context_object_name = 'post'
 
     def get(self, request, pk):
-        post = Post.objects.filter(id=pk).only(
-            'id', 'title', 'main_image').first()
-        content = Content.objects.filter(post=post).annotate(cont=Case(
-            When(text__gte=1, then=ArrayAgg(
-                Array(F('text__text'), Value('text')))),
-            When(image__gte=1, then=ArrayAgg(
-                Array(F('image__image'), Value('image')))),
-            When(file__gte=1, then=ArrayAgg(
-                Array(F('file__file'), Value('file')))),
-            When(video__gte=1, then=ArrayAgg(Array(F('video__video'), Value('video')))), output_field=TextField())).\
-            order_by('order').values('cont')
-        return self.render_to_response({'post': post, 'content': content})
+        r = redis.Redis(host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                db=settings.REDIS_DB)
+        post=cache.get(f'postid:{pk}')
+        if post is None:
+            post = Post.objects.filter(id=pk).values(
+                'id', 'title', 'main_image').first()
+            cache.set(f'postid:{pk}',post)
+
+        content=cache.get(f'contentpostid:{pk}')
+        if content is None:
+            content = Content.objects.filter(post__id=pk).annotate(cont=Case(
+                When(text__gte=1, then=ArrayAgg(
+                    Array(F('text__text'), Value('text')))),
+                When(image__gte=1, then=ArrayAgg(
+                    Array(F('image__image'), Value('image')))),
+                When(file__gte=1, then=ArrayAgg(
+                    Array(F('file__file'), Value('file')))),
+                When(video__gte=1, then=ArrayAgg(Array(F('video__video'), Value('video')))), output_field=TextField())).\
+                order_by('order').values('cont')
+            cache.set(f'contentpostid:{pk}',content)
+
+        total_views = r.incr(f'post:{pk}:views')
+        return self.render_to_response({'post': post, 'content': content,'total_views':total_views})
 
 
 class PostUpdate(UpdateView):
@@ -110,11 +125,11 @@ class ContentCreateUpdateView(GetModelAndForm,TemplateResponseMixin, View):
             obj.save()
             if not id:
                 if not order:
-                    content = Content.objects.create(post=self.post_obj,
+                    content = Content.objects.using('test_db').create(post=self.post_obj,
                                                      item=obj)
                 else:
                     order = int(order)+1
-                    content = Content.objects.create(post=self.post_obj,
+                    content = Content.objects.using('test_db').create(post=self.post_obj,
                                                      order=order,
                                                      item=obj)
                     data['id'] = content.id
@@ -151,7 +166,7 @@ class PostDetailChange(GetModelAndForm,TemplateResponseMixin, View):
             When(video__gte=1, then=ArrayAgg(Array(Cast(F('video__id'), output_field=CharField()), F('video__video'), Value('video'), output_field=TextField()))))).\
             values('id', 'order', 'content').order_by('order')
         list_of_values = []
-        for x in self.contents.iterator():
+        for x in self.contents:
             name_model = x['content'][0][2]
             data = x['content'][0][1]
             item_id = x['content'][0][0]
@@ -165,7 +180,8 @@ class PostDetailChange(GetModelAndForm,TemplateResponseMixin, View):
         main_form = PostForm(instance=self.module)
         return self.render_to_response({'main_form': main_form,
                                         'object': self.module,
-                                        'items': list_of_values})
+                                        'items': list_of_values,
+                                        })
 
     def get_main_form(self, model, field, *args, **kwargs):
         Form = modelform_factory(model, fields=[field])

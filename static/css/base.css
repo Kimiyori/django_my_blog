@@ -728,3 +728,48 @@ textarea:focus {
 	background-color:inherit;
 	color:rgb(0, 0, 0);
 }
+
+.profile > * {
+    padding: 20px;
+}
+ .profile-img img,.base-img img {
+    object-fit: cover;
+    object-position: center top;
+    width: 120%; 
+    height: 120%;
+    margin-left: -10%; 
+    margin-top: -10%;
+
+}
+.base-img{
+    display: inline-block; 
+    position: relative; 
+    width: 50px; 
+    height: 50px; 
+    overflow: hidden; 
+    border-radius: 50%; 
+    
+}
+
+ .profile-img{
+    display: inline-block; 
+    position: relative; 
+    width: 250px; 
+    height: 250px; 
+    overflow: hidden; 
+    border-radius: 50%; 
+
+    
+}
+
+.profile textarea{
+    background-color:#fcfcfc;
+}
+.pagination_main {
+
+    display: flex;
+    justify-content: center;
+
+    
+
+}
