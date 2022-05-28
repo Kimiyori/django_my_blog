@@ -126,31 +126,23 @@ let dragStartIndex;
 let dragEndIndex;
 
 function dragStart() {
-
     dragStartIndex = this.closest('.item-change')
 
 }
 function dragEnter() {
-    // console.log('Event: ', 'dragenter');
-
-
     this.classList.add('over');
 }
 
 function dragLeave() {
-    // console.log('Event: ', 'dragleave');
     this.classList.remove('over');
 }
 
 function dragOver(e) {
-    // console.log('Event: ', 'dragover');
     e.preventDefault();
 }
 
 function dragDrop() {
-    // console.log('Event: ', 'drop');
     dragEndIndex = this
-
     swapItems(dragStartIndex, dragEndIndex);
     this.classList.remove('over');
 }
@@ -184,7 +176,6 @@ function swapItems(fromIndex, toIndex) {
 }
 
 
-
 draggable.forEach(item => {
     item.addEventListener('dragstart', dragStart);
     item.addEventListener('dragover', dragOver);
@@ -193,32 +184,25 @@ draggable.forEach(item => {
     item.addEventListener('dragleave', dragLeave);
 });
 
-let textarea_elements = document.getElementsByTagName('textarea')
-
-Object.keys(textarea_elements).forEach(function (e) {
-    textarea_elements[e].style.height = 'auto';
-    textarea_elements[e].style.height = textarea_elements[e].scrollHeight + 100 + 'px';
-});
-for (let i = 0; i < textarea_elements.length; i++) {
-    textarea_elements[i].addEventListener('input', function (e) {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-    })
+const tx = document.getElementsByTagName("textarea");
+for (let i = 0; i < tx.length; i++) {
+  tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+  tx[i].addEventListener("input", OnInput, false);
+}
+function OnInput() {
+  this.style.height = "auto";
+  this.style.height = (this.scrollHeight) + "px";
 }
 
-let parent = document.querySelector('.detail-post').getElementsByClassName('target_img')
+let target_images = document.querySelector('.detail-post').getElementsByClassName('target_img')
 
-let forms = parent
-
-for (let i = 0; i < forms.length; i++) {
-    forms[i].addEventListener('change', function (e) {
-
+for (let i = 0; i < target_images.length; i++) {
+    target_images[i].addEventListener('change', function (e) {
         const csrftoken = getCookie('csrftoken');
         let form = new FormData();
-        let data = forms[i].querySelector('#id_image').files[0]
+        let data = target_images[i].querySelector('#id_image').files[0]
         form.append('image', data);
-        let url = forms[i].action;
-
+        let url = target_images[i].action;
         let source_url = fetch(url, {
             method: 'POST',
             body: form,
@@ -226,12 +210,12 @@ for (let i = 0; i < forms.length; i++) {
         }).then(response => {
             if (!response.ok) throw Error(response.statusText);
             let name = form.get('image')['name']
-            let url_img = forms[i].parentElement.querySelector('.img')
+            let url_img = target_images[i].parentElement.querySelector('.img')
             let parent_url = url_img.parentElement
             let url_img_src = url_img.src
             url_img_src = url_img_src.replace('http://127.0.0.1:8000', '')
             url_img_src = url_img_src.substr(0, url_img_src.lastIndexOf("/") + 1) + name
-            forms[i].parentElement.querySelector('.img').src = url_img_src
+            target_images[i].parentElement.querySelector('.img').src = url_img_src
             parent_url.href = url_img_src
             return response.json();
         })
@@ -240,11 +224,8 @@ for (let i = 0; i < forms.length; i++) {
 }
 
 let target_texts = document.querySelector('.detail-post').getElementsByClassName('target_text')
-
-
 for (let i = 0; i < target_texts.length; i++) {
     target_texts[i].addEventListener('change', function (e) {
-
         const csrftoken = getCookie('csrftoken');
         let form = new FormData();
         let data = target_texts[i].getElementsByTagName('textarea')[0].value
@@ -264,7 +245,6 @@ for (let i = 0; i < target_texts.length; i++) {
 let target_videos = document.querySelector('.detail-post').getElementsByClassName('target_video')
 for (let i = 0; i < target_videos.length; i++) {
     target_videos[i].addEventListener('change', function (e) {
-
         const csrftoken = getCookie('csrftoken');
         let form = new FormData();
         let data = target_videos[i].getElementsByTagName('input')[0].value
@@ -286,7 +266,7 @@ for (let i = 0; i < target_videos.length; i++) {
     })
 }
 
-let links = document.querySelector('.post-img').getElementsByTagName('a')
+let links = document.querySelectorAll('.post-img a')
 for (let i = 0; i < links.length; i++) {
     links[i].addEventListener('click', function (e) {
         e.preventDefault()
@@ -317,6 +297,8 @@ let add_item = document.getElementsByClassName("item-create")
 function insertAfter(referenceNode, newNode) {
     referenceNode.parentElement.insertBefore(newNode, referenceNode.nextSibling);
   }
+
+function item_create_events(add_item) {
 for (let i = 0; i < add_item.length; i++) {
     add_item[i].addEventListener('click', function (e) {
         const model=add_item[i].getAttribute('data-model')
@@ -325,22 +307,21 @@ for (let i = 0; i < add_item.length; i++) {
         let el = document.createElement("div");
         let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+order
         el.classList.add("item-change")
-        el.dataset.order="?"
         el.setAttribute('draggable', true);
         if (model=='text') {
             el.innerHTML = `
-                <div class="content-types" data-id='?'>
+                <div class="content-types" >
                     <a class="del" ><img src="{% static 'img/del.png' %}"></a>
                     <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-                    <div class='item-create' data-model='text'  data-url="${url}" role="link" aria-disabled="true">
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
                         Text</div>
-                        <div class='item-create' data-model='image'  data-url="${url}" role="link" aria-disabled="true">
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
                             Image</div>
-                            <div class='item-create' data-model='video' data-url="${url}" role="link" aria-disabled="true">
+                            <div class='item-create' data-model='video'  role="link" aria-disabled="true">
                                 Video</div>
                     </div>
                         <div class="text-main">
-                            <form class='target_text' action="${url}" method="post" enctype="multipart/form-data">
+                            <form class='target_text'  method="post" enctype="multipart/form-data">
                                 <textarea name="text" cols="40" rows="10" required="" id="id_text" style="height: 384px;"></textarea>
                                 {% csrf_token %}
                             </form>
@@ -351,7 +332,6 @@ for (let i = 0; i < add_item.length; i++) {
                 let form = new FormData();
                 let data = el.getElementsByTagName('textarea')[0].value
                 form.append('text', data);
-                let url = el.getElementsByTagName('form')[0].action;
                 let source_url = fetch(url, {
                     method: 'POST',
                     body: form,
@@ -365,8 +345,10 @@ for (let i = 0; i < add_item.length; i++) {
                     el.getElementsByTagName('form')[0].action=url
                     el.dataset.order=json.order
                     el.querySelector('.content-types').dataset.id=json.id
+                    let name_models=['text','image','video']
                     let items=el.getElementsByClassName('item-create')
                     for (let i = 0; i < items.length; i++) {
+                        let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
                         items[i].dataset.url=url
                     }
 
@@ -375,14 +357,14 @@ for (let i = 0; i < add_item.length; i++) {
         }
         if (model=='image') {
             el.innerHTML = `
-                <div class="content-types" data-id='?'>
+                <div class="content-types" >
                     <a class="del" ><img src="{% static 'img/del.png' %}"></a>
                     <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-                    <div class='item-create' data-model='text'  data-url="${url}" role="link" aria-disabled="true">
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
                         Text</div>
-                        <div class='item-create' data-model='image'  data-url="${url}" role="link" aria-disabled="true">
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
                             Image</div>
-                            <div class='item-create' data-model='video' data-url="${url}" role="link" aria-disabled="true">
+                            <div class='item-create' data-model='video'  role="link" aria-disabled="true">
                                 Video</div>
                     </div>
                     <div class="img-main">
@@ -393,7 +375,7 @@ for (let i = 0; i < add_item.length; i++) {
             
                             </a>
                         </div>
-                        <form class='target_img' action="${url}" method="post" enctype="multipart/form-data">
+                        <form class='target_img'method="post" enctype="multipart/form-data">
                             <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
                             {% csrf_token %}
                         </form>
@@ -404,8 +386,6 @@ for (let i = 0; i < add_item.length; i++) {
                     let form = new FormData();
                     let data = el.querySelector('#id_image').files[0]
                     form.append('image', data);
-                    let url = el.getElementsByTagName('form')[0].action;
-            
                     let source_url = fetch(url, {
                         method: 'POST',
                         body: form,
@@ -426,8 +406,10 @@ for (let i = 0; i < add_item.length; i++) {
                         el.getElementsByTagName('form')[0].action=url
                         el.dataset.order=json.order
                         el.querySelector('.content-types').dataset.id=json.id
+                        let name_models=['text','image','video']
                         let items=el.getElementsByClassName('item-create')
                         for (let i = 0; i < items.length; i++) {
+                            let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
                             items[i].dataset.url=url
                         }
 
@@ -436,19 +418,19 @@ for (let i = 0; i < add_item.length; i++) {
         }
         if (model=='video') {
             el.innerHTML = `
-                <div class="content-types" data-id='?'>
+                <div class="content-types" >
                     <a class="del" ><img src="{% static 'img/del.png' %}"></a>
                     <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-                    <div class='item-create' data-model='text'  data-url="${url}" role="link" aria-disabled="true">
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
                         Text</div>
-                        <div class='item-create' data-model='image'  data-url="${url}" role="link" aria-disabled="true">
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
                             Image</div>
-                    <div class='item-create' data-model='video' data-url="${url}" role="link" aria-disabled="true">
+                    <div class='item-create' data-model='video'  role="link" aria-disabled="true">
                         Video</div>
                     </div>
                     <div class="video-main">
                         <iframe width="100%" height="700" src="" loading="lazy" frameborder="0" allowfullscreen=""></iframe>
-                        <form class='target_video' action="${url}" method="post" enctype="multipart/form-data">
+                        <form class='target_video'  method="post" enctype="multipart/form-data">
                             <input type="url" name="video" value="" maxlength="200" required="" id="id_video">
                             {% csrf_token %}
                         </form>
@@ -475,8 +457,10 @@ for (let i = 0; i < add_item.length; i++) {
                         el.getElementsByTagName('form')[0].action=url
                         el.dataset.order=json.order
                         el.querySelector('.content-types').dataset.id=json.id
+                        let name_models=['text','image','video']
                         let items=el.getElementsByClassName('item-create')
                         for (let i = 0; i < items.length; i++) {
+                            let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
                             items[i].dataset.url=url
                         }
                         const embed_url =   json.url          
@@ -486,6 +470,7 @@ for (let i = 0; i < add_item.length; i++) {
                 })
                 })
         }
+
         insertAfter(parent,el)
         let del=el.querySelector('.del')
         del.addEventListener('click', function (e) {
@@ -501,13 +486,16 @@ for (let i = 0; i < add_item.length; i++) {
                 headers: { "X-CSRFToken": csrftoken }
             }).then(response => {
                 if (!response.ok) throw Error(response.statusText);
-                this.parentElement.parentElement.remove()
                 return response.json();
-            })
+            }).catch(function(error) { console.log(error); })
+            .finally(() => { this.parentElement.parentElement.remove() });
         });
-        
+        let add_items=el.getElementsByClassName("item-create")
+        item_create_events(add_items)
     })
 }
+}
+item_create_events(add_item)
 
 let edit_title=document.querySelector('.edit-title input')
 edit_title.addEventListener('change', function(e) {
