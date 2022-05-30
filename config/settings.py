@@ -173,7 +173,7 @@ AUTHENTICATION_BACKENDS = (
 #LOGIN_REDIRECT_URL = "home"   #change to desired url name
 #LOGOUT_REDIRECT_URL = "home" #change to desired url name
 ACCOUNT_SESSION_REMEMBER = True #remember user via sessions
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False #preferred UX
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True #preferred UX
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"  
 ACCOUNT_EMAIL_REQUIRED = True #required for email authentication
 ACCOUNT_UNIQUE_EMAIL = True #required for email authentication
@@ -184,6 +184,11 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 36400
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 AUTH_USER_MODEL = "accounts.CustomUser"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'youremail@gmail.com'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+EMAIL_PORT = 587
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.SignupForm'
     }

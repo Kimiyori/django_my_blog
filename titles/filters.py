@@ -5,6 +5,7 @@ from django.db.models.functions import Cast
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F, Q,Value
 from django.db.models.expressions import Func
+from urllib.parse import urlsplit, parse_qs
 
 
 class Filter:
@@ -92,16 +93,12 @@ def values_acc(type, tab):
     return d_values[type][tab]
 
 
-def filter_by_models(request, type, instance):
+def filter_by_models(request, instance):
     fil = Filter()
-    if type == 'manga_list':
-        list_filter = ['genre', 'theme', 'demographic',
-                       'type', 'publisher', 'magazine', ]
-    elif type == 'anime_list':
-        list_filter = ['genre', 'theme', 'type', 'studio']
-    for model in list_filter:
-        list = request.GET.getlist(model)
-        if list:
-            for item in list:
-                instance = instance.filter(**fil(name=model, item=item))
+    params=parse_qs(urlsplit(request.get_full_path()).query)
+    if params.get('page'):
+        del params['page']
+    for model,list in params.items():
+        for item in list:
+            instance = instance.filter(**fil(name=model, item=item))
     return instance

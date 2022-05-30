@@ -20,9 +20,7 @@
         </div>
     {% elif block.cont.0.1 == 'image' %}
     <div class="post-img">
-        {% thumbnail block.cont.0.0 "1200"  as im %}
-        <a href="/media/{{ block.cont.0.0 }}" ><img src="/media/{{ im }}" ></a>
-        {% endthumbnail %}
+        <a href="/media/{{ block.cont.0.0 }}" ><img src="/media/{{ block.cont.0.0 }}" ></a>
         </div>
     {% elif block.cont.0.1 == 'file' %}
     <p><a href="{{ block.cont.0.0 }}" class="button">Download file</a></p>

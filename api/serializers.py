@@ -1,6 +1,6 @@
 # posts/serializers.py
 from requests import post
-from post.models import Post, Related
+from post.models import Post
 from rest_framework import serializers
 from titles.models import Anime,Title,Manga,AuthorTable,Publisher,Demographic,MangaType,Genre,Authors,AuthorTable,Image
 
@@ -61,14 +61,9 @@ class AnimeSerializer(serializers.ModelSerializer):
         fields = ('id','title','type', 'studio','premiere','episodes','genre','theme','image','description',)
 
 
-class RelatedToSerializer(serializers.ModelSerializer):
-    manga=serializers.CharField(source='manga.title.original_name',default='',read_only=True)
-    anime=serializers.CharField(source='anime.title.original_name',default='',read_only=True)
-    class Meta:
-        model=Related
-        fields=('manga','anime')
+
 class PostSerializer(serializers.ModelSerializer):
-    related_to=RelatedToSerializer()
+
     author=serializers.CharField(source='author.username',default='',read_only=True)
     class Meta:
         model=Post

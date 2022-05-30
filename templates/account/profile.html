@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ profile.user.username }} Profile{% endblock %}
+{% block content %}
+
+ 
+<div class="profile">
+    <h1> Profile</h1>
+    <div class="profile-img-main">
+        <div class="profile-img">
+        {% if profile.photo %}
+        <a href="/media/{{ profile.photo }}" ><img src="/media/{{ profile.photo }}" ></a>
+        {% else %}
+        <img src="{% static 'img/no-image.png' %}">
+        {% endif %}
+    </div>
+    {% if profile.user == request.user %}
+    <input class="custom-file-input" type="file" name="photo" accept="image/*" id="id_image">
+    {% endif %}
+    </div>
+    <div class="username" >Name: {{ profile.user.username }}</div>
+    <div class="user_id" >Id: {{ profile.user.id }}</div>
+    <div class="profile-info">
+        <textarea class="profile-text" {% if request.user != profile.user %} readonly {% endif %}>{{profile.info}}</textarea>
+    </div>
+    
+</div>
+{% endblock %}
+{% block script %}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want? 
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+img_button=document.querySelector('.custom-file-input')
+img_button.addEventListener('change',function(e) {
+        const csrftoken = getCookie('csrftoken');
+        let form = new FormData();
+        let data = img_button.files[0];
+        form.append("photo", data);
+        let url = 'http://127.0.0.1:8000'+'{{request.get_full_path}}';
+        let source_url = fetch(url, {
+            method: 'POST',
+            body: form,
+            headers: { "X-CSRFToken": csrftoken }
+        }).then(response => {
+            if (!response.ok) throw Error(response.statusText);
+            return response.json();
+        }).then(json =>{
+            image_a=document.querySelector('.profile-img a')
+            image_img=document.querySelector('.profile-img a img')
+            console.log(json.image)
+            image_a.href=json.image
+            image_img.src=json.image
+        })
+
+    })
+
+    text=document.querySelector('.profile-text')
+    text.addEventListener('change',function(e) {
+            const csrftoken = getCookie('csrftoken');
+            let form = new FormData();
+            let data = text.value;
+            form.append("info", data);
+            let url = 'http://127.0.0.1:8000'+'{{request.get_full_path}}';
+            let source_url = fetch(url, {
+                method: 'POST',
+                body: form,
+                headers: { "X-CSRFToken": csrftoken }
+            }).then(response => {
+                if (!response.ok) throw Error(response.statusText);
+                return response.json();
+            })
+    
+        })
+    {% endblock %}

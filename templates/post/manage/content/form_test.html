@@ -24,9 +24,7 @@ Add new content
     <div class="img-main">
         <div class="post-img">
             <a  href="/media/{{item.main_image.value}}">
-            {% thumbnail main_form.main_image.value "1500"  quality=99 as im  %}
-            <img  src='/media/{{im}}'>
-            {% endthumbnail %}
+            <img  src='/media/{{ main_form.main_image.value}}'>
             </a>
         </div>
             <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
@@ -85,7 +83,8 @@ Add new content
     </div>
         {% endfor %}
         {% else %}
-        <div class="content-types" data-id={{item.id}}>
+        <div class='item-change' data-order=0 >
+        <div class="content-types" >
             <a class="del" ><img src="{% static 'img/del.png' %}"></a>
             <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
             <div class='item-create' data-model='text'  data-url="{% url 'module_content_create' object.id 'text' 0 %}" role="link" aria-disabled="true">
@@ -94,6 +93,7 @@ Add new content
                 Image </div>
             <div class='item-create' data-model='video'  data-url="{% url 'module_content_create' object.id 'image' 0%}" role="link" aria-disabled="true" >
                 Video</div>
+        </div>
         </div>
         {% endif %}
 
@@ -533,8 +533,15 @@ edit_main_img.addEventListener('change', function(e) {
                     "X-CSRFToken": csrftoken }
     }).then(response => {
         if (!response.ok) throw Error(response.statusText);
-        console.log(response)
         return response.json();
+    }).then(json=>{
+        let name = form.get('main_image')['name']
+        let url_img = edit_main_img.parentElement.querySelector('.img-main a img')
+        let url_img_src = url_img.src
+        url_img_src = url_img_src.replace('http://127.0.0.1:8000', '')
+        url_img_src = url_img_src.substr(0, url_img_src.lastIndexOf("/") + 1) + name
+        edit_main_img.parentElement.querySelector('.img-main a img').src = url_img_src
+        //parent_url.href = url_img_src
     })
 })
 let related=document.querySelector('.related select')

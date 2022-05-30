@@ -95,6 +95,26 @@ class Title(models.Model):
             return "Doesn't have name"
 
 
+class AnimeType(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    slug = models.SlugField(max_length=250, default='')
+
+    class Meta:
+        ordering = ('-name',)
+
+    def __str__(self):
+        return self.name
+
+class Studio(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to='studios/', blank=True)
+    slug = models.SlugField(max_length=250, default='')
+
+    class Meta:
+        ordering = ('-name',)
+
+    def __str__(self):
+        return self.name
 
 
 class Adaptation(models.Model):
@@ -136,6 +156,8 @@ class Image(models.Model):
         editable=False)
     image = models.ImageField(upload_to=image_path, max_length=300,blank=True)
     thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
+
+
 
 class Manga(models.Model):
     id = models.UUIDField(
@@ -191,26 +213,6 @@ class Manga(models.Model):
 
 
 
-class AnimeType(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    slug = models.SlugField(max_length=250, default='')
-
-    class Meta:
-        ordering = ('-name',)
-
-    def __str__(self):
-        return self.name
-
-class Studio(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    image = models.ImageField(upload_to='studios/', blank=True)
-    slug = models.SlugField(max_length=250, default='')
-
-    class Meta:
-        ordering = ('-name',)
-
-    def __str__(self):
-        return self.name
 
 
 class Anime(models.Model):

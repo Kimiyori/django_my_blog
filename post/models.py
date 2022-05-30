@@ -17,19 +17,7 @@ User=get_user_model()
 
 
 
-class Related(models.Model):
-    manga = models.ForeignKey(Manga, related_name='related',null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    anime = models.ForeignKey(Anime,related_name='related', null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    
-    def __str__(self):
-        if self.manga:
-            return self.manga.title.original_name
-        elif self.anime:
-            return self.anime.title.original_name
-        else:
-             return 'Not related'
+
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -46,7 +34,6 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=500)
     main_image = models.ImageField(upload_to=main_path)
-    related_to=models.ForeignKey(Related, related_name='post', on_delete=models.CASCADE,blank=True,null=True)
     id = models.UUIDField(
                             primary_key=True,
                             default=uuid.uuid4,
