@@ -1,11 +1,11 @@
-from functools import cache
+
 import json
 from django.forms.models import modelform_factory
 from django.apps import apps
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse , HttpResponseRedirect
 from .models import Post, Content, Video
 from django.views.generic.base import TemplateResponseMixin, View
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, UpdateView
 from .forms import PostForm
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -125,11 +125,11 @@ class ContentCreateUpdateView(GetModelAndForm,TemplateResponseMixin, View):
             obj.save()
             if not id:
                 if not order:
-                    content = Content.objects.using('test_db').create(post=self.post_obj,
+                    content = Content.objects.create(post=self.post_obj,
                                                      item=obj)
                 else:
                     order = int(order)+1
-                    content = Content.objects.using('test_db').create(post=self.post_obj,
+                    content = Content.objects.create(post=self.post_obj,
                                                      order=order,
                                                      item=obj)
                     data['id'] = content.id
@@ -151,8 +151,10 @@ class PostDetailChange(GetModelAndForm,TemplateResponseMixin, View):
     template_name = 'post/manage/content/form_test.html'
 
     def dispatch(self, request, pk):
-        self.module = Post.objects.filter(id=pk, author=request.user).only(
+        self.module = Post.objects.filter(id=pk).only(
             'id', 'title', 'author', 'related_to', 'main_image').first()
+        if request.user!=self.module.author:
+            return  HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return super().dispatch(request, pk)
 
     def get(self, request, pk):
@@ -195,7 +197,7 @@ class PostDetailChange(GetModelAndForm,TemplateResponseMixin, View):
         else:
             print(form.errors)
 
-        return JsonResponse({'responce': 'ok'})
+        return JsonResponse({request.POST['type']: 'ok'})
 
 
 class ContentDeleteView(View):

@@ -359,6 +359,7 @@ body {
 .related-blog {
     padding-left: 30px;
     padding-right: 30px;
+    overflow: auto;
 }
 
 .post-wrap {

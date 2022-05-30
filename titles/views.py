@@ -17,19 +17,18 @@ class TitleList(ListView):
     context_object_name = 'list'
     paginate_by = 20
     paginator=LargeTablePaginator
-    
 
     def get_queryset(self):
         type = self.request.resolver_match.url_name
         model = apps.get_model(app_label='titles',
                                model_name=type.split('_')[0]).objects.all()
-        model = filter_by_models(self.request, type, model)
+        model = filter_by_models(self.request, model)
         query = self.request.GET.get("q")
         if query:
             model = filter_by_name(query, model)
-        model = model.values('id', 'title__original_name', 'image__thumbnail').alias(
+        model = model.values('id', 'title__original_name', 'image__thumbnail').annotate(
             relevance=Count('id')).order_by('-relevance', 'title__original_name')
-
+        print(model)
         return model
 
     def get_context_data(self, **kwargs):

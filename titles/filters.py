@@ -5,6 +5,7 @@ from django.db.models.functions import Cast
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F, Q,Value
 from django.db.models.expressions import Func
+from urllib.parse import urlsplit, parse_qs
 
 
 class Filter:
@@ -40,7 +41,6 @@ def annotate_acc(type, tab) -> dict:
         else:
             arr = Array(*[f_value(name) for name in list],
                         output_field=ArrayField(CharField(max_length=200)))
-            print(arr)
             r = ArrayAgg(arr, distinct=True)
         return r
     d_anno = {'manga_detail': {
@@ -49,7 +49,7 @@ def annotate_acc(type, tab) -> dict:
          'publishers': ['publisher__name'],
          'themes': ['theme__name'],
          'magazines': ['magazine__name'],
-         'related_posts': ['related__post__id', 'related__post__title', 'related__post__main_image']},
+         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
         'related':
         {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name','anime'],
          'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'anime'],
@@ -60,7 +60,7 @@ def annotate_acc(type, tab) -> dict:
         {'genres': ['genre__name'],
          'themes': ['theme__name'],
          'studios': ['studio__name'],
-         'related_posts': ['related__post__id', 'related__post__title', 'related__post__main_image']},
+         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
         'related':
         {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'manga'],
          'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'manga'],
@@ -92,16 +92,12 @@ def values_acc(type, tab):
     return d_values[type][tab]
 
 
-def filter_by_models(request, type, instance):
+def filter_by_models(request, instance):
     fil = Filter()
-    if type == 'manga_list':
-        list_filter = ['genre', 'theme', 'demographic',
-                       'type', 'publisher', 'magazine', ]
-    elif type == 'anime_list':
-        list_filter = ['genre', 'theme', 'type', 'studio']
-    for model in list_filter:
-        list = request.GET.getlist(model)
-        if list:
-            for item in list:
-                instance = instance.filter(**fil(name=model, item=item))
+    params=parse_qs(urlsplit(request.get_full_path()).query)
+    if params.get('page'):
+        del params['page']
+    for model,list in params.items():
+        for item in list:
+            instance = instance.filter(**fil(name=model, item=item))
     return instance

@@ -39,11 +39,14 @@ class AnimeAdmin(admin.ModelAdmin):
        AdaptationInline,AdaptationReverseInline,
        PrequelAnimeInline,SequelAnimeInline
     ]
-    filter_horizontal=['genre','studio','theme',]
+    filter_horizontal=['genre','studio','theme','related_post']
     autocomplete_fields=['title','type',]
-    search_fields=['title']
+    search_fields=['title__original_name', 'title__russian_name',
+                 'title__english_name']
     change_form_template = 'admin/anime/change_form.html'
-
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'title')
 
 
 @admin.register(AnimeType)
@@ -97,10 +100,13 @@ class MangaAdmin(admin.ModelAdmin):
        AdaptationInline,AdaptationReverseInline,
        SequelMangaInline,PrequelMangaInline
     ]
-    filter_horizontal=['genre','publisher','magazine','theme',]
-    search_fields = ['title']
+    filter_horizontal=['genre','publisher','magazine','theme','related_post']
+    search_fields = ['title__original_name', 'title__russian_name',
+                 'title__english_name']
     autocomplete_fields=['title','type','authors','demographic']
-    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'title')
 
 @admin.register(Magazine)
 class MagazineAdmin(admin.ModelAdmin):

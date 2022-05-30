@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import Post,Related,Content,Text,Image,Video,File
+from .models import Post,Content,Text,Image,Video,File
+from django.contrib.auth.models import Permission
 
-@admin.register(Related)
-class RelatedAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['anime','manga']
+
 
 class MultiDBModelAdmin(admin.ModelAdmin):
     # A handy constant for the name of the alternate database.
@@ -33,12 +32,16 @@ class MultiDBModelAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     using = 'test_db'
-    list_display = ('title', 'related_to', 'author', 'publish', 'status')
+    list_display = ('title', 'author', 'publish', 'status')
     list_filter = ('status', 'created', 'publish', 'author')
     search_fields = ('title', 'body')
     date_hierarchy = 'publish'
     ordering = ('status', 'publish')
-
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == 'user_permissions':
+            kwargs['queryset'] = Permission.objects.all(
+            ).select_related('content_type')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
