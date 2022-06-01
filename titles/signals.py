@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 @receiver(pre_save, sender=ImageTable)
 def generate_thumbnail(sender, instance, **kwargs):
+    """Generate thumbnail when upload image"""
+    #if image, then create or recreate thumbnail
     if instance.image:
         image = Image.open(instance.image)
         image = image.convert("RGB")
@@ -26,6 +28,7 @@ def generate_thumbnail(sender, instance, **kwargs):
         save=False,
         )
         temp_thumb.close()
+    # case for delete. if thumbnail exist, but not image, then delete thumbnail too
     elif instance.thumbnail and not instance.image:
         instance.thumbnail.delete()
 

@@ -1,6 +1,5 @@
 from io import BytesIO
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django.urls import reverse, resolve
 
 from post.templatetags.urlparams import urlparams
@@ -13,7 +12,9 @@ import tempfile
 import datetime
 from django.core.files.base import ContentFile,File
 # Create your tests here.
+
 class AnimePageTests(TestCase):
+    """Tests for animepage"""
     def setUp(self):
         url = reverse('anime_list')
         self.response = self.client.get(url)
@@ -32,6 +33,7 @@ class AnimePageTests(TestCase):
         TitleList.as_view().__name__
         )
 class MangaPageTests(TestCase):
+    """Tests for mangapage"""
     def setUp(self):
         url = reverse('manga_list')
         self.response = self.client.get(url)
@@ -51,6 +53,7 @@ class MangaPageTests(TestCase):
         )
 
 def get_temporary_image():
+    """Create temporary file for test"""
     temp_file= BytesIO()
     size = (1000, 1000)
     color = (255, 0, 0, 0)
@@ -58,7 +61,9 @@ def get_temporary_image():
     image.save(temp_file, 'png')
     temp_file.seek(0)
     return File(temp_file,name='test')
+
 def get_thumbnail(instance):
+    """Create thumbnails for test"""
     THUMBNAIL_SIZE = (400,400)
     image = ImageTest.open(instance.image)
     image = image.convert("RGB")

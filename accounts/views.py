@@ -21,7 +21,7 @@ class ProfileDetail(TemplateResponseMixin, View):
 
         return super().dispatch( request,pk)
     def get(self,request,pk,) :
-        print(1)
+
         return  self.render_to_response({'profile':self.profile})
     
     def post(self,request,pk):
