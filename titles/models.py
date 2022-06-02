@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.urls import reverse
+from django_cleanup import cleanup
 
 # Create your models here.
 
@@ -20,7 +21,7 @@ class Genre(models.Model):
     slug = models.SlugField(max_length=250, default='')
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -94,97 +95,6 @@ class Title(models.Model):
         else:
             return "Doesn't have name"
 
-class RelatedItem(models.Model):
-    manga = models.OneToOneField('Manga', related_name='related_item',null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    anime = models.OneToOneField('Anime',related_name='related_item', null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    
-    def __str__(self):
-        if self.manga:
-            return self.manga.title.original_name
-        elif self.anime:
-            return self.anime.title.original_name
-        else:
-             return 'Not related'
-    def get_model(self):
-        if self.manga:
-            return self.manga
-        elif self.anime:
-            return self.anime
-        else:
-            return 'Does Not Exist'
-
-
-class Adaptation(models.Model):
-    adaptation= models.ForeignKey('Anime', on_delete=models.CASCADE,
-                               related_name='based_on', null=True, blank=True)
-    based_on= models.ForeignKey('Manga', on_delete=models.CASCADE,
-                               related_name='adaptation', null=True, blank=True)
-
-class SequelPrequelAnime(models.Model):
-    sequel= models.ForeignKey('Anime', on_delete=models.CASCADE,
-                               related_name='prequel', null=True, blank=True)
-    prequel= models.ForeignKey('Anime', on_delete=models.CASCADE,
-                               related_name='sequel', null=True, blank=True)
-
-class SequelPrequelManga(models.Model):
-    sequel= models.ForeignKey('Manga', on_delete=models.CASCADE,
-                               related_name='prequel', null=True, blank=True)
-    prequel= models.ForeignKey('Manga', on_delete=models.CASCADE,
-                               related_name='sequel', null=True, blank=True)
-def image_path_manga(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'manga/{0}/{1}'.format(instance.id, filename)
-class Manga(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False)
-    title = models.ForeignKey(Title, on_delete=models.CASCADE,
-                             related_name='manga')
-
-    type = models.ForeignKey(MangaType, on_delete=models.CASCADE,
-                             related_name='manga', null=True, blank=True)
-    authors = models.ForeignKey(Authors, on_delete=models.CASCADE,related_name='manga', null=True, blank=True)
-
-    publisher = models.ManyToManyField(
-        Publisher, related_name='manga', blank=True)
-    premiere = models.DateField(blank=True)
-    volumes = models.IntegerField(null=True, blank=True)
-    chapters = models.IntegerField(null=True, blank=True)
-    genre = models.ManyToManyField(
-        Genre, related_name='manga', blank=True)
-    demographic = models.ForeignKey(
-        Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
-    theme = models.ManyToManyField(
-        Theme, related_name='manga', blank=True)
-    image = models.ImageField(upload_to=image_path_manga, blank=True)
-    magazine = models.ManyToManyField(
-        Magazine, related_name='manga', blank=True)
-    description = models.TextField( blank=True)
-    class Meta:
-        ordering = ('-title',)
-
-    def __str__(self):
-        if self.title.original_name:
-            return str(self.title.original_name)
-        elif self.title.english_name:
-            return str(self.title.english_name)
-        elif self.title.russian_name:
-            return str(self.title.russian_name)
-        else:
-            return 'Not name'
-    def get_desc(self):
-        if self.description:
-            return self.description
-        else:
-            return "Нет описания"
-    def get_absolute_url(self):
-        return reverse('manga_detail', kwargs={'pk':str(self.id)})
-
-
-
 
 class AnimeType(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -207,34 +117,68 @@ class Studio(models.Model):
     def __str__(self):
         return self.name
 
-def image_path_anime(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'anime/{0}/{1}'.format(instance.id, filename)
 
-class Anime(models.Model):
+class Adaptation(models.Model):
+    adaptation= models.ForeignKey('Anime', on_delete=models.CASCADE,
+                               related_name='based_on', null=True, blank=True)
+    based_on= models.ForeignKey('Manga', on_delete=models.CASCADE,
+                               related_name='adaptation', null=True, blank=True)
+
+class AdaptationReverse(models.Model):
+    adaptation= models.ForeignKey('Manga', on_delete=models.CASCADE,
+                               related_name='based_on', null=True, blank=True)
+    based_on= models.ForeignKey('Anime', on_delete=models.CASCADE,
+                               related_name='adaptation', null=True, blank=True)
+
+
+class SequelPrequelAnime(models.Model):
+    sequel= models.ForeignKey('Anime', on_delete=models.CASCADE,
+                               related_name='prequel', null=True, blank=True)
+    prequel= models.ForeignKey('Anime', on_delete=models.CASCADE,
+                               related_name='sequel', null=True, blank=True)
+
+class SequelPrequelManga(models.Model):
+    sequel= models.ForeignKey('Manga', on_delete=models.CASCADE,
+                               related_name='prequel', null=True, blank=True)
+    prequel= models.ForeignKey('Manga', on_delete=models.CASCADE,
+                               related_name='sequel', null=True, blank=True)
+def image_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return f'{instance._meta.model_name}/{instance.id}/original/{filename}'
+def image_thumb_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return f'{instance._meta.model_name}/{instance.id}/thumbnail/{filename}'
+
+
+class Image(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    title = models.ForeignKey(Title, on_delete=models.CASCADE,
-                             related_name='anime')
-    type = models.ForeignKey(AnimeType, on_delete=models.CASCADE,
-                             related_name='anime', null=True, blank=True)
-    studio = models.ManyToManyField(
-        Studio, related_name='anime', blank=True)
-    premiere = models.DateField(null=True, blank=True)
-    episodes = models.IntegerField(null=True, blank=True)
+    image = models.ImageField(upload_to=image_path, max_length=300,blank=True)
+    thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
+
+class MetaTitle(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
+    title = models.ForeignKey(Title, on_delete=models.SET_DEFAULT,
+                             related_name='%(class)s',default='No title yet')
+    premiere = models.DateField(blank=True)
     genre = models.ManyToManyField(
-        Genre, related_name='anime', blank=True)
+        Genre, related_name='%(class)s', blank=True)
     theme = models.ManyToManyField(
-        Theme, related_name='anime', blank=True)
-    image = models.ImageField(upload_to=image_path_anime, blank=True)
-    description = models.TextField(null=True,  blank=True)
+        Theme, related_name='%(class)s', blank=True)
+    image = models.ForeignKey(
+        Image, on_delete=models.SET_NULL, related_name='%(class)s', null=True, blank=True)
+    description = models.TextField( blank=True)
 
-
+    related_post=models.ManyToManyField(
+        'post.Post', related_name='%(class)s', blank=True)
     class Meta:
-        ordering = ('-title',)
-        
+        abstract=True
+
     def __str__(self):
         if self.title.original_name:
             return str(self.title.original_name)
@@ -251,3 +195,49 @@ class Anime(models.Model):
         else:
             return "Нет описания"
 
+class Manga(MetaTitle):
+    type = models.ForeignKey(MangaType, on_delete=models.CASCADE,
+                             related_name='manga', null=True, blank=True)
+    authors = models.ForeignKey(Authors, on_delete=models.CASCADE,related_name='manga', null=True, blank=True)
+
+    publisher = models.ManyToManyField(
+        Publisher, related_name='manga', blank=True)
+    volumes = models.IntegerField(null=True, blank=True)
+    chapters = models.IntegerField(null=True, blank=True)
+    demographic = models.ForeignKey(
+        Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
+    magazine = models.ManyToManyField(
+        Magazine, related_name='manga', blank=True)
+    class Meta:
+        ordering = ('title',)
+        indexes = [
+            models.Index(fields=['id',]),
+        ]
+
+
+    def get_absolute_url(self):
+        return reverse('manga_detail', kwargs={'pk':str(self.id)})
+
+
+
+
+
+
+class Anime(MetaTitle):
+    type = models.ForeignKey(AnimeType, on_delete=models.CASCADE,
+                             related_name='anime', null=True, blank=True)
+    studio = models.ManyToManyField(
+        Studio, related_name='anime', blank=True)
+    episodes = models.IntegerField(null=True, blank=True)
+
+
+
+    class Meta:
+        ordering = ('title',)
+        indexes = [
+            models.Index(fields=['id',]),
+        ]
+        
+
+    def get_absolute_url(self):
+        return reverse('anime_detail', kwargs={'pk':str(self.id)})

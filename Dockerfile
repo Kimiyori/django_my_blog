@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Pull base image
 FROM python:3.10
 # Set environment variables

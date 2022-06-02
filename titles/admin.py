@@ -2,11 +2,15 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable
+from .models import Demographic,Genre,MangaType,Publisher,Manga,Theme,Title,Magazine,Anime, Studio, AnimeType,Adaptation,AdaptationReverse,SequelPrequelAnime,SequelPrequelManga,Authors,AuthorTable,Image
 # Register your models here.
 
 class AdaptationInline(admin.TabularInline):
     model = Adaptation
+    autocomplete_fields=['adaptation','based_on']
+    extra=1
+class AdaptationReverseInline(admin.TabularInline):
+    model = AdaptationReverse
     autocomplete_fields=['adaptation','based_on']
     extra=1
 class PrequelAnimeInline(admin.TabularInline):
@@ -32,14 +36,17 @@ class SequelMangaInline(admin.TabularInline):
 @admin.register(Anime)
 class AnimeAdmin(admin.ModelAdmin):
     inlines = [
-       AdaptationInline,
+       AdaptationInline,AdaptationReverseInline,
        PrequelAnimeInline,SequelAnimeInline
     ]
-    filter_horizontal=['genre','studio','theme',]
+    filter_horizontal=['genre','studio','theme','related_post']
     autocomplete_fields=['title','type',]
-    search_fields=['title']
+    search_fields=['title__original_name', 'title__russian_name',
+                 'title__english_name']
     change_form_template = 'admin/anime/change_form.html'
-
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'title')
 
 
 @admin.register(AnimeType)
@@ -60,7 +67,9 @@ class DemoAdmin(admin.ModelAdmin):
 class DemoAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
-
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    pass
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
@@ -88,13 +97,16 @@ class TitleAdmin(admin.ModelAdmin):
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
     inlines = [
-       AdaptationInline,
+       AdaptationInline,AdaptationReverseInline,
        SequelMangaInline,PrequelMangaInline
     ]
-    filter_horizontal=['genre','publisher','magazine','theme',]
-    search_fields = ['title']
+    filter_horizontal=['genre','publisher','magazine','theme','related_post']
+    search_fields = ['title__original_name', 'title__russian_name',
+                 'title__english_name']
     autocomplete_fields=['title','type','authors','demographic']
-    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'title')
 
 @admin.register(Magazine)
 class MagazineAdmin(admin.ModelAdmin):

@@ -1,78 +1,102 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from .models import Genre, Studio, Anime,Manga, Demographic, AnimeType,MangaType, Publisher, Theme
-from django.db.models import Count
-from .filters import Filter,filter_by_name
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+
+from typing import Any
+from django.http import HttpRequest, HttpResponseBadRequest
+from django.views.generic import ListView 
+from .models import Genre,  Demographic, AnimeType, MangaType, Publisher, Theme
+
+from .filters import filter_by_name, annotate_acc, values_acc, filter_by_models
+from django.core.cache import cache
+from django.apps import apps
+from django.core.cache.utils import make_template_fragment_key
+from django.views.generic.base import TemplateResponseMixin, View
+from .paginator import LargeTablePaginator
 
 # Create your views here.
+
+
 class TitleList(ListView):
-    template_name='titles/list.html'
+    """ Get list of titles"""
+    template_name = 'titles/list.html'
     context_object_name = 'list'
+    paginate_by = 20
+    paginator=LargeTablePaginator
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponseBadRequest:
+        #get type of title (manga or anime)
+        self.type = self.request.resolver_match.url_name.split('_')[0]
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        def filter(instance,name):
-            temp=name.split('__')[-1]
-            if temp in captured_value:
-                list=self.request.GET.getlist(temp)
-                if list:
-                    for item in list:
-                        instance=instance.filter(**filter_func(name=name,item=item))
-            return instance
-        url=self.request.build_absolute_uri().split('/')[3]
-        url1 = self.request.build_absolute_uri()
-        parsed_url = urlparse(url1)
-        captured_value = parse_qs(parsed_url.query).keys()
-        if url=='manga':
-            model=Manga.objects.select_related('title')
-            list_filter=['genre','theme','demographic','type','publisher','magazine','authors__artist','authors__author']
-        elif url=='anime':
-            model=Anime.objects.select_related('title')
-            list_filter=['genre','theme','type','studio']
-        filter_func=Filter()
-        for item in list_filter:
-            model=filter(model,item)
+
+        #get model based on type
+        model = apps.get_model(app_label='titles',
+                               model_name=self.type).objects.all()
+        # filter instance based on attributes
+        model = filter_by_models(self.request, model)
+        # get q if need filter by title and then filter
         query = self.request.GET.get("q")
         if query:
-            model= filter_by_name(query,model)
-        model=model.values('id','title__original_name','image').annotate(relevance=Count('id')).order_by('-relevance','title__original_name') 
+            model = filter_by_name(query, model)
+        # optimize by taking only the necessary values and order it
+        model = model.values('id', 'title__original_name', 'image__thumbnail').order_by( 'title__original_name')
         return model
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        url=self.request.build_absolute_uri().split('/')[3]
-        if url=='manga':
-            list_models=[MangaType,Demographic,Publisher,Theme,Genre]
-            model='Manga'
-        elif url=='anime':
-           list_models=[AnimeType,Demographic,Studio,Theme,Genre]
-           model='Anime'
-        filter_dict={}
-        for item in list_models:
-            filter_dict[f'{item._meta.model_name}'.capitalize()]=item.objects.all().values('name').order_by('name')
+        #inicialize cache key for filter bar
+        cache_key=f'filterdict:{self.type}'
+        #check if in cache and if no, create filter_dict and put it in cache
+        filter_dict = cache.get(cache_key)
+        if filter_dict is None:
+            list_models = { 'Demographic': Demographic,
+                               'Publisher': Publisher, 'Theme': Theme, 'Genre': Genre}
+            if self.type == 'manga':
+                list_models['Type'] =  MangaType
+            elif self.type == 'anime':
+                list_models['Type'] =  AnimeType
+            filter_dict = {}
+            for key, item in list_models.items():
+                filter_dict[key] = item.objects.all().values(
+                    'name').order_by('name')
+            cache.set(cache_key, filter_dict,5*60)
+        #get q from query string
         query = self.request.GET.get("q")
-        context.update({'filter':filter_dict,'model':model,'query': query})
+        #update context
+        context.update({
+            'filter': filter_dict,
+             'model': self.type.capitalize(),
+              'query': query})
         return context
 
 
-class TitleDetail(DetailView):
-    template_name='titles/detail.html'
+class TitleDetail(TemplateResponseMixin, View):
+    """Get certain title"""
+    template_name = 'titles/detail_test.html'
     context_object_name = 'item'
-    def get_queryset(self):
-        url=self.request.build_absolute_uri().split('/')[3]
-        id=self.request.build_absolute_uri().split('/')[4]
-        if url=='manga':
-            model=Manga.objects.prefetch_related('genre','theme','magazine','publisher').select_related('title','demographic','type','authors').filter(id=id)
-        elif url=='anime':
-            model=Anime.objects.prefetch_related('genre','theme','studio').select_related('title','source','type','authors').filter(id=id)
-        return model
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        url=self.request.build_absolute_uri().split('/')[3]
-        if url=='manga':
-            model='Manga'
-        elif url=='anime':
-           model='Anime'
-        context.update({'model':model})
-        return context
+
+
+    def get(self,request,pk):
+        #get tab(info or related)
+        tab = self.request.GET.get('tab')
+        #check if tab params is empty; if its empyty, then assign it default info value+
+        if not tab:
+            tab = 'info'
+        #get type if url(anime or manga)
+        type = self.request.resolver_match.url_name.split('_')[0]
+        # create cache key
+        key=f'titledetail:{tab}:{self.kwargs["pk"]}'
+        #get cache with key
+        model=cache.get(key)
+        #if got in cache, then create queryset in cache it
+        if model is None:
+            # get tab(info or related)
+            model = apps.get_model(app_label='titles',
+                                model_name=type
+                                ).objects.filter(id=self.kwargs['pk']).annotate(
+                **annotate_acc(type, tab)
+                ).values(*values_acc(type, tab))
+            # cache queryset
+            cache.set(key,model,5*60)
+        return self.render_to_response({'item':model,'model': type, 'tab': tab, })
+
+

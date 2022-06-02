@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load exist %}
+{% load dynamic_url %}
+{% load urlparams %}
+{% load thumbnail %}
+{% block title %}{{ item.title__original_name  }}{% endblock title %}
+{% block content %}
+
+{% with item.0 as item %}
+<div id='manga-detail'>
+    <div class='main-info'>
+        <div class="upper-image">
+            {% if item.image__image %}
+            <img src="/media/{{ item.image__image }}" alt="{{ item.title__original_name }}">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name}}">
+            {% endif %}
+        </div>
+        <div class="title-block">
+            <div class="title-block2">
+                <div class="main-image">
+                    {% if item.image__image %}
+                        <img class='img2' src="/media/{{ item.image__image }}" alt="{{item.title__original_name }}">
+                        {% else %}
+                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name }}">
+                        {% endif %}
+                </div>
+                <div class='title'>
+                    <h4 class="main-title">{{item.title__original_name }}</h4>
+                    <h2>{{item.title__russian_name }}</h2>
+                    <h1>{{item.title__english_name }}</h1>
+                </div>
+                <div class="tabs">
+                    <a class="item" href="?tab=info">
+                        <span>Info</span>
+                    </a>
+                    <a class="item" href="?tab=related">
+                        <span>Related</span>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {% if tab == 'info' %}
+
+    <div class="info">
+        <div class="desc">
+            <div class="name">Описание</div>
+            <p>{{item.description}}</p>
+        </div>
+        {% if item.authors__author__name %}
+        <div class="items">
+            <div class="name">Автор</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.authors__author__name %}"><span>{{ item.authors__author__name }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.authors__artist__name %}
+        <div class="items">
+            <div class="name">Художник</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams artist=item.authors__artist__name %}"><span>{{ item.authors__artist__name }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.type__name %}
+        <div class="items">
+            <div class="name">Тип</div>
+            <div class="item-list">
+                
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type__name %}"><span>{{ item.type__name }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+    
+        {% if item.demographic__name %}
+        <div class="items">
+            <div class="name">Демография</div>
+            <div class="item-list">
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=item.demographic__name %}"><span>{{ item.demographic__name }}</span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.studios %}
+        <div class="items">
+            <div class="name">Студия</div>
+            <div class="item-list">
+                {% for name in item.studios %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams studio=name %}">
+                    <span>
+                        {{ name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.publishers %}
+        <div class="items">
+            <div class="name">Издатель</div>
+            <div class="item-list">
+                {% for name in item.publishers %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams publisher=name %}">
+                    <span>
+                        {{ name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.magazines %}
+        <div class="items">
+            <div class="name">Журнал</div>
+            <div class="item-list">
+                {% for name in item.magazines %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams magazine=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.genres %}
+        <div class="items">
+            <div class="name">Жанры</div>
+            <div class="item-list">
+                {% for name in item.genres %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams genre=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.themes %}
+        <div class="items">
+            <div class="name">Темы</div>
+            <div class="item-list">
+                {% for name in item.themes %}
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams theme=name %}"><span>{{ name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.volumes or item.chapters %}
+        <div class="items">
+            <div class="name">Издано</div>
+            <div class="item-list">
+                <a class='item' ><span>{% if item.volumes  %}
+                    {{ item.volumes}} томов 
+                    {% endif %}
+                    {% if item.chapters %}
+                    {{ item.chapters}} главы
+                    {% endif %}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.premiere %}
+        <div class="items">
+            <div class="name">Дата начала</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {{ item.premiere}}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+        {% if item.episodes %}
+        <div class="items">
+            <div class="name">Эпизоды</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {{ item.episodes}}
+                </span></a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if  item.related_posts|exist %}
+    <div class="related-blog">
+        <div class="name">Блог</div>
+        <div id='manga-list'>
+            {% for item in item.related_posts %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ item.1 }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% url 'post_detail' item.0 %}">
+                    {% if item.2 %}
+                 
+                    <img class="mangaimg" src="/media/{{  item.2 }}" alt="{{ item.2 }}">
+              
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.1 }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
+{% endif %}
+{% if tab == 'related' %}
+{% if  item.adaptations|exist %}
+    <div class="related-blog">
+        <div class="name">Adaptation</div>
+        <div id='manga-list'>
+            {% for item in item.adaptations %}
+            <div class='manga-item'> 
+                
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                <span>{{ item.2  }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                    {% if item.1 %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
+
+{% if  item.based_ons|exist %}
+    <div class="related-blog">
+        <div class="name">Based on</div>
+        <div id='manga-list'>
+            {% for item in item.based_ons %}
+            <div class='manga-item'> 
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                <span>{{ item.2  }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                    {% if item.1 %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
+
+{% if  item.sequels|exist %}
+<div class="related-blog">
+    <div class="name">Sequel</div>
+    <div id='manga-list'>
+        {% for item in item.sequels %}
+        <div class='manga-item'> 
+            <a class='title' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+            <span>{{ item.2  }}</span>
+            </a>
+            <div class='cover'>
+            <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+                {% if item.1 %}
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+                {% else %}
+                <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                {% endif %}
+            </a>
+        </div>
+    </div>
+        {% endfor %}
+</div>
+
+</div>
+{% endif %}
+
+{% if  item.prequels|exist %}
+<div class="related-blog">
+    <div class="name">Prequel</div>
+    <div id='manga-list'>
+        {% for item in item.prequels %}
+        <div class='manga-item'> 
+            <a class='title' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+            <span>{{ item.2  }}</span>
+            </a>
+            <div class='cover'>
+            <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+                {% if item.1 %}
+
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
+                {% else %}
+                <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                {% endif %}
+            </a>
+        </div>
+    </div>
+        {% endfor %}
+</div>
+
+</div>
+{% endif %}
+
+{% endif %}
+{% endwith %}
+{% endblock content %}

@@ -23,10 +23,17 @@
     </ul>
     <span class="user">
       {% if request.user.is_authenticated %}
-      Hello {{ request.user }},
-      <a href='{% url "account_logout" %}'>Logout</a>
+      <a href='{% url "profile_detail" request.user.id %}'>    <div class="base-img">
+        {% if request.user.profile.photo %}
+        <img src="/media/{{ request.user.profile.photo }}" >
+        {% else %}
+        <img src="{% static 'img/no-image.png' %}">
+        {% endif %}
+    </div></a>
+      <a href='{% url "account_logout" %}?next={{request.path}}'>Logout</a>
       {% else %}
-      <a href='{% url "account_login" %}'>Log-in</a>
+      <a href='{% url "account_login" %}?next={{request.path}}'>Log-in</a>
+      <a href='{% url "account_signup" %}?next={{request.path}}'>Sign-up</a>
       {% endif %}
     </span>
 

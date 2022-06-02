@@ -80,11 +80,13 @@ body {
     margin-left: auto;
     margin-right: auto;
 
+
 }
 
 .detail-post>* {
-    border: 1px solid black;
-    border-radius: 12px;
+    /*border: 1px solid black;*/
+   
+
 }
 
 .detail-post h2 {
@@ -225,6 +227,10 @@ body {
     display: flex;
     flex-basis: auto;
     box-sizing: border-box;
+    margin-left: auto;
+}
+.title-block2 div:last-child {
+    margin-left: auto;
 }
 
 .title-block .main-image {
@@ -243,6 +249,14 @@ body {
 
 }
 
+.tabs {
+    display: flex;
+    flex-basis: auto;
+    margin-right:5px;
+    gap:1rem;
+    flex-direction: column;
+
+}
 
 .title {
     display: flex;
@@ -279,7 +293,7 @@ body {
 
 .info {
     display: flex;
-    column-gap: 6rem;
+    column-gap: 3rem;
     flex-wrap: wrap;
     row-gap: 2rem;
     justify-content: flex-start;
@@ -290,7 +304,7 @@ body {
 
 .info .items {
     display: block;
-    max-width: 30%;
+    max-width: 20%;
 }
 
 .info .items .name {
@@ -304,6 +318,17 @@ body {
     flex-wrap: wrap;
 
 
+}
+.item {
+    background-color: #f3f3f3;
+    border-radius: 0.25rem;
+    padding: 0.3125rem 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: all .1s ease-out;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000000;
 }
 
 .info .item-list .item {
@@ -320,10 +345,8 @@ body {
 }
 
 .desc {
-    padding-top: 30px;
-    padding-left: 30px;
+
     padding-right: 30px;
-    max-height: 234px;
     height: auto;
     word-break: break-word;
 }
@@ -336,6 +359,7 @@ body {
 .related-blog {
     padding-left: 30px;
     padding-right: 30px;
+    overflow: auto;
 }
 
 .post-wrap {
@@ -432,6 +456,8 @@ body {
     padding: 2rem 0.5rem 0.5rem;
     background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .7));
     text-shadow: 0 0 3px rgb(7, 7, 7);
+    text-decoration: none;
+    color:#ebebeb;
 }
 
 .content-types {
@@ -442,6 +468,7 @@ body {
 
 .item-create {
     display: block;
+
 }
 
 .item-change {
@@ -527,7 +554,7 @@ textarea:focus {
 }
 
 .custom-file-input::before {
-    content: 'Select some files';
+    content: 'Change image';
     color: black;
     display: inline-block;
     background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
@@ -591,7 +618,23 @@ textarea:focus {
     transform: translate(-50%, -50%);
     width: 50%;
     box-shadow: 0 5px 30px #000000;
+    padding:20px;
 }
+
+.filter .filter_button {
+    background-color: #ebebeb; /* Green */
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-right: 15px;
+    
+}
+
 
 #filter_form {
     display: flex;
@@ -602,12 +645,13 @@ textarea:focus {
 
 .filter_item .name_filter {
     font-size: 20px;
-    margin-bottom: 0.25rem;
+
 }
 
 .filter_item .item-list {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom:5px;
 }
 
 .filter_item .item-list label .item-list-name {
@@ -659,4 +703,74 @@ textarea:focus {
     z-index: 1;
     pointer-events: none;
     user-select: none;
+}
+
+.pagination__list{
+    list-style: none;
+    margin: 10px;
+
+	font-family: sans-serif;
+}
+.pagination__item {
+    display:block;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+	float:left;
+	margin:5px;
+    border-radius: 5px;
+    background-color: rgb(245, 245, 245);
+}
+.pagination__item .pagination__link{
+	display:block;
+	padding:3px;
+	text-decoration:none;
+	background-color:inherit;
+	color:rgb(0, 0, 0);
+}
+
+.profile > * {
+    padding: 20px;
+}
+ .profile-img img,.base-img img {
+    object-fit: cover;
+    object-position: center top;
+    width: 120%; 
+    height: 120%;
+    margin-left: -10%; 
+    margin-top: -10%;
+
+}
+.base-img{
+    display: inline-block; 
+    position: relative; 
+    width: 50px; 
+    height: 50px; 
+    overflow: hidden; 
+    border-radius: 50%; 
+    
+}
+
+ .profile-img{
+    display: inline-block; 
+    position: relative; 
+    width: 250px; 
+    height: 250px; 
+    overflow: hidden; 
+    border-radius: 50%; 
+
+    
+}
+
+.profile textarea{
+    background-color:#fcfcfc;
+}
+.pagination_main {
+
+    display: flex;
+    justify-content: center;
+
+    
+
 }

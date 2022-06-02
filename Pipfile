@@ -15,6 +15,12 @@ django-cors-headers = "*"
 django-cleanup = "*"
 django-embed-video = "*"
 django-debug-toolbar = "*"
+coverage = "*"
+redis = "*"
+jsonschema = "*"
+faker = "*"
+celery = "*"
+flower = "*"
 
 [dev-packages]
 

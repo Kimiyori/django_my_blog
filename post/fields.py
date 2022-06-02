@@ -1,22 +1,41 @@
+from django.apps import apps
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+
+
+
+
 class OrderField(models.PositiveIntegerField):
     def __init__(self, for_fields=None, *args, **kwargs):
         self.for_fields = for_fields
         super().__init__(*args, **kwargs)
+
     def pre_save(self, model_instance, add):
-        if model_instance.pk is  None:
-            qs = self.model.objects.all()
-            if self.for_fields:
-                query = {field: getattr(model_instance, field) for field in self.for_fields}
-                qs = qs.filter(**query)
-                cur_max=int(model_instance.order)
-                for item in qs:
-                    if (item.order - cur_max) in [0,1]:
-                        cur_max=item.order
-                        value=item.order+1
-                        setattr(item, self.attname, value)
-                        item.save()
-            return int(model_instance.order)   
-        else:
-            return super().pre_save(model_instance, add)
+            try:
+                qs = self.model.objects.all()
+                if self.for_fields:
+                    query = {field: getattr(model_instance, field)
+                             for field in self.for_fields}
+                    qs = qs.filter(**query)
+                    if getattr(model_instance, self.attname) is not None:
+                        cur_max = getattr(model_instance,self.attname)
+                        for item in qs:
+                            if item.order - cur_max==0:
+                                value = getattr(item,self.attname)+1
+                                cur_max = value
+                                setattr(item, self.attname, value)
+                        content=apps.get_model(app_label='post',model_name='content')
+                        content.objects.bulk_update(qs,['order'])
+
+                    else:
+                        try:
+                            last_item = qs.last(self.attname)
+                            value = last_item.order + 1
+                        except ObjectDoesNotExist:
+                            value = 1
+                        setattr(model_instance, self.attname, value)
+
+            except Exception as e:
+                print(e)
+            return model_instance.order
+

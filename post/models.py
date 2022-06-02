@@ -3,7 +3,7 @@ from django.db import models
 import uuid 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from titles.models import Manga,Anime
+
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,  GenericRelation
 from .fields import OrderField
@@ -11,24 +11,13 @@ from django.template.loader import render_to_string
 from django.apps import apps
 from django_cleanup import cleanup
 
+
 # Create your models here.
 User=get_user_model()
 
 
 
-class Related(models.Model):
-    manga = models.OneToOneField(Manga, related_name='related',null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    anime = models.OneToOneField(Anime,related_name='related', null=True, blank=True,
-                                 on_delete=models.CASCADE)
-    
-    def __str__(self):
-        if self.manga:
-            return self.manga.title.original_name
-        elif self.anime:
-            return self.anime.title.original_name
-        else:
-             return 'Not related'
+
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -37,13 +26,14 @@ class PublishedManager(models.Manager):
 def main_path(instance, filename):
     return 'post/{0}/{1}/{2}/{3}'.format(instance.author.id,instance.id,'image', filename)
 class Post(models.Model):
+    DRAFT='draft'
+    PUBLISHED='published'
     STATUS_CHOICES = (
-    ('draft', 'Draft'),
-    ('published', 'Published'),
+    (DRAFT, 'Draft'),
+    (PUBLISHED, 'Published'),
     )
     title = models.CharField(max_length=500)
     main_image = models.ImageField(upload_to=main_path)
-    related_to=models.ForeignKey(Related, related_name='post', on_delete=models.CASCADE,blank=True,null=True)
     id = models.UUIDField(
                             primary_key=True,
                             default=uuid.uuid4,
@@ -52,7 +42,7 @@ class Post(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=DRAFT)
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
     class Meta:
@@ -75,8 +65,10 @@ class Content(models.Model):
     class Meta:
         ordering = ['order']
 
+    def __str__(self):
+        return f'{self.post.title} {self.order}'
     
-    
+
 
 def path(instance, filename):
     return 'post/{0}/{1}/{2}/{3}'.format(instance.post.author.id,instance.post.id,instance._meta.model_name, filename)
@@ -100,10 +92,18 @@ class ItemBase(models.Model):
         {'item': self})
 class Text(ItemBase):
     text = models.TextField()
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='text')
     
 class File(ItemBase):
     file = models.FileField(upload_to=path)
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='file')
 class Image(ItemBase):
     image = models.ImageField(upload_to=path)
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='image')
 class Video(ItemBase):
     video = models.URLField()
+    relation = GenericRelation(Content ,content_type_field='content_type',
+    object_id_field='object_id', related_query_name='video')
