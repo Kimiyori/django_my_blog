@@ -62,7 +62,7 @@ class PostDetail(TemplateResponseMixin, View):
         if post is None:
             post = Post.objects.filter(id=pk).values(
                 'id', 'title', 'main_image').first()
-            cache.set(cache_post_key)
+            cache.set(cache_post_key,post)
 
         #search in cache content fo given post by key
         cache_content_key=f'contentpostid:{pk}'
