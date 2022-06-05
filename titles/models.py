@@ -74,26 +74,27 @@ class Theme(models.Model):
 
 class Magazine(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to='magazines/', blank=True)
     slug = models.SlugField(max_length=150, default='')
 
     def __str__(self):
         return self.name
 
+class TitleLanguage(models.Model):
+    language=models.CharField(max_length=50)
+    image = models.ImageField(upload_to='title_language/', blank=True)
+    def __str__(self):
+        return self.language
+
 class Title(models.Model):
 
-    original_name = models.CharField(max_length=300, null=True, blank=True)
-    russian_name = models.CharField(max_length=300, null=True, blank=True)
-    english_name = models.CharField(max_length=300, null=True, blank=True)
+    title = models.CharField(max_length=300,)
+    language=models.ForeignKey(TitleLanguage,on_delete=models.SET_NULL,
+                               related_name='title', null=True, blank=True)
 
     def __str__(self):
-        if self.original_name:
-            return str(self.original_name)
-        elif self.english_name:
-            return str(self.english_name)
-        elif self.russian_name:
-            return str(self.russian_name)
-        else:
-            return "Doesn't have name"
+        return f'{self.language.upper()}:{self.title}'
+
 
 
 class AnimeType(models.Model):

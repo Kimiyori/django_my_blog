@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&dr@m!m%ly^t7k*i!qsp@9s^th(a&fm7so-@gyz@5*)#wzvgh&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'embed_video',
     'debug_toolbar',
+
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -64,8 +66,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 ]
-
+SILKY_PYTHON_PROFILER = True
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [

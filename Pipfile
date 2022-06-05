@@ -19,8 +19,8 @@ coverage = "*"
 redis = "*"
 jsonschema = "*"
 faker = "*"
-celery = "*"
-flower = "*"
+django-silk = "*"
+django-debug-toolbar-force = "*"
 
 [dev-packages]
 
