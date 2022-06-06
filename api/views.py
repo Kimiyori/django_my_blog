@@ -57,6 +57,7 @@ class MangaList(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         key = f'api:{pk}:manga'
         queryset = cache.get(key)
+
         if queryset is None:
             queryset = self.get_queryset().get(pk=pk)
             serializer_context = {

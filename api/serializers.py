@@ -69,6 +69,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class MangaSerializer(serializers.Serializer):
     id=serializers.UUIDField(read_only=True)
+    title = TitleSerializer()
     premiere=serializers.DateField(required=False)
     volumes=serializers.IntegerField(required=False)
     chapters=serializers.IntegerField(required=False)
@@ -79,7 +80,7 @@ class MangaSerializer(serializers.Serializer):
     magazine = serializers.SlugRelatedField(queryset=Magazine.objects.all(), many=True,slug_field='name',required=False)
     demographic = serializers.SlugRelatedField(queryset=Demographic.objects.all(),slug_field='name',required=False)
     type = serializers.PrimaryKeyRelatedField(queryset=MangaType.objects.all(),required=False)
-    title = TitleSerializer()
+  
     image = ImageSerializer(required=False)
     related_post = serializers.HyperlinkedIdentityField(
         many=True, view_name='post_detail', format='html',required=False)

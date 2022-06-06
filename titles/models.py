@@ -80,20 +80,24 @@ class Magazine(models.Model):
     def __str__(self):
         return self.name
 
-class TitleLanguage(models.Model):
-    language=models.CharField(max_length=50)
-    image = models.ImageField(upload_to='title_language/', blank=True)
-    def __str__(self):
-        return self.language
+
 
 class Title(models.Model):
 
-    title = models.CharField(max_length=300,)
-    language=models.ForeignKey(TitleLanguage,on_delete=models.SET_NULL,
-                               related_name='title', null=True, blank=True)
+
+    original_name = models.CharField(max_length=300, null=True, blank=True)
+    russian_name = models.CharField(max_length=300, null=True, blank=True)
+    english_name = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.language.upper()}:{self.title}'
+        if self.original_name:
+            return str(self.original_name)
+        elif self.english_name:
+            return str(self.english_name)
+        elif self.russian_name:
+            return str(self.russian_name)
+        else:
+            return "Doesn't have name"
 
 
 
@@ -164,8 +168,8 @@ class MetaTitle(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    title = models.ForeignKey(Title, on_delete=models.SET_DEFAULT,
-                             related_name='%(class)s',default='No title yet')
+    title = models.ForeignKey(Title, on_delete=models.SET_NULL,
+                             related_name='%(class)s',null=True)
     premiere = models.DateField(blank=True)
     genre = models.ManyToManyField(
         Genre, related_name='%(class)s', blank=True)

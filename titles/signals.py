@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 def generate_thumbnail(sender, instance, **kwargs):
     """Generate thumbnail when upload image"""
     logger.info(
-        "Generating thumbnail for product %d",
-        instance.product.id,
+        "Generating thumbnail for  %d",
+        instance.image,
         )
     #if image, then create or recreate thumbnail
     if instance.image:

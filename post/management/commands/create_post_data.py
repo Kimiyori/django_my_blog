@@ -1,7 +1,7 @@
 import random
 from django.core.management.base import BaseCommand
 from faker import Faker
-from ...models import Post, Related,Content
+from ...models import Post,Content
 from titles.models import Image as ImageModel
 from titles.models import Anime, Manga
 from titles.management.commands.create_titles_data import NUMBER_ANIME, NUMBER_MANGA
@@ -83,17 +83,11 @@ class Command(BaseCommand):
     def create_post(self):
         for _ in range(NUMBER_POST):
             title = self.fake.sentence(nb_words=8,)
-            related_obj = random.choice(['manga', 'anime'])
-            if related_obj == 'anime':
-                obj = self.get_rand(Anime, NUMBER_ANIME)
-                related = Related.objects.create(anime=obj)
-            elif related_obj == 'manga':
-                obj = self.get_rand(Manga, NUMBER_MANGA)
-                related = Related.objects.create(manga=obj)
+
             user=get_user_model()
             author = self.get_rand(user, NUMBER_USERS)
             post=Post.objects.create(
-                title=title, related_to=related, author=author,)
+                title=title, author=author,)
             file = settings.MEDIA_ROOT+'test_db/image'
             files = os.listdir(file)
             name_img = random.choice(files)
@@ -149,5 +143,5 @@ class Command(BaseCommand):
 
         #self.create_users()
 
-        self.create_post()
+        #self.create_post()
 

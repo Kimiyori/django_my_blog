@@ -2,7 +2,7 @@ import random
 from django.core.management.base import BaseCommand
 from faker import Faker
 import faker.providers
-from ...models import Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine, Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title, TitleLanguage
+from ...models import Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine, Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title
 from ...models import Image as ImageModel
 from django.db import transaction
 from django.db.models import Max, Min
@@ -172,8 +172,6 @@ class Provider(faker.providers.BaseProvider):
 
     def anime_type(self):
         return self.random_element(ANIMETYPE)
-    def title_language(self):
-        return self.random_element(TITLE_LANGUAGES)
 
 class Command(BaseCommand):
     help = 'create data for titles model'
@@ -209,9 +207,7 @@ class Command(BaseCommand):
         for _ in range(len(ANIMETYPE)):
             AnimeType.objects.create(
                 name=fake.unique.anime_type())
-        for _ in range(len(TITLE_LANGUAGES)):
-            TitleLanguage.objects.create(
-                name=fake.unique.title_language())
+
 
     def get_rand(self, model, number):
         pk = random.randint(0, number-1)
@@ -234,9 +230,12 @@ class Command(BaseCommand):
 
     def create_manga(self, fake):
         for _ in range(NUMBER_MANGA):
-            title_name= fake['en-US'].sentence(nb_words=8,)
-
-            title = Title.objects.create(title=title_name,language=self.get_rand(TitleLanguage,len(TITLE_LANGUAGES)))
+            title_original_name = fake['en-US'].sentence(nb_words=8,)
+            title_english_name = fake['en-US'].sentence(nb_words=8,)
+            title_russian_name = fake['ru-RU'].sentence(nb_words=8,)
+            title = Title.objects.create(original_name=title_original_name,
+                                                          english_name=title_english_name,
+                                                          russian_name=title_russian_name)
 
             manga_type = self.get_rand(MangaType, len(MANGATYPE))
 
@@ -342,14 +341,14 @@ class Command(BaseCommand):
 
         self.create_manga(fake)
 
-        self.create_anime(fake)
+        #self.create_anime(fake)
 
-        self.create_adaptations(fake)
+        #self.create_adaptations(fake)
 
-        self.create_reverse_adaptations(fake)
+        #self.create_reverse_adaptations(fake)
 
-        self.create_sequel_prequel(fake)
+        #self.create_sequel_prequel(fake)
 
-        self.create_prequel_sequel(fake)
+       # self.create_prequel_sequel(fake)
 
 
