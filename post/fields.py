@@ -1,8 +1,8 @@
 from django.apps import apps
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-
-
+import logging
+file_logger = logging.getLogger('file_logger')
 
 
 class OrderField(models.PositiveIntegerField):
@@ -36,6 +36,6 @@ class OrderField(models.PositiveIntegerField):
                         setattr(model_instance, self.attname, value)
 
             except Exception as e:
-                print(e)
+                file_logger.warning(f'Can\'t updare content order because of the following error - {e}')
             return model_instance.order
 

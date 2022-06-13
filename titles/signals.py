@@ -8,18 +8,19 @@ from .models import Image as ImageTable
 
 
 THUMBNAIL_SIZE = (400, 400)
-logger = logging.getLogger(__name__)
+file_logger=logging.getLogger('file_logger')
+console_logger=logging.getLogger('console_logger')
 
 
 @receiver(pre_save, sender=ImageTable)
 def generate_thumbnail(sender, instance, **kwargs):
     """Generate thumbnail when upload image"""
-    logger.info(
+    #if image, then create or recreate thumbnail
+    if instance.image:
+        file_logger.info(
         "Generating thumbnail for  %d",
         instance.image,
         )
-    #if image, then create or recreate thumbnail
-    if instance.image:
         image = Image.open(instance.image)
         image = image.convert("RGB")
         image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
@@ -32,7 +33,20 @@ def generate_thumbnail(sender, instance, **kwargs):
         save=False,
         )
         temp_thumb.close()
+        file_logger.info(
+        "Successful generate thumbnail for  %d",
+        instance.image,
+        )
     # case for delete. if thumbnail exist, but not image, then delete thumbnail too
     elif instance.thumbnail and not instance.image:
+        file_logger.info(
+        "Delete thumbnail for  %d",
+        instance.image,
+        )
         instance.thumbnail.delete()
+        file_logger.info(
+        "Successful delete thumbnail for  %d",
+        instance.image,
+        )
+
 

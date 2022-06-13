@@ -31,10 +31,10 @@ class MultiDBModelAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, using=self.using, **kwargs)
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    using = 'test_db'
+
     list_display = ('title', 'author', 'publish', 'status')
     list_filter = ('status', 'created', 'publish', 'author')
-    search_fields = ('title', 'body')
+    search_fields = ('title', )
     date_hierarchy = 'publish'
     ordering = ('status', 'publish')
     def formfield_for_manytomany(self, db_field, request, **kwargs):

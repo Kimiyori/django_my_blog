@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import socket
 from pathlib import Path
 import os
+from pythonjsonlogger.jsonlogger import JsonFormatter
+from titles.logging_formatters import CustomJsonFormatter
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,7 +48,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "titles.apps.TitlesConfig",
     'sorl.thumbnail',
-    'rest_framework', #
+    'rest_framework',
     'api.apps.ApiConfig',
     "post.apps.PostConfig",
     'corsheaders',
@@ -84,9 +87,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
-            'urlparams': 'post.templatetags.urlparams',
-            'dynamic_url': 'post.templatetags.dynamic_url'
-         }
+                'urlparams': 'post.templatetags.urlparams',
+                'dynamic_url': 'post.templatetags.dynamic_url'
+            }
         }
     },
 ]
@@ -99,18 +102,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', #changed from sqlite
-        'NAME': 'postgres', #development settings, will change in production
-        'USER': 'postgres', #development settings, will change in production
-        'PASSWORD': 'postgres', #development settings, will change in production
+        'ENGINE': 'django.db.backends.postgresql',  # changed from sqlite
+        'NAME': 'postgres',  # development settings, will change in production
+        'USER': 'postgres',  # development settings, will change in production
+        'PASSWORD': 'postgres',  # development settings, will change in production
         'HOST': 'db',
         'PORT': 5432
     },
     'test_db': {
-        'ENGINE': 'django.db.backends.postgresql', #changed from sqlite
-        'NAME': 'test_db', #development settings, will change in production
-        'USER': 'postgres', #development settings, will change in production
-        'PASSWORD': 'postgres', #development settings, will change in production
+        'ENGINE': 'django.db.backends.postgresql',  # changed from sqlite
+        'NAME': 'test_db',  # development settings, will change in production
+        'USER': 'postgres',  # development settings, will change in production
+        'PASSWORD': 'postgres',  # development settings, will change in production
         'HOST': 'db',
         'PORT': 5432
     }
@@ -153,11 +156,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),] 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_FINDERS = [
-"django.contrib.staticfiles.finders.FileSystemFinder",
-"django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
 
@@ -165,7 +168,7 @@ STATICFILES_FINDERS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SITE_ID = 1     #all-auth supports multiple sites
+SITE_ID = 1  # all-auth supports multiple sites
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -173,20 +176,20 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend"
 )
-#LOGIN_REDIRECT_URL = "home"   #change to desired url name
-#LOGOUT_REDIRECT_URL = "home" #change to desired url name
-ACCOUNT_SESSION_REMEMBER = True #remember user via sessions
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True #preferred UX
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"  
-ACCOUNT_EMAIL_REQUIRED = True #required for email authentication
-ACCOUNT_UNIQUE_EMAIL = True #required for email authentication
-ACCOUNT_EMAIL_VERIFICATION = "optional" #can use as a welcome email as well
+# LOGIN_REDIRECT_URL = "home"   #change to desired url name
+# LOGOUT_REDIRECT_URL = "home" #change to desired url name
+ACCOUNT_SESSION_REMEMBER = True  # remember user via sessions
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True  # preferred UX
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True  # required for email authentication
+ACCOUNT_UNIQUE_EMAIL = True  # required for email authentication
+ACCOUNT_EMAIL_VERIFICATION = "optional"  # can use as a welcome email as well
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 36400
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 AUTH_USER_MODEL = "accounts.CustomUser"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'youremail@gmail.com'
@@ -194,21 +197,58 @@ EMAIL_HOST_PASSWORD = 'yourpassword'
 EMAIL_PORT = 587
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.SignupForm'
-    }
+}
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
 
 }
-CORS_ORIGIN_ORIGINS  = (
-'http://localhost:3000',
-'http://localhost:8000',
-'http://127.0.0.1:8000',
+CORS_ORIGIN_ORIGINS = (
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 )
-import socket
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'main_format': {
+            'format': '{asctime} - {levelname} - {module} - {filename} - {message}',
+            'style': '{',
+        },  # time - LEVEL - module - filename - message
+        'json_formatter': {
+            '()':CustomJsonFormatter,
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_format',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'formatter': 'json_formatter',
+            'filename': 'logging/info.log'
+        },
+    },
+    'loggers': {
+        'file_logger': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'console_logger': {
+            'handlers': ['console', ],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    },
+}
 
 CACHES = {
     'default': {

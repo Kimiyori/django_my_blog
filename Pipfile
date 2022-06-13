@@ -21,6 +21,7 @@ jsonschema = "*"
 faker = "*"
 django-silk = "*"
 django-debug-toolbar-force = "*"
+python-json-logger = "*"
 
 [dev-packages]
 

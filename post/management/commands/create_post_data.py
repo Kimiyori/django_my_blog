@@ -141,7 +141,7 @@ class Command(BaseCommand):
 
         self.delete_all_data(models)
 
-        #self.create_users()
+        self.create_users()
 
-        #self.create_post()
+        self.create_post()
 

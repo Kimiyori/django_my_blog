@@ -168,7 +168,7 @@ class MetaTitle(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    title = models.ForeignKey(Title, on_delete=models.SET_NULL,
+    title = models.ForeignKey(Title, on_delete=models.CASCADE,
                              related_name='%(class)s',null=True)
     premiere = models.DateField(blank=True)
     genre = models.ManyToManyField(
@@ -185,11 +185,11 @@ class MetaTitle(models.Model):
         abstract=True
 
     def __str__(self):
-        if self.title.original_name:
+        if hasattr(self.title,'original_name'):
             return str(self.title.original_name)
-        elif self.title.english_name:
+        elif hasattr(self.title,'english_name'):
             return str(self.title.english_name)
-        elif self.title.russian_name:
+        elif hasattr(self.title,'russian_name'):
             return str(self.title.russian_name)
         else:
             return 'Not name' 
@@ -200,8 +200,9 @@ class MetaTitle(models.Model):
         else:
             return "Нет описания"
 
+
 class Manga(MetaTitle):
-    type = models.ForeignKey(MangaType, on_delete=models.CASCADE,
+    type = models.ForeignKey(MangaType, on_delete=models.SET_NULL,
                              related_name='manga', null=True, blank=True)
     authors = models.ForeignKey(Authors, on_delete=models.CASCADE,related_name='manga', null=True, blank=True)
 
@@ -210,7 +211,7 @@ class Manga(MetaTitle):
     volumes = models.IntegerField(null=True, blank=True)
     chapters = models.IntegerField(null=True, blank=True)
     demographic = models.ForeignKey(
-        Demographic, on_delete=models.CASCADE, related_name='manga', null=True, blank=True)
+        Demographic, on_delete=models.SET_NULL, related_name='manga', null=True, blank=True)
     magazine = models.ManyToManyField(
         Magazine, related_name='manga', blank=True)
     class Meta:
@@ -223,7 +224,14 @@ class Manga(MetaTitle):
     def get_absolute_url(self):
         return reverse('manga_detail', kwargs={'pk':str(self.id)})
 
-
+    def delete(self,*args,**kwargs):
+        if self.image:
+            self.image.delete()
+        if self.title:
+            self.title.delete()
+        if self.authors:
+            self.authors.delete()
+        return super().delete(*args,**kwargs)
 
 
 
@@ -246,3 +254,10 @@ class Anime(MetaTitle):
 
     def get_absolute_url(self):
         return reverse('anime_detail', kwargs={'pk':str(self.id)})
+        
+    def delete(self,*args,**kwargs):
+        if self.image:
+            self.image.delete()
+        if self.title:
+            self.title.delete()
+        return super().delete(*args,**kwargs)

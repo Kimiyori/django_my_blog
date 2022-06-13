@@ -1,19 +1,25 @@
 
 from api.permissions import IsAdminOrReadOnly
-from post.models import Post
+from post.models import Content, Post
 from rest_framework import status, viewsets, permissions
 from titles.models import Anime, Demographic, Magazine, Manga, Genre, Publisher, Theme
 from .serializers import AnimeSerializer, MangaSerializer, PostSerializer, GenreSerializer
 from .pagination import StandardResultsSetPagination
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.db.models import Prefetch
 from rest_framework.response import Response
-
+from django.db.models import Count
 from django.core.cache import cache
 from rest_framework import generics
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+import logging
 
 CACHE_TIME = 60*5
+
+file_logger = logging.getLogger('file_logger')
+console_logger = logging.getLogger('console_logger')
 
 
 class EnablePartialUpdateMixin:
@@ -29,15 +35,35 @@ class EnablePartialUpdateMixin:
 
 
 class AnimeList(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrReadOnly,)
-    queryset = Anime.objects.select_related(
-        'type',
-        'title',
-        'image',).prefetch_related(
-        'genre',
-        'theme',
-        'studio',)
+    pagination_class = StandardResultsSetPagination
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsAdminOrReadOnly, ]
     serializer_class = AnimeSerializer
+
+    def get_queryset(self,):
+        query = Anime.objects.select_related('type', 'title', 'image').prefetch_related(
+            'genre', 'theme', 'studio', 'related_post')
+        return query
+
+    def list(self, request):
+        console_logger.info('Get list of anime titles with api')
+        return super().list(request)
+
+    @method_decorator(cache_page(CACHE_TIME))
+    def retrieve(self, request, pk=None):
+        console_logger.info(f'Get anime title with following {id}')
+        queryset = self.get_queryset().get(pk=pk)
+        serializer_context = {
+            'request': request,
+        }
+        arguments={'instance':queryset,'context':serializer_context,'partial':True}
+        fields = request.query_params.get('fields')
+        if fields:
+            arguments['fields']=fields.split(',')
+
+        queryset = AnimeSerializer(**arguments).data
+        file_logger.info(f'Successful get api anime title with following id {id}',extra={'fields':fields})
+        return Response(queryset)
 
 
 class MangaList(EnablePartialUpdateMixin, viewsets.ModelViewSet):
@@ -53,20 +79,25 @@ class MangaList(EnablePartialUpdateMixin, viewsets.ModelViewSet):
             'genre', 'theme', 'magazine',
             'publisher', 'related_post')
         return query
+    
+    def list(self, request):
+        console_logger.info('Get list of manga titles with api')
+        return super().list(request)
 
+    @method_decorator(cache_page(CACHE_TIME))
     def retrieve(self, request, pk=None):
-        key = f'api:{pk}:manga'
-        queryset = cache.get(key)
+        console_logger.info(f'Get manga title with following {id}')
+        queryset = self.get_queryset().get(pk=pk)
+        serializer_context = {
+            'request': request,
+        }
+        arguments={'instance':queryset,'context':serializer_context,'partial':True}
+        fields = request.query_params.get('fields')
+        if fields:
+            arguments['fields']=fields.split(',')
 
-        if queryset is None:
-            queryset = self.get_queryset().get(pk=pk)
-            serializer_context = {
-                'request': request,
-            }
-            queryset = MangaSerializer(
-                queryset, context=serializer_context, partial=True).data
-            cache.set(key, queryset, CACHE_TIME)
-
+        queryset = MangaSerializer(**arguments).data
+        file_logger.info(f'Successful get api manga title with following id {id}',extra={'fields':fields})
         return Response(queryset)
 
 
@@ -75,6 +106,7 @@ class GenreList(generics.ListAPIView):
     queryset = Genre.objects.all()
 
     def list(self, request):
+        console_logger.info('Get list of genres with api')
         return Response(self.get_queryset().values_list("name", flat=True))
 
 
@@ -83,6 +115,7 @@ class ThemeList(generics.ListAPIView):
     queryset = Theme.objects.all()
 
     def list(self, request):
+        console_logger.info('Get list of themes  with api')
         return Response(self.get_queryset().values_list("name", flat=True))
 
 
@@ -91,6 +124,7 @@ class PublisherList(generics.ListAPIView):
     queryset = Publisher.objects.all()
 
     def list(self, request):
+        console_logger.info('Get list of publishers with api')
         return Response(self.get_queryset().values_list("name", flat=True))
 
 
@@ -99,6 +133,7 @@ class DemographicList(generics.ListAPIView):
     queryset = Demographic.objects.all()
 
     def list(self, request):
+        console_logger.info('Get list of demographic with api')
         return Response(self.get_queryset().values_list("name", flat=True))
 
 
@@ -107,13 +142,39 @@ class MagazineList(generics.ListAPIView):
     queryset = Magazine.objects.all()
 
     def list(self, request):
+        console_logger.info('Get list of magazines with api')
         return Response(self.get_queryset().values_list("name", flat=True))
 
 
 class PostList(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAdminUser,)
-    queryset = Post.objects.select_related(
-        'author',
-        'related_to__manga__title',
-        'related_to__anime__title')
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsAdminOrReadOnly, ]
+
     serializer_class = PostSerializer
+
+    def list(self, request):
+        console_logger.info('Get list of posts with api')
+        return super().list(request)
+
+    def get_queryset(self,):
+        query = Post.objects.select_related(
+            'author',
+        ).prefetch_related(
+            Prefetch('contents', queryset=Content.objects.all(
+            ).prefetch_related('item', 'content_type'))
+        )
+        return query
+
+    @method_decorator(cache_page(CACHE_TIME))
+    def retrieve(self, request, pk=None):
+        queryset = self.get_queryset().get(pk=pk)
+        serializer_context = {
+            'request': request,
+        }
+        arguments={'instance':queryset,'context':serializer_context,'partial':True}
+        fields = request.query_params.get('fields')
+        if fields:
+            arguments['fields']=fields.split(',')
+        queryset = PostSerializer(**arguments).data
+
+        return Response(queryset)

@@ -2,6 +2,7 @@ import random
 from django.core.management.base import BaseCommand
 from faker import Faker
 import faker.providers
+from post.models import Post
 from ...models import Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine, Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title
 from ...models import Image as ImageModel
 from django.db import transaction
@@ -238,7 +239,7 @@ class Command(BaseCommand):
                                                           russian_name=title_russian_name)
 
             manga_type = self.get_rand(MangaType, len(MANGATYPE))
-
+            demographic = self.get_rand(Demographic, len(DEMOGRAPHICS))
             author = AuthorTable.objects.create(name=fake['ja-JP'].romanized_name(),
                                                                  pseudonym=fake['ja-JP'].romanized_name(
             ),
@@ -253,7 +254,7 @@ class Command(BaseCommand):
             volumes = random.randint(1, 100)
             chapters = random.randint(volumes, volumes*6)
             description = fake['en-US'].text(max_nb_chars=350)
-            manga = Manga.objects.create(title=title, type=manga_type,
+            manga = Manga.objects.create(title=title, type=manga_type,demographic=demographic,
                                                           authors=authors, premiere=premiere,
                                                           volumes=volumes, chapters=chapters,
                                                           image=self.make_image(), description=description)
@@ -267,12 +268,17 @@ class Command(BaseCommand):
             manga.magazine.add(*magazines)
             genres = random.sample(list(Genre.objects.all()), random.randint(1, 3))
             manga.genre.add(*genres)
-
+            posts=random.sample(
+                list(Post.objects.all()), random.randint(1, 5))
+            manga.related_post.add(*posts)
     def create_anime(self, fake):
         for _ in range(NUMBER_ANIME):
-            title_name= fake['en-US'].sentence(nb_words=8,)
-
-            title = Title.objects.create(title=title_name,language=self.get_rand(TitleLanguage,len(TITLE_LANGUAGES)))
+            title_original_name = fake['en-US'].sentence(nb_words=8,)
+            title_english_name = fake['en-US'].sentence(nb_words=8,)
+            title_russian_name = fake['ru-RU'].sentence(nb_words=8,)
+            title = Title.objects.create(original_name=title_original_name,
+                                                          english_name=title_english_name,
+                                                          russian_name=title_russian_name)
             anime_type = self.get_rand(AnimeType, len(ANIMETYPE))
 
             premiere = fake.date_object()
@@ -291,6 +297,9 @@ class Command(BaseCommand):
             anime.theme.add(*themes)
             genres = random.sample(list(Genre.objects.all()), random.randint(1, 3))
             anime.genre.add(*genres)
+            posts=random.sample(
+                list(Post.objects.all()), random.randint(1, 5))
+            anime.related_post.add(*posts)
 
     def create_adaptations(self, fake):
         for _ in range(NUMBER_ADAPTATION):
@@ -335,11 +344,11 @@ class Command(BaseCommand):
         models = [Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine,
                   Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title, ImageModel]
 
-        self.delete_all_data(models)
+        #self.delete_all_data(models)
 
-        self.create_default_data()
+        #self.create_default_data()
 
-        self.create_manga(fake)
+       # self.create_manga(fake)
 
         #self.create_anime(fake)
 
@@ -349,6 +358,6 @@ class Command(BaseCommand):
 
         #self.create_sequel_prequel(fake)
 
-       # self.create_prequel_sequel(fake)
+        #self.create_prequel_sequel(fake)
 
 

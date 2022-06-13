@@ -1,0 +1,52 @@
+{"message": "get manga list", "timestamp": "2022-06-10T21:16:34.341582Z", "level": "INFO"}
+{"message": "get manga list", "timestamp": "2022-06-10T21:16:54.581656Z", "level": "INFO"}
+{"message": "Get list of manga with the following filters:{}", "timestamp": "2022-06-10T22:11:20.014358Z", "level": "INFO"}
+{"message": "Get list of manga with the following filters:{'genre': ['Tragedy'], 'demographic': ['Shoujo']}", "timestamp": "2022-06-10T22:12:01.841444Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {"genre": ["Tragedy"], "demographic": ["Shoujo"]}, "timestamp": "2022-06-10T22:32:14.516799Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {"demographic": ["Shoujo"]}, "timestamp": "2022-06-10T22:32:38.351823Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "timestamp": "2022-06-10T22:32:44.192669Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "timestamp": "2022-06-10T22:36:25.500386Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "title_filter": "Able office", "timestamp": "2022-06-10T22:37:52.699856Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "title_filter": "", "timestamp": "2022-06-10T22:38:00.008650Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-12T20:03:33.970773Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "title_filter": "ew", "timestamp": "2022-06-12T20:03:57.870787Z", "level": "INFO"}
+{"message": "Get list of manga", "filers": {}, "title_filter": "", "timestamp": "2022-06-12T20:04:03.891918Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": "", "timestamp": "2022-06-12T20:05:09.523088Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-12T20:05:29.206076Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-12T20:37:15.996892Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 647c5cf6-1fb4-4443-af86-477a4cf0af05 for editing", "timestamp": "2022-06-12T21:00:50.599328Z", "level": "INFO"}
+{"message": "Error for access edit post page.Request user(Kimiyori) is not the author(kyosukeyamaguchi", "timestamp": "2022-06-12T21:20:06.963341Z", "level": "WARNING"}
+{"message": "Error for access edit post page.Request user(Kimiyori) is not the author of that post(kyosukeyamaguchi)", "request_user": "Kimiyori", "author": "kyosukeyamaguchi", "timestamp": "2022-06-12T21:21:50.239332Z", "level": "WARNING"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.629982Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.852147Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.864788Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.872850Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.880779Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.902294Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.920625Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.929469Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.942784Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:39.949853Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": "Tetsugaka Letra", "timestamp": "2022-06-13T17:48:40.719776Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:40.727446Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {"genre": ["Romance"]}, "title_filter": null, "timestamp": "2022-06-13T17:48:40.733573Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:48:40.746132Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T17:57:39.402773Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-06-13T18:03:01.206218Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "ea80401b-fe10-43aa-829d-d7db06dadf81", "content_id": 1, "request_user": "test", "timestamp": "2022-06-13T18:20:58.554961Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "ea80401b-fe10-43aa-829d-d7db06dadf81", "content_id": 1, "request_user": "test", "timestamp": "2022-06-13T18:20:58.569211Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 817fbd0c-bb04-499d-b520-d9fede4c7c41", "timestamp": "2022-06-13T18:20:59.703274Z", "level": "INFO"}
+{"message": "Collect content for post in list...", "timestamp": "2022-06-13T18:20:59.963755Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 28ed8286-f251-4a69-81dc-2a2d6a8a336c for editing", "timestamp": "2022-06-13T18:20:59.968791Z", "level": "INFO"}
+{"message": "Trying to update post instance", "timestamp": "2022-06-13T18:21:00.040517Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-06-13T18:21:00.043240Z", "level": "INFO"}
+{"message": "Trying to update post instance", "timestamp": "2022-06-13T18:21:00.061354Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-06-13T18:21:00.066987Z", "level": "INFO"}
+{"message": "Swaping contents order", "timestamp": "2022-06-13T18:21:00.605603Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-06-13T18:21:00.613904Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id <built-in function id>", "fields": null, "timestamp": "2022-06-13T20:03:29.653023Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id <built-in function id>", "fields": "type,studio", "timestamp": "2022-06-13T20:06:06.384222Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id <built-in function id>", "fields": "", "timestamp": "2022-06-13T20:06:13.678413Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id <built-in function id>", "fields": "", "timestamp": "2022-06-13T20:18:31.086496Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-06-13T20:33:15.584818Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": "theme", "timestamp": "2022-06-13T20:33:27.285728Z", "level": "INFO"}
