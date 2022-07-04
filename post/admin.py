@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Post,Content,Text,Image,Video,File
+from .models import Post,Content,Text,Image,Video,File,Comment
 from django.contrib.auth.models import Permission
+from mptt.admin import MPTTModelAdmin
 
 
 
@@ -61,4 +62,9 @@ class ContentAdmin(admin.ModelAdmin):
     using = 'test_db'
     list_display = ('post', )
     ordering=['post','order']
+
+@admin.register(Comment)
+class CommentAdmin(MPTTModelAdmin):
+     autocomplete_fields = ['post']
+
 

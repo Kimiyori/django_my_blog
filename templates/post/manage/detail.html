@@ -2,6 +2,7 @@
 {% load static %}
 {% load embed_video_tags %}
 {% load thumbnail %}
+{% load mptt_tags %}
 {% block title %}{{ post.title }}{% endblock title %}
 {% block content %}
 
@@ -30,19 +31,141 @@
     {% endif %}
 
 {% endfor %}
-
+<hr>
+<div class="comments">
+{% recursetree comments %}
+        <div id="{{node.id}}">
+            <div class="comment-upper">
+        <div class="base-img"><img src="/media/{{ node.author.profile.photo }}" ></div>
+        <div class="comment-upper-info">
+        <div class="">{{ node.author.username }}</div>
+        <div>{{ node.created|date:"M d"}} {{ node.created|date:"H:i"}}</div>
+            </div>
+        </div>
+        <div class="comment-content">{{node.content}}</div>
+        {% if request.user.is_authenticated %}
+        <button class="button" onclick="invoke_reply({{ node.id }})">Reply</button>
+        {% if request.user == node.author %}
+        <button class="button" onclick="delete_comment({{ node.id }})">Delete</button>
+        {% endif %}
+        {% endif %}
+        {% if not node.os_leaf_node %}
+        <div class="children">{{children}}</div>
+        {% endif %}
+    </div>
+{% endrecursetree %}
 </div>
+<hr>
+{% if request.user.is_authenticated %}
+<div id="myDIV" >
+    <form id="myForm" method="post">
+      <h2>Create new comment</h2>
+      {{ comment_form.as_p }}
+      {% csrf_token %}
+      <button type="submit" onclick="comment_submit(event)" >Submit</button>
+    </form>
+  </div>
+</div>
+{%  endif %}
 {% endblock content %}
-<script>
 
+{% block script %}
 
-</script>
-{% block domready %}
-content=document.querySelector('#content')
-const textnode = document.createTextNode("Water");
-{% for block in post.contents.all %}
-   content.appendChild({{block.item.render}})
-    console.log({{block.type}})
-{% endfor %}
-console.log('333')
- {% endblock %}
+function getCookie(name) { 
+    let cookieValue=null; 
+    if (document.cookie && document.cookie !=='' ) { 
+        const cookies=document.cookie.split(';'); 
+        for (let i=0; i < cookies.length; i++) { 
+            const cookie=cookies[i].trim(); 
+            // Does this cookie string begin with the name we want? 
+            if (cookie.substring(0, name.length + 1)===(name + '=' )) { 
+                cookieValue=decodeURIComponent(cookie.substring(name.length + 1)); 
+                break; 
+            } 
+        } 
+    } 
+    return cookieValue; 
+} 
+
+function formExit() {
+    document.getElementById("newForm").remove();
+  }
+
+function invoke_reply(id) {
+    if (document.contains(document.getElementById("newForm"))) { 
+        if (document.getElementById("newForm").parentNode.parentNode.id==id) {
+            return formExit();
+        } else {
+            formExit();
+        }
+      }
+      const parent_id = document.getElementById(id);
+      const children=parent_id.querySelector('.children')
+      const placeholder = document.createElement("div");
+        placeholder.innerHTML = `<form id="newForm" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-between"><h2>Reply:</h2> \
+            <select name="parent" class="d-none" id="id_parentt" hidden> \
+            <option value=${id} selected=${id}></option> \
+            </select> \
+            <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" onclick="comment_submit(event,id)" >Submit</button> \
+          </form>`;
+      parent_id.insertBefore(placeholder,children)
+}
+
+function delete_comment(id) {
+    const csrftoken = getCookie('csrftoken');
+    const url = 'http://127.0.0.1:8000/blog/comment/' + id +'/delete/'
+    let source_url = fetch(url, {
+        method: 'POST',
+        headers: { "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        let com=document.getElementById(id);
+        com.remove();
+        return response.json();
+    })
+}
+
+function comment_submit(e, id ) {
+    let comment_btn = id!== undefined ? document.querySelector('#newForm'):document.querySelector('#myDIV');
+    e.preventDefault()
+    const csrftoken = getCookie('csrftoken');
+    const url = 'http://127.0.0.1:8000/blog/comment/' + '{{post.id}}/'
+    let data = new FormData();
+    let content = comment_btn.querySelector('#id_content').value
+    let parent = comment_btn.querySelector('#id_parentt')
+    data.append('author', {{request.user.id}})
+    data.append('content', content)
+    if (parent) {
+        parent = parent.options[parent.selectedIndex].value;
+        data.append('parent', parent)
+        }
+    let source_url = fetch(url, {
+        method: 'POST',
+        body: data,
+        headers: { "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+    }).then(json => {
+        let comments = id==undefined? document.querySelector('.comments') : comment_btn.parentNode.parentNode.querySelector('.children');
+        let elem=document.createElement('div')
+        elem.setAttribute('id',`${json.id}`)
+        elem.innerHTML = `<div class="comment-upper">
+            <div class="base-img"><img src="/media/{{ request.user.profile.photo }}" ></div>
+            <div class="comment-upper-info">
+        <div class="">By ${json.author}</div>
+        <div>${json.created}</div>
+    </div>
+</div>
+        <div class="comment-content">${content}</div>
+        <button class="button" onclick="invoke_reply(${json.id})">Reply</button>
+        <button class="button" onclick="delete_comment(${json.id})">Delete</button>
+        <div class="children"></div>`
+        comments.appendChild(elem)   
+        formExit();     
+    })
+}
+ {% endblock %} 

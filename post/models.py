@@ -10,7 +10,7 @@ from .fields import OrderField
 from django.template.loader import render_to_string
 from django.apps import apps
 from django_cleanup import cleanup
-
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 User = get_user_model()
@@ -124,3 +124,21 @@ class Video(ItemBase):
     video = models.URLField()
     relation = GenericRelation(Content, content_type_field='content_type',
                                object_id_field='object_id', related_query_name='video')
+
+
+class Comment(MPTTModel):
+    post = models.ForeignKey(Post,
+                             related_name='comments',
+                             on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE,
+                            null=True, blank=True, related_name='children')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    #updated = models.DateTimeField(auto_now=True)
+
+    class MPTTMeta:
+        order_insertion_by=['created']
+
+    def __str__(self):
+        return f'Comment by {self.author}'

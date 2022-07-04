@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostList, ContentCreateUpdateView, PostDetail, PostDetailChange, ContentDeleteView,ContentOrderView
+from .views import PostList, ContentCreateUpdateView, PostDetail, PostDetailChange, ContentDeleteView,ContentOrderView,add_comment,delete_comment
 urlpatterns = [
     path('', PostList.as_view(), name='post_list'),
     path('<uuid:pk>', PostDetail.as_view(), name='post_detail'),
@@ -22,4 +22,12 @@ urlpatterns = [
      path('content/order/',
           ContentOrderView.as_view(),
           name='content_order'),
+     path('comment/<post_id>/',
+     add_comment,
+     name='add_comment'
+     ),
+     path('comment/<comment_id>/delete/',
+     delete_comment,
+     name='delete_comment'
+     )
 ]

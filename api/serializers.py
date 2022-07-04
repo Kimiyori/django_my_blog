@@ -8,10 +8,8 @@ from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 import logging
 from titles.models import Anime, AnimeType, Magazine, Studio, Theme, Title, Manga, AuthorTable, Publisher, Demographic, MangaType, Genre, Authors, AuthorTable, Image
-logging.basicConfig(format='%(levelname)s:%(message)s')
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+file_logger = logging.getLogger('file_logger')
+console_logger = logging.getLogger('console_logger')
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """
@@ -40,18 +38,18 @@ class TitleSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        logger.info(
-            f'Starting create instance of title model with folloving fields:{*[x for x in validated_data.keys()],}')
+        file_logger.info(
+            f'Trying create instance of title model with following fields',extra={'fields':{*[x for x in validated_data.keys()],}})
         original_name = validated_data.pop('original_name', None)
         english_name = validated_data.pop('english_name', None)
         russian_name = validated_data.pop('russian_name', None)
         title = Title.objects.create(
             original_name=original_name, english_name=english_name, russian_name=russian_name)
-        logger.info('Successful create instance of title model')
+        file_logger.info('Successful create instance of title model')
         return title
 
     def update(self, instance, validated_data):
-        logger.info(
+        file_logger.info(
             f'Starting update instance of title model with folloving fields:{*[x for x in validated_data.keys()],}')
         instance.original_name = validated_data.pop(
             'original_name', instance.original_name)
@@ -60,7 +58,7 @@ class TitleSerializer(serializers.ModelSerializer):
         instance.russian_name = validated_data.pop(
             'russian_name', instance.russian_name)
         instance.save()
-        logger.info('Successful update instance of item model')
+        file_logger.info('Successful update instance of item model')
         return instance
 
 
@@ -138,8 +136,8 @@ class MangaSerializer(DynamicFieldsModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        logger.info(
-            f'Starting create instance of manga model with folloving fields:{*[x for x in validated_data.keys()],}')
+        file_logger.info(
+            f'Starting create instance of manga model with folloving fields',extra={'fields':{*[x for x in validated_data.keys()],}})
 
         title = Title.objects.create(**validated_data.pop('title'))
 
@@ -167,13 +165,13 @@ class MangaSerializer(DynamicFieldsModelSerializer):
             image = Image.objects.create(**image)
             manga.image = image
         manga.save()
-        logger.info('Successful create instance of manga model')
+        file_logger.info('Successful create instance of manga model')
         return manga
 
     @transaction.atomic
     def update(self, instance, validated_data):
 
-        logger.info(
+        file_logger.info(
             f'Starting update instance of manga model with folloving fields:{*[x for x in validated_data.keys()],}')
         # default fields
         fields = ['type',  'premiere',
@@ -185,7 +183,7 @@ class MangaSerializer(DynamicFieldsModelSerializer):
                 if data:
                     setattr(instance, field, data)
             except KeyError as e:  # validated_data may not contain all fields during HTTP PATCH
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         # manytomant fields
         manytomany_fields = ['genre', 'theme', 'publisher', 'magazine']
@@ -196,7 +194,7 @@ class MangaSerializer(DynamicFieldsModelSerializer):
                     field_instance = getattr(instance, field)
                     field_instance.set(self.get_values(field=field, data=data))
             except Exception as e:
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         # nested fields
         nested_fields = {'title': TitleSerializer,
@@ -210,11 +208,11 @@ class MangaSerializer(DynamicFieldsModelSerializer):
                     if obj.is_valid():
                         obj.save()
             except Exception as e:
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         instance.save()
 
-        logger.info('Successful update instance of manga model')
+        file_logger.info('Successful update instance of manga model')
         return instance
 
 
@@ -242,8 +240,8 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        logger.info(
-            f'Starting create instance of anime model with folloving fields:{*[x for x in validated_data.keys()],}')
+        file_logger.info(
+            f'Starting create instance of anime model with folloving fields',extra={'fields':{*[x for x in validated_data.keys()],}})
 
         title = Title.objects.create(**validated_data.pop('title'))
 
@@ -262,14 +260,14 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
             image = Image.objects.create(**image)
             anime.image = image
         anime.save()
-        logger.info('Successful create instance of anime model')
+        file_logger.info('Successful create instance of anime model')
         return anime
 
     @transaction.atomic
     def update(self, instance, validated_data):
 
-        logger.info(
-            f'Starting update instance of anime model with folloving fields:{*[x for x in validated_data.keys()],}')
+        file_logger.info(
+            f'Starting update instance of anime model with folloving fields:',extra={'fields':{*[x for x in validated_data.keys()],}})
         # default fields
         fields = ['type',  'premiere',
                   'episodes',
@@ -280,7 +278,7 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
                 if data:
                     setattr(instance, field, data)
             except KeyError as e:  # validated_data may not contain all fields during HTTP PATCH
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         # manytomant fields
         manytomany_fields = ['genre', 'theme', 'studio']
@@ -291,7 +289,7 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
                     field_instance = getattr(instance, field)
                     field_instance.set(self.get_values(field=field, data=data))
             except Exception as e:
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         # nested fields
         nested_fields = {'title': TitleSerializer, 'image': ImageSerializer}
@@ -304,11 +302,11 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
                     if obj.is_valid():
                         obj.save()
             except Exception as e:
-                logger.warning(e)
+                file_logger.warning(f'{e}')
 
         instance.save()
 
-        logger.info('Successful update instance of anime model')
+        file_logger.info('Successful update instance of anime model')
         return instance
 
 

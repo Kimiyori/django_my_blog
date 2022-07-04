@@ -22,6 +22,8 @@ faker = "*"
 django-silk = "*"
 django-debug-toolbar-force = "*"
 python-json-logger = "*"
+channels = "*"
+django-mptt = "*"
 
 [dev-packages]
 

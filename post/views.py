@@ -1,13 +1,14 @@
 
 import json
+
 from django.forms.models import modelform_factory
 from django.apps import apps
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Post, Content, Video
+from .models import Post, Content, Video,Comment
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, UpdateView
-from .forms import PostForm
+from .forms import NewCommentForm, PostForm
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F
 from django.db.models.fields import CharField, TextField
@@ -20,6 +21,10 @@ from django.conf import settings
 from django.core.cache import cache
 from titles.paginator import LargeTablePaginator
 import logging
+CACHE_TIME = 60*5
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.contrib.auth import get_user_model
 # Create your views here.
 
 file_logger = logging.getLogger('file_logger')
@@ -53,19 +58,21 @@ class PostList(ListView):
         return post
 
 
+
 class PostDetail(TemplateResponseMixin, View):
     """View for detail post"""
     model = Post
     template_name = 'post/manage/detail.html'
     context_object_name = 'post'
 
+    #@method_decorator(cache_page(CACHE_TIME))
     def get(self, request, pk):
         console_logger.info(f'Trying to get detail post with id - {pk}')
         # connect to redis
         r = redis.Redis(host=settings.REDIS_HOST,
                         port=settings.REDIS_PORT,
                         db=settings.REDIS_DB)
-        # search in cache post by key
+         # search in cache post by key
         cache_post_key = f'postid:{pk}'
         post = cache.get(cache_post_key)
         # if not, then create and cache it
@@ -90,11 +97,47 @@ class PostDetail(TemplateResponseMixin, View):
                 When(video__gte=1, then=ArrayAgg(Array(F('video__video'), Value('video')))), output_field=TextField())).\
                 order_by('order').values('cont')
             cache.set(cache_content_key, content)
+
+        comments=Comment.objects.all().filter(post__id=pk)
+
         # increate in redis number of views in post
         total_views = r.incr(f'post:{pk}:views')
         file_logger.info(f'Successful get detail post with id - {pk}')
-        return self.render_to_response({'post': post, 'content': content, 'total_views': total_views})
+        comment_form = NewCommentForm()
+        return self.render_to_response({'post': post, 
+                                        'content': content, 
+                                        'total_views': total_views,
+                                        'comments':comments,
+                                        'comment_form': comment_form,})
 
+def delete_comment(request,comment_id):
+    console_logger.info(f'Trying to delete comment with id {comment_id}')
+    if not request.user.is_authenticated:
+        file_logger.info(f'failed to delete comment with id {comment_id} because not auth')
+        return HttpResponseRedirect('accounts/login/')
+    comment=Comment.objects.get(id=comment_id)
+    comment.delete()
+    console_logger.info(f'Successful delete comment with id {comment_id}')
+    return JsonResponse({'answer':'yes'})
+
+def add_comment(request,post_id):
+    console_logger.info(f'Trying to add comment to post with id {post_id}')
+    if request.method == 'POST':
+        comment_form = NewCommentForm(request.POST)
+        if comment_form.is_valid():
+            if not request.user.is_authenticated:
+                file_logger.info(f'failed to add comment to post with id {post_id} because not auth')
+                return HttpResponseRedirect('accounts/login/')
+            post=Post.objects.get(id=post_id)
+            user=get_user_model().objects.get(id=request.user.id)
+            user_comment = comment_form.save(commit=False)
+            user_comment.author=user
+            user_comment.post = post
+            user_comment.save()
+            console_logger.info(f'Successful add comment to post with id {post_id}')
+        return JsonResponse({'id':user_comment.id,
+                            'created':str(user_comment.created.strftime("%b %d %H:%M")),
+                            'author':user.username})
 
 class GetModelAndForm:
     """Metaclass"""

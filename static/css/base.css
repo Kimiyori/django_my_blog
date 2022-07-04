@@ -113,7 +113,7 @@ body {
 .detail-post img {
     display: block;
     text-align: center;
-    max-width: 100%;
+    max-width: 120%;
     height: 50%;
     max-height: 800px;
 
@@ -778,4 +778,37 @@ textarea:focus {
 
     
 
+}
+
+.children  {
+    margin-left: 48px;
+    /* will touch very left side */
+  }
+#myDIV {
+    display:block;
+}
+#myDIV h2 {
+    font-size: 24px;
+}
+#myDIV textarea {
+    border: 1px solid black;
+    height:10rem;
+    margin-left: 20px;
+}
+
+.comment-upper {
+    display:flex;
+    justify-content: flex-start;
+}
+
+.comment-upper * {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+}
+.comment-upper-info {
+    display:block;
+}
+.comment-content {
+    margin-left:10px;
 }

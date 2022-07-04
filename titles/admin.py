@@ -81,7 +81,7 @@ class DemoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Genre)
-class DemoAdmin(admin.ModelAdmin):
+class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
 
