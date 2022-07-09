@@ -87,8 +87,59 @@ function getCookie(name) {
     return cookieValue; 
 } 
 
+const commentsConsumer=new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/post/'
+    + '{{post.id}}'
+    + '/'
+)
+
+function create_comment_node(data) {
+    let  comments = data['message']['parent']==null? document.querySelector('.comments') : document.getElementById(data['message']['parent']).querySelector('.children');
+    let elem=document.createElement('div')
+    elem.setAttribute('id',`${data['message']['id']}`)
+    elem.innerHTML = `<div class="comment-upper">
+        <div class="base-img"><img src="/media/${data['message']['author_image']}" ></div>
+        <div class="comment-upper-info">
+    <div class="">By ${data['message']['author']}</div>
+    <div>${data['message']['created']}</div>
+</div>
+</div>
+    <div class="comment-content">${data['message']['content']}</div>
+    `
+    if ('{{request.user}}' !== 'AnonymousUser') {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="invoke_reply(${data['message']['id']})">Reply</button>`)
+    }
+    if ('{{request.user.id}}' == data['message']['author_id']) {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="delete_comment(${data['message']['id']})">Delete</button>`)
+    }
+    elem.insertAdjacentHTML('beforeend',`<div class="children"></div>`)
+    comments.appendChild(elem)
+    formExit(); 
+}
+
+function delete_comment_node(data) {
+
+    let com=document.getElementById(data['message']['id']);
+    com.remove();
+}
+
+commentsConsumer.onmessage = function(e) {
+    const data= JSON.parse(e.data)
+    if (data['type']=='new_comment') {
+        create_comment_node(data)
+    }
+    else if (data['type']=='delete_comment') {
+        delete_comment_node(data)
+    }
+}
+
+
 function formExit() {
+    if (document.contains(document.getElementById("newForm"))) {
     document.getElementById("newForm").remove();
+    }
   }
 
 function invoke_reply(id) {
@@ -115,57 +166,32 @@ function invoke_reply(id) {
 }
 
 function delete_comment(id) {
-    const csrftoken = getCookie('csrftoken');
-    const url = 'http://127.0.0.1:8000/blog/comment/' + id +'/delete/'
-    let source_url = fetch(url, {
-        method: 'POST',
-        headers: { "X-CSRFToken": csrftoken }
-    }).then(response => {
-        if (!response.ok) throw Error(response.statusText);
-        let com=document.getElementById(id);
-        com.remove();
-        return response.json();
-    })
+    let data = {}
+    data={}
+    data['comment_id']=id
+    data['type']= 'delete_comment'
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
 }
 
 function comment_submit(e, id ) {
     let comment_btn = id!== undefined ? document.querySelector('#newForm'):document.querySelector('#myDIV');
     e.preventDefault()
-    const csrftoken = getCookie('csrftoken');
-    const url = 'http://127.0.0.1:8000/blog/comment/' + '{{post.id}}/'
-    let data = new FormData();
+    let data = {}
     let content = comment_btn.querySelector('#id_content').value
     let parent = comment_btn.querySelector('#id_parentt')
-    data.append('author', {{request.user.id}})
-    data.append('content', content)
+    data['author']= {{request.user.id}}
+    data['content']= content
+    data['type']= 'new_comment'
     if (parent) {
         parent = parent.options[parent.selectedIndex].value;
-        data.append('parent', parent)
+        data['parent']= parent
         }
-    let source_url = fetch(url, {
-        method: 'POST',
-        body: data,
-        headers: { "X-CSRFToken": csrftoken }
-    }).then(response => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-    }).then(json => {
-        let comments = id==undefined? document.querySelector('.comments') : comment_btn.parentNode.parentNode.querySelector('.children');
-        let elem=document.createElement('div')
-        elem.setAttribute('id',`${json.id}`)
-        elem.innerHTML = `<div class="comment-upper">
-            <div class="base-img"><img src="/media/{{ request.user.profile.photo }}" ></div>
-            <div class="comment-upper-info">
-        <div class="">By ${json.author}</div>
-        <div>${json.created}</div>
-    </div>
-</div>
-        <div class="comment-content">${content}</div>
-        <button class="button" onclick="invoke_reply(${json.id})">Reply</button>
-        <button class="button" onclick="delete_comment(${json.id})">Delete</button>
-        <div class="children"></div>`
-        comments.appendChild(elem)   
-        formExit();     
-    })
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
 }
+
+
  {% endblock %} 

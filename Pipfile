@@ -24,6 +24,7 @@ django-debug-toolbar-force = "*"
 python-json-logger = "*"
 channels = "*"
 django-mptt = "*"
+channels-redis = "*"
 
 [dev-packages]
 
