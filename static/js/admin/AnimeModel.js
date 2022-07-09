@@ -163,3 +163,25 @@ function comment_submit(e, id ) {
         formExit();     
     })
 }
+
+commentsConsumer.onmessage = function(e) {
+    const data= JSON.parse(e.data)
+    console.log(data)
+    //let  comments = data['message']['id']==undefined? document.querySelector('.comments') : comment_btn.parentNode.parentNode.querySelector('.children');
+    let  comments = document.querySelector('.comments') 
+    let elem=document.createElement('div')
+    elem.setAttribute('id',`${data['message']['id']}`)
+    elem.innerHTML = `<div class="comment-upper">
+        <div class="base-img"><img src="/media/${data['message']['author_image']}" ></div>
+        <div class="comment-upper-info">
+    <div class="">By ${data['message']['author']}</div>
+    <div>${data['message']['created']}</div>
+</div>
+</div>
+    <div class="comment-content">${data['message']['content']}</div>
+    <button class="button" onclick="invoke_reply(${data['message']['id']})">Reply</button>
+    <button class="button" onclick="delete_comment(${data['message']['id']})">Delete</button>
+    <div class="children"></div>`
+    comments.appendChild(elem)
+    formExit(); 
+}
