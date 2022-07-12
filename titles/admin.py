@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Demographic, Genre, MangaType, Publisher, Manga, Theme, Title, Magazine, Anime, Studio, AnimeType, Adaptation, AdaptationReverse, SequelPrequelAnime, SequelPrequelManga, Authors, AuthorTable, Image
+from .models import Demographic,Urls, Genre, MangaType, Publisher, Manga, Theme, Title, Magazine, Anime, Studio, AnimeType, Adaptation, AdaptationReverse, SequelPrequelAnime, SequelPrequelManga, Authors, AuthorTable, Image
 # Register your models here.
 
 
@@ -79,6 +79,9 @@ class DemoAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
 
+@admin.register(Urls)
+class UrlsAdmin(admin.ModelAdmin):
+    pass
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

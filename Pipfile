@@ -25,6 +25,7 @@ python-json-logger = "*"
 channels = "*"
 django-mptt = "*"
 channels-redis = "*"
+celery = "*"
 
 [dev-packages]
 

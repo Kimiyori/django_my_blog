@@ -163,6 +163,9 @@ class Image(models.Model):
     image = models.ImageField(upload_to=image_path, max_length=300,blank=True)
     thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
 
+class Urls(models.Model):
+    mal=models.URLField()
+
 class MetaTitle(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -181,6 +184,9 @@ class MetaTitle(models.Model):
 
     related_post=models.ManyToManyField(
         'post.Post', related_name='%(class)s', blank=True)
+    urls=models.ForeignKey(Urls, on_delete=models.CASCADE,
+                             related_name='%(class)s',null=True)
+    score=models.DecimalField(max_digits=4,decimal_places=2,blank=True,null=True)
     class Meta:
         abstract=True
 
