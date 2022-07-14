@@ -98,17 +98,18 @@ def annotate_acc(type: str, tab: str) -> dict:
 def values_acc(type: str, tab: str) -> list:
     """Simple func that serves as dict of values"""
     d_values = {'manga': {
-        'info': ['id', 'description', 'title__original_name', 'title__russian_name',
-                 'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
-                 'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers', 'themes', 'magazines', 'related_posts'],
-        'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                    'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                    'info': ['id', 'description', 'title__original_name', 'title__russian_name',
+                            'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
+                            'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers', 
+                            'themes', 'magazines', 'related_posts','score'],
+                    'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
+                    '           title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 'anime': {
-        'info': ['id', 'description', 'title__original_name', 'title__russian_name',
-                 'title__english_name', 'type__name', 'premiere',
-                                        'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts'],
-        'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                    'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                    'info': ['id', 'description', 'title__original_name', 'title__russian_name',
+                            'title__english_name', 'type__name', 'premiere',
+                            'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts','score'],
+                    'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
+                                'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 }
     return d_values[type][tab]
 

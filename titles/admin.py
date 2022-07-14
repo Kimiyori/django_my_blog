@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
+from titles.tasks import add_score
 from .models import Demographic,Urls, Genre, MangaType, Publisher, Manga, Theme, Title, Magazine, Anime, Studio, AnimeType, Adaptation, AdaptationReverse, SequelPrequelAnime, SequelPrequelManga, Authors, AuthorTable, Image
 # Register your models here.
 
@@ -61,7 +62,10 @@ class AnimeAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related(
             'title')
-
+    def save_model(self, request, obj, form, change):
+        if not obj.score and (obj.urls and obj.urls.mal):
+            add_score.delay(obj.id,'anime')
+        super().save_model(request, obj, form, change)
 
 @admin.register(AnimeType)
 class AnimeTypeAdmin(admin.ModelAdmin):
@@ -142,7 +146,9 @@ class MangaAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related(
             'title')
-
+    def save_model(self, request, obj, form, change):
+        add_score.delay(obj.id,'manga')
+        super().save_model(request, obj, form, change)
 
 @admin.register(Magazine)
 class MagazineAdmin(admin.ModelAdmin):

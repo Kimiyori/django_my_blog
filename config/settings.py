@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from celery.schedules import crontab
 import socket
 from pathlib import Path
 import os
 from pythonjsonlogger.jsonlogger import JsonFormatter
-from titles.logging_formatters import CustomJsonFormatter
+from logging_fold.logging_formatters import CustomJsonFormatter
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -244,7 +245,7 @@ LOGGING = {
         'file': {
             'class': 'logging.FileHandler',
             'formatter': 'json_formatter',
-            'filename': 'logging/info.log'
+            'filename': 'logging_fold/info.log'
         },
     },
     'loggers': {
@@ -278,3 +279,13 @@ CELERY_BROKER_URL = "redis://redis:6379"
 
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
+CELERY_BEAT_SCHEDULE = {
+    'update_anime_scores': {
+        'task': 'titles.tasks.update_anime_scores',
+        'schedule': crontab(hour=10, minute=30, day_of_week=1)  # midnight,
+    },
+    'update_manga_scores': {
+        'task': 'titles.tasks.update_manga_scores',
+        'schedule': crontab(hour=10, minute=30, day_of_week=1)  # midnight,
+    },
+}   

@@ -184,7 +184,7 @@ class MetaTitle(models.Model):
 
     related_post=models.ManyToManyField(
         'post.Post', related_name='%(class)s', blank=True)
-    urls=models.ForeignKey(Urls, on_delete=models.CASCADE,
+    urls=models.ForeignKey(Urls, on_delete=models.SET_NULL,
                              related_name='%(class)s',null=True)
     score=models.DecimalField(max_digits=4,decimal_places=2,blank=True,null=True)
     class Meta:

@@ -4,6 +4,8 @@ from PIL import Image
 from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
+from titles.tasks import add_score
 from .models import Image as ImageTable
 from .models import Anime,Manga
 from .api_urls import myanimelist
@@ -51,19 +53,8 @@ def generate_thumbnail(sender, instance, **kwargs):
         instance.image,
         )
 
-@receiver(pre_save, sender=Manga)
-@receiver(pre_save, sender=Anime)
-def get_score_for_title(sender,instance,**kwargs):
-    type='anime' if isinstance(instance,Anime) else 'manga'
-    console_logger.info(f'Get score for {type} with id {instance.id}')
-    api=myanimelist.log()
-    mal_id=re.findall(f'https://myanimelist.net/{type}/(\d+)/',instance.urls.mal)[0]
-    if type=='anime':
-        score=api.anime(int(mal_id)).GET(fields='mean')['mean']
-    elif type=='manga':
-        score=api.manga(int(mal_id)).GET(fields='mean')['mean']
-    else:
-        file_logger.debug(f'error when adding score to title because type of title is invalid')
-        return ValidationError('Not correct type of title')
-    setattr(instance,'score',score)
-    console_logger.info(f'Succeessfull set score for {type} with id {instance.id}')
+# @receiver(pre_save, sender=Manga)
+# @receiver(pre_save, sender=Anime)
+# def get_score_for_title(sender,instance,**kwargs):
+#     type='anime' if isinstance(instance,Anime) else 'manga'
+#     add_score.delay(instance.id,type)

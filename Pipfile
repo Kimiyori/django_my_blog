@@ -26,6 +26,7 @@ channels = "*"
 django-mptt = "*"
 channels-redis = "*"
 celery = "*"
+flower = "*"
 
 [dev-packages]
 

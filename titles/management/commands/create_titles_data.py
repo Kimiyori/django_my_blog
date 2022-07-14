@@ -1,15 +1,18 @@
 import random
+from time import sleep
 from django.core.management.base import BaseCommand
+import requests
 from faker import Faker
 import faker.providers
 from post.models import Post
-from ...models import Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine, Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title
+from ...models import Adaptation,Urls, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine, Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title
 from ...models import Image as ImageModel
 from django.db import transaction
 from django.db.models import Max, Min
 from config import settings
 import os
 from django.core.files.base import ContentFile
+from ...api_urls import myanimelist
 
 GENRES = [
     'Tragedy',
@@ -330,20 +333,46 @@ class Command(BaseCommand):
             SequelPrequelManga.objects.create(
                 sequel=manga1, prequel=manga2)
 
+    def populate_api(self):
+        def get_mal_title(api):
+            check =False
+            while check==False:
+                try:
+                    random_api_title=str(random.randint(1,40000))
+                    check=api.manga(random_api_title).GET()
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code==403:
+                        sleep(35)
+                    check=False
+            final_url=url+str(random_api_title)+'/'
+            return final_url if check else False
+        url='https://myanimelist.net/manga/'
+        titles=Manga.objects.all()
+        api=myanimelist.log()
+        for title in titles:
+            check_exist=getattr(title,'urls',None)
+            if check_exist==None:
+                final_url=get_mal_title(api)
+                if final_url:
+                    ins_url=Urls.objects.create(mal=final_url)
+                    setattr(title,'urls',ins_url)
+                    title.save()
+                
+
 
 
     def delete_all_data(self, models):
         for m in models:
             m.objects.all().delete()
 
-    @transaction.atomic
+    #@transaction.atomic
     def handle(self, *args, **kwargs):
         locale_list = ['en-US', 'ja-JP', 'ru_RU']
         fake = Faker(locale_list)
 
         models = [Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine,
                   Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title, ImageModel]
-
+        #Urls.objects.all().delete()
         #self.delete_all_data(models)
 
         #self.create_default_data()
@@ -360,4 +389,5 @@ class Command(BaseCommand):
 
         #self.create_prequel_sequel(fake)
 
+        self.populate_api()
 

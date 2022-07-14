@@ -50,3 +50,23 @@
 {"message": "Successful get api anime title with following id <built-in function id>", "fields": "", "timestamp": "2022-06-13T20:18:31.086496Z", "level": "INFO"}
 {"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-06-13T20:33:15.584818Z", "level": "INFO"}
 {"message": "Successful get api manga title with following id <built-in function id>", "fields": "theme", "timestamp": "2022-06-13T20:33:27.285728Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:05:34.531457Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:05:36.931752Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:05:41.848815Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c", "timestamp": "2022-07-13T11:08:14.681016Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:09:57.980919Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 39d3883d-0b7a-4cce-8434-e9d4702da798", "timestamp": "2022-07-13T11:27:43.324785Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:27:44.998279Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:27:50.875944Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:27:54.661396Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:27:58.146967Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": "Item between want exactly ", "timestamp": "2022-07-13T11:29:57.346880Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:30:04.262855Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T11:30:36.883505Z", "level": "INFO"}
+{"message": "Collect content for post in list...", "timestamp": "2022-07-13T12:07:48.602397Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-13T12:07:48.627099Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c", "timestamp": "2022-07-13T12:07:53.284400Z", "level": "INFO"}
+{"message": "Successfil get list of anime", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T12:08:08.671472Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T12:08:09.759804Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 65ac90f3-2035-41d3-82b9-3a914028c3ec", "timestamp": "2022-07-13T12:08:13.217132Z", "level": "INFO"}
+{"message": "Successfil get list of manga", "filers": {}, "title_filter": null, "timestamp": "2022-07-13T12:08:19.658775Z", "level": "INFO"}

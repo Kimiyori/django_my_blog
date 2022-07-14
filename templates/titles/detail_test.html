@@ -176,6 +176,15 @@
             </div>
         </div>
         {% endif %}
+        <div class="items">
+            <div class="name">Оценка</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {{ item.score}}
+                </span></a>
+            </div>
+        </div>
+
     </div>
 
     {% if  item.related_posts|exist %}
