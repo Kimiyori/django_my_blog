@@ -51,7 +51,7 @@ class Post(models.Model):
     class Meta:
         ordering = ('-publish',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.title
 
 
@@ -71,7 +71,7 @@ class Content(models.Model):
     class Meta:
         ordering = ['order']
 
-    def __str__(self):
+    def __str__(self)->str:
         return f'{self.post.title} {self.order}'
 
 
@@ -90,10 +90,10 @@ class ItemBase(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
+    def __str__(self)->str:
         return f'{self.__class__.__name__} from {self.post}'
 
-    def get_model_name(self):
+    def get_model_name(self)->str:
         return self._meta.model_name
 
     def render(self):
@@ -140,5 +140,5 @@ class Comment(MPTTModel):
     class MPTTMeta:
         order_insertion_by=['created']
 
-    def __str__(self):
+    def __str__(self)->str:
         return f'Comment by {self.author}'

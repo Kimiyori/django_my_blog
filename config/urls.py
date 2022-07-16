@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from post.views import PostList
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('accounts.urls')),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('',include('titles.urls'),name='titles'),
     path('blog/',include('post.urls'),name='blog'),
 ]
+handler404 = 'config.general_views.error_404_view'
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [

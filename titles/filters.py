@@ -7,12 +7,14 @@ from django.db.models import F, Q, Value
 from django.db.models.expressions import Func
 from urllib.parse import urlsplit, parse_qs
 from django.db.models import QuerySet
-from typing import List
+from typing import Dict, List, Optional, Tuple, Union
 from django.http import HttpRequest
 
 
 class Filter:
-    """Calling class for filtering"""
+    """
+    Calling class for filtering
+    """
 
     def __call__(self, name: str, item: str) -> str:
         return {
@@ -20,26 +22,41 @@ class Filter:
         }
 
 
-def filter_by_name(request: HttpRequest, item: QuerySet) -> QuerySet:
-    """Function for filtering by title name"""
-    title_name=request.GET.get('q')
+def filter_by_name(request: HttpRequest, item: QuerySet) -> Tuple[QuerySet, Optional[str]]:
+    """
+    Function for filtering by title name if it given in request.
+
+    :param HttpRequest request: send request from main method to get q query param
+
+    :param QuerySet item: Send QuerySet given instance to filter q=name
+
+    """
+    title_name: Optional[str] = request.GET.get('q')
     if title_name:
-        item=item.filter(
+        item = item.filter(
             Q(title__original_name__icontains=title_name) |
             Q(title__russian_name__icontains=title_name) |
             Q(title__english_name__icontains=title_name))
 
-    return (item,title_name)
+    return (item, title_name)
 
 
 class Array(Func):
-    """Inplementation psql array func"""
+    """
+    Inplementation psql array func.
+    """
     template = '%(function)s[%(expressions)s]'
     function = 'ARRAY'
 
 
-def annotate_acc(type: str, tab: str) -> dict:
-    """Function for annotation that defines specific values"""
+def annotate_acc(type: str, tab: str) -> Dict[str, Union[Array, ArrayAgg]]:
+    """
+    Function for annotation that defines specific values.
+
+    :param str type: Type title(manga or anime).
+
+    :param str tab: info or related.
+    """
 
     def create_wrapper(name: str) -> str:
         # if name just anime or manga, then wrap in into Value() to pass itw original name into template.
@@ -66,28 +83,28 @@ def annotate_acc(type: str, tab: str) -> dict:
         return r
     # dictionary with values for specific tab for certail title model
     d_anno = {'manga': {
-                'info':
-                    {'genres': ['genre__name'],
-                    'publishers': ['publisher__name'],
-                    'themes': ['theme__name'],
-                    'magazines': ['magazine__name'],
-                    'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
-                'related':
-                    {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'anime'],
-                    'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'anime'],
-                    'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
-                    'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}},
-            'anime': {
-                'info':
-                    {'genres': ['genre__name'],
-                    'themes': ['theme__name'],
-                    'studios': ['studio__name'],
-                    'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
-                'related':
-                    {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'manga'],
-                    'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'manga'],
-                    'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
-                    'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}
+        'info':
+        {'genres': ['genre__name'],
+         'publishers': ['publisher__name'],
+         'themes': ['theme__name'],
+         'magazines': ['magazine__name'],
+         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
+        'related':
+        {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'anime'],
+         'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'anime'],
+         'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
+         'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}},
+        'anime': {
+        'info':
+        {'genres': ['genre__name'],
+         'themes': ['theme__name'],
+         'studios': ['studio__name'],
+         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
+        'related':
+        {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'manga'],
+         'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'manga'],
+         'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
+         'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}
     }}
     # compile dict for annotate
     annotate_dict = {key: create_array(value)
@@ -95,30 +112,42 @@ def annotate_acc(type: str, tab: str) -> dict:
     return annotate_dict
 
 
-def values_acc(type: str, tab: str) -> list:
-    """Simple func that serves as dict of values"""
+def values_acc(type: str, tab: str) -> List[str]:
+    """
+    Simple func that serves as dict of values
+
+    :param str type: Type title(manga or anime).
+
+    :param str tab: info or related.
+    """
     d_values = {'manga': {
-                    'info': ['id', 'description', 'title__original_name', 'title__russian_name',
-                            'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
-                            'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers', 
-                            'themes', 'magazines', 'related_posts','score'],
-                    'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
+        'info': ['id', 'description', 'title__original_name', 'title__russian_name',
+                 'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
+                 'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers',
+                            'themes', 'magazines', 'related_posts', 'score'],
+        'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
                     '           title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 'anime': {
                     'info': ['id', 'description', 'title__original_name', 'title__russian_name',
-                            'title__english_name', 'type__name', 'premiere',
-                            'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts','score'],
+                             'title__english_name', 'type__name', 'premiere',
+                             'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts', 'score'],
                     'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
                                 'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 }
     return d_values[type][tab]
 
 
-def filter_by_models(request: HttpRequest, instance: QuerySet) -> QuerySet:
-    """Filter instance by its attributes"""
+def filter_by_models(request: HttpRequest, instance: QuerySet) -> Tuple[QuerySet, Dict[str, str]]:
+    """
+    Filter instance by its attributes.
+
+    :param HttpRequest request: send request from main method to get q query param
+
+    :param QuerySet item: Send QuerySet given instance to filter by given attributes
+    """
     fil = Filter()
     # get attirubtes from query parameters
-    params = parse_qs(urlsplit(request.get_full_path()).query)
+    params: Dict[str, str] = parse_qs(urlsplit(request.get_full_path()).query)
     # check if  in url params exist page attr
     if 'page' in params:
         del params['page']
@@ -129,4 +158,4 @@ def filter_by_models(request: HttpRequest, instance: QuerySet) -> QuerySet:
     for model, list in params.items():
         for item in list:
             instance = instance.filter(**fil(name=model, item=item))
-    return instance,params
+    return instance, params

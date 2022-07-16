@@ -1,8 +1,12 @@
 import json
+from typing import Dict
+
+from django.http import Http404
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from post.models import Comment, Post
-
+import redis
+from django.conf import settings
 
 class CommentsConsumer(AsyncWebsocketConsumer):
 
@@ -16,14 +20,16 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, code):
-        await self.channel_layer.discard(
+        await self.channel_layer.group_discard(
             self.post_group_name,
             self.channel_name
         )
 
-    async def receive(self, text_data):
+    async def receive(self, text_data:json):
         text_json_load = json.loads(text_data)
-        if text_json_load['type'] == 'new_comment':
+        if text_json_load['type'] == 'increment_views':
+            new_comment = await self.increment()
+        elif text_json_load['type'] == 'new_comment':
             new_comment = await self.create_new_comment(text_json_load)
         elif text_json_load['type'] == 'delete_comment':
             new_comment = await self._delete_comment(text_json_load)
@@ -33,6 +39,15 @@ class CommentsConsumer(AsyncWebsocketConsumer):
                 'type': text_json_load['type'],
                 'message': new_comment
             }
+        )
+
+    async def increment_views(self, event):
+        message = event['message']
+        await self.send(
+            text_data=json.dumps({
+                'type': 'increment_views',
+                'message': message
+            })
         )
 
     async def new_comment(self, event):
@@ -53,11 +68,10 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_comment(self, data):
-        if data.get('parent', None):
-            parent = Comment.objects.get(id=data.get('parent', None))
-        else:
-            parent = None
+    def create_new_comment(self, data:json)->Dict:
+        get_parent=data.get('parent', None)
+        parent = Comment.objects.get(id=get_parent) if get_parent else None
+
         new_comment = Comment.objects.create(
             post=Post.objects.get(id=self.post_id),
             parent=parent,
@@ -76,10 +90,27 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         }
 
     @database_sync_to_async
-    def _delete_comment(self, data):
+    def _delete_comment(self, data:json)->Dict:
+        try:
+            comment = Comment.objects.get(id=data['comment_id'])
+            comment.delete()
+            data={
+                'id': data['comment_id']
+            }
+        except Comment.DoesNotExist:
+            data=data={
+                'id': f"Cannot find comment with given id {data['comment_id']}"
+            }
+        return data
 
-        comment = Comment.objects.get(id=data['comment_id'])
-        comment.delete()
+    @database_sync_to_async
+    def increment(self):
+        r = redis.Redis(host=settings.REDIS_HOST,
+                        port=settings.REDIS_PORT,
+                        db=settings.REDIS_DB)
+        # increate in redis number of views in post
+        total_views = r.incr(f'post:{self.post_id}:views')
+
         return {
-            'id': data['comment_id']
-        }
+            'count':total_views
+            }

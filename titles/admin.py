@@ -1,3 +1,4 @@
+import uuid
 from django.contrib import admin
 
 # Register your models here.
@@ -60,11 +61,9 @@ class AnimeAdmin(admin.ModelAdmin):
     change_form_template = 'admin/anime/change_form.html'
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related(
-            'title')
+        return super().get_queryset(request).select_related('title')
     def save_model(self, request, obj, form, change):
-        if not obj.score and (obj.urls and obj.urls.mal):
-            add_score.delay(obj.id,'anime')
+        add_score.delay(obj.id,'anime')
         super().save_model(request, obj, form, change)
 
 @admin.register(AnimeType)

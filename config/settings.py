@@ -280,12 +280,14 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    'update_anime_scores': {
+    'update_scores': {
         'task': 'titles.tasks.update_anime_scores',
-        'schedule': crontab(hour=10, minute=30, day_of_week=1)  # midnight,
+        'schedule': crontab(hour=8, minute=30, ),  # midnight,
+        'args':('anime')
     },
-    'update_manga_scores': {
+    'update_scores': {
         'task': 'titles.tasks.update_manga_scores',
-        'schedule': crontab(hour=10, minute=30, day_of_week=1)  # midnight,
+        'schedule': crontab(hour=10, minute=30, ),
+        'args':('manga') # midnight,
     },
 }   

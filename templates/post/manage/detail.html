@@ -124,6 +124,7 @@ function delete_comment_node(data) {
     let com=document.getElementById(data['message']['id']);
     com.remove();
 }
+commentsConsumer.onopen = () => commentsConsumer.send(JSON.stringify({'type':'increment_views'}));
 
 commentsConsumer.onmessage = function(e) {
     const data= JSON.parse(e.data)
@@ -132,6 +133,10 @@ commentsConsumer.onmessage = function(e) {
     }
     else if (data['type']=='delete_comment') {
         delete_comment_node(data)
+    }
+    else if (data['type']=='increment_views'){
+        count=document.querySelector('.count')
+        count.innerText = `${data['message']['count']} views`
     }
 }
 

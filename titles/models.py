@@ -12,7 +12,7 @@ class Demographic(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -23,7 +23,7 @@ class Genre(models.Model):
     class Meta:
         ordering = ('name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -35,7 +35,7 @@ class Publisher(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -46,7 +46,7 @@ class MangaType(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -55,20 +55,20 @@ class AuthorTable(models.Model):
     pseudonym = models.CharField(max_length=200, null=True, blank=True)
     photo = models.ImageField(upload_to='authors/', blank=True)
 
-    def __str__(self):
+    def __str__(self)->str:
         return f'{self.name}'
 
 class Authors(models.Model):
     author= models.ForeignKey(AuthorTable, on_delete=models.CASCADE,related_name='authors_author', null=True, blank=True)
     artist= models.ForeignKey(AuthorTable, on_delete=models.CASCADE,related_name='authors_artist', null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self)->str:
         return f'Author-{self.author} Artist-{self.artist}'
 class Theme(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     slug = models.SlugField(max_length=150, default='')
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -77,7 +77,7 @@ class Magazine(models.Model):
     image = models.ImageField(upload_to='magazines/', blank=True)
     slug = models.SlugField(max_length=150, default='')
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -89,7 +89,7 @@ class Title(models.Model):
     russian_name = models.CharField(max_length=300, null=True, blank=True)
     english_name = models.CharField(max_length=300, null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self)->str:
         if self.original_name:
             return str(self.original_name)
         elif self.english_name:
@@ -108,7 +108,7 @@ class AnimeType(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 class Studio(models.Model):
@@ -119,7 +119,7 @@ class Studio(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self):
+    def __str__(self)->str:
         return self.name
 
 
@@ -185,12 +185,12 @@ class MetaTitle(models.Model):
     related_post=models.ManyToManyField(
         'post.Post', related_name='%(class)s', blank=True)
     urls=models.ForeignKey(Urls, on_delete=models.SET_NULL,
-                             related_name='%(class)s',null=True)
+                             related_name='%(class)s',blank=True,null=True)
     score=models.DecimalField(max_digits=4,decimal_places=2,blank=True,null=True)
     class Meta:
         abstract=True
 
-    def __str__(self):
+    def __str__(self)->str:
         if hasattr(self.title,'original_name'):
             return str(self.title.original_name)
         elif hasattr(self.title,'english_name'):
@@ -200,7 +200,7 @@ class MetaTitle(models.Model):
         else:
             return 'Not name' 
             
-    def get_desc(self):
+    def get_desc(self)->str:
         if self.description:
             return self.description
         else:
@@ -227,7 +227,7 @@ class Manga(MetaTitle):
         ]
 
 
-    def get_absolute_url(self):
+    def get_absolute_url(self)->str:
         return reverse('manga_detail', kwargs={'pk':str(self.id)})
 
     def delete(self,*args,**kwargs):
