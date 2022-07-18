@@ -16,6 +16,9 @@ from pathlib import Path
 import os
 from pythonjsonlogger.jsonlogger import JsonFormatter
 from logging_fold.logging_formatters import CustomJsonFormatter
+import django_stubs_ext
+
+django_stubs_ext.monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     "titles.apps.TitlesConfig",
     'sorl.thumbnail',
     'rest_framework',
+    'rest_framework.authtoken',
     'api.apps.ApiConfig',
     "post.apps.PostConfig",
     'corsheaders',
@@ -57,7 +61,8 @@ INSTALLED_APPS = [
     'embed_video',
     'debug_toolbar',
     'mptt',
-    'channels'
+    'channels',
+    'drf_yasg',
 
 ]
 
@@ -211,10 +216,24 @@ ACCOUNT_FORMS = {
     'signup': 'accounts.forms.SignupForm'
 }
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            #'rest_framework.authentication.SessionAuthentication',
+               'rest_framework.authentication.TokenAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' 
 
+}
+SWAGGER_SETTINGS = {'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization' 
+        }
+    },
 }
 CORS_ORIGIN_ORIGINS = (
     'http://localhost:3000',
@@ -280,13 +299,13 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    'update_scores': {
-        'task': 'titles.tasks.update_anime_scores',
+    'update_anime_scores': {
+        'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=8, minute=30, ),  # midnight,
         'args':('anime')
     },
-    'update_scores': {
-        'task': 'titles.tasks.update_manga_scores',
+    'update_manga_scores': {
+        'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=10, minute=30, ),
         'args':('manga') # midnight,
     },

@@ -27,6 +27,15 @@ django-mptt = "*"
 channels-redis = "*"
 celery = "*"
 flower = "*"
+pyyaml = "*"
+uritemplate = "*"
+drf-yasg = "*"
+django-stubs = "*"
+mypy = "*"
+django-stubs-ext = "*"
+types-redis = "*"
+uvicorn = "*"
+gunicorn = "*"
 
 [dev-packages]
 

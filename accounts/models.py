@@ -1,3 +1,4 @@
+from typing import Any
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,AbstractUser,BaseUserManager,PermissionsMixin
@@ -5,7 +6,11 @@ from django.conf import settings
 
 # Create your models here.class CustomManager(BaseUserManager):
 class CustomManager(BaseUserManager):
-    def _create_user(self, email, username, password, **extra_fields):
+    def _create_user(self, 
+                    email, 
+                    username:str, 
+                    password:str, 
+                    **extra_fields:Any):
         values = [email, username]
         field_value_map = dict(zip(self.model.REQUIRED_FIELDS, values))
         for field_name, value in field_value_map.items():
@@ -22,7 +27,11 @@ class CustomManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, username, password=None, **extra_fields):
+    def create_user(self, 
+                    email, 
+                    username:str, 
+                    password:str, 
+                    **extra_fields:Any):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, username,  password, **extra_fields)

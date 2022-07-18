@@ -12,8 +12,8 @@ class Demographic(models.Model):
     class Meta:
         ordering = ('-name',)
 
-    def __str__(self)->str:
-        return self.name
+    def __str__(self)-> str:
+        return str(self.name)
 
 
 class Genre(models.Model):
@@ -24,7 +24,7 @@ class Genre(models.Model):
         ordering = ('name',)
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 class Publisher(models.Model):
@@ -36,7 +36,7 @@ class Publisher(models.Model):
         ordering = ('-name',)
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 class MangaType(models.Model):
@@ -47,7 +47,7 @@ class MangaType(models.Model):
         ordering = ('-name',)
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 class AuthorTable(models.Model):
@@ -56,7 +56,7 @@ class AuthorTable(models.Model):
     photo = models.ImageField(upload_to='authors/', blank=True)
 
     def __str__(self)->str:
-        return f'{self.name}'
+        return str(self.name)
 
 class Authors(models.Model):
     author= models.ForeignKey(AuthorTable, on_delete=models.CASCADE,related_name='authors_author', null=True, blank=True)
@@ -69,7 +69,7 @@ class Theme(models.Model):
     slug = models.SlugField(max_length=150, default='')
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 class Magazine(models.Model):
@@ -78,7 +78,7 @@ class Magazine(models.Model):
     slug = models.SlugField(max_length=150, default='')
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 
@@ -109,7 +109,7 @@ class AnimeType(models.Model):
         ordering = ('-name',)
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 class Studio(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -120,7 +120,7 @@ class Studio(models.Model):
         ordering = ('-name',)
 
     def __str__(self)->str:
-        return self.name
+        return str(self.name)
 
 
 class Adaptation(models.Model):
@@ -173,7 +173,7 @@ class MetaTitle(models.Model):
         editable=False)
     title = models.ForeignKey(Title, on_delete=models.CASCADE,
                              related_name='%(class)s',null=True)
-    premiere = models.DateField(blank=True)
+    premiere = models.DateField(null=True,blank=True)
     genre = models.ManyToManyField(
         Genre, related_name='%(class)s', blank=True)
     theme = models.ManyToManyField(
@@ -190,15 +190,16 @@ class MetaTitle(models.Model):
     class Meta:
         abstract=True
 
-    def __str__(self)->str:
-        if hasattr(self.title,'original_name'):
-            return str(self.title.original_name)
-        elif hasattr(self.title,'english_name'):
-            return str(self.title.english_name)
-        elif hasattr(self.title,'russian_name'):
-            return str(self.title.russian_name)
-        else:
-            return 'Not name' 
+    def __str__(self)-> str:
+        name='Not name' 
+        if self.title:
+            if getattr(self.title,'original_name'):
+                name= str(self.title.original_name)
+            elif getattr(self.title,'english_name'):
+                name=  str(self.title.english_name)
+            elif getattr(self.title,'russian_name'):
+                name= str(self.title.russian_name)
+        return name
             
     def get_desc(self)->str:
         if self.description:

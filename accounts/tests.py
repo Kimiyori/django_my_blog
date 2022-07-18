@@ -22,7 +22,9 @@ class CustomUserTests(TestCase):
         admin_user = User.objects.create_superuser(
         username='superadmin',
         email='superadmin@email.com',
-        password='testpass123'
+        password='testpass123',
+        is_staff=True,
+        is_superuser=True
         )
         self.assertEqual(admin_user.username, 'superadmin')
         self.assertEqual(admin_user.email, 'superadmin@email.com')

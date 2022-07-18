@@ -1,27 +1,33 @@
-from typing import Any, NoReturn
+
+from typing import Any, NoReturn, Sequence, Union,TYPE_CHECKING
+from typing_extensions import reveal_type
 from django.apps import apps
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 from django.db.models import QuerySet
 
+if TYPE_CHECKING:
+    from post.models import Post,Content
+
+
 file_logger = logging.getLogger('file_logger')
 
 
 class OrderField(models.PositiveIntegerField):
-    def __init__(self, for_fields=None, *args:Any, **kwargs:Any):
+    def __init__(self, for_fields:Union[Sequence[str],None]=None, *args:Any, **kwargs:Any):
         #reference to post model
         self.for_fields = for_fields
         super().__init__(*args, **kwargs)
 
-    def pre_save(self, model_instance:QuerySet,add:bool)->NoReturn:
+    def pre_save(self, model_instance,add:bool):
             try:
                 #content model
-                qs= self.model.objects.all()
+                qs: QuerySet[Content]= self.model.objects.all()
                 if self.for_fields:
                     query = {field: getattr(model_instance, field)
                              for field in self.for_fields}
-                    qs = qs.filter(**query)
+                    qs= qs.filter(**query)
                     if getattr(model_instance, self.attname) is not None:
                         cur_max = getattr(model_instance,self.attname)
                         for item in qs:

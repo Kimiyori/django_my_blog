@@ -94,7 +94,7 @@ class ItemBase(models.Model):
         return f'{self.__class__.__name__} from {self.post}'
 
     def get_model_name(self)->str:
-        return self._meta.model_name
+        return str(self._meta.model_name)
 
     def render(self):
         return render_to_string(

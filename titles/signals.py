@@ -31,7 +31,7 @@ def generate_thumbnail(sender: Any, instance: QuerySet, **kwargs: Any) -> NoRetu
     """
     # if image, then create or recreate thumbnail
     if instance.image:
-        console_logger.info("Generating thumbnail for  %d", instance.image,)
+        console_logger.info("Generating thumbnail for  %d", instance.id,)
         image = Image.open(instance.image)
         image = image.convert("RGB")
         image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
@@ -46,18 +46,18 @@ def generate_thumbnail(sender: Any, instance: QuerySet, **kwargs: Any) -> NoRetu
         temp_thumb.close()
         file_logger.info(
             "Successful generate thumbnail for  %d",
-            instance.image,
+            instance.id,
         )
     # case for delete. if thumbnail exist, but not image, then delete thumbnail too
     elif instance.thumbnail and not instance.image:
-        file_logger.info(
+        console_logger.info(
             "Delete thumbnail for  %d",
-            instance.image,
+            instance.id,
         )
         instance.thumbnail.delete()
         file_logger.info(
             "Successful delete thumbnail for  %d",
-            instance.image,
+            instance.id,
         )
 
 # @receiver(pre_save, sender=Manga)

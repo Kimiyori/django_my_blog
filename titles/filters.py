@@ -1,4 +1,5 @@
 
+from typing_extensions import reveal_type
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.fields import CharField, TextField
 from django.db.models.functions import Cast
@@ -7,8 +8,11 @@ from django.db.models import F, Q, Value
 from django.db.models.expressions import Func
 from urllib.parse import urlsplit, parse_qs
 from django.db.models import QuerySet
+
 from typing import Dict, List, Optional, Tuple, Union
 from django.http import HttpRequest
+
+from titles.models import Anime, Manga
 
 
 class Filter:
@@ -16,13 +20,13 @@ class Filter:
     Calling class for filtering
     """
 
-    def __call__(self, name: str, item: str) -> str:
+    def __call__(self, name: str, item: str) -> Dict[str, str]:
         return {
             f'{name}__name__icontains': item
         }
 
 
-def filter_by_name(request: HttpRequest, item: QuerySet) -> Tuple[QuerySet, Optional[str]]:
+def filter_by_name(request: HttpRequest, item: QuerySet[Union[Manga,Anime]]) -> Tuple[QuerySet, Optional[str]]:
     """
     Function for filtering by title name if it given in request.
 
@@ -49,7 +53,7 @@ class Array(Func):
     function = 'ARRAY'
 
 
-def annotate_acc(type: str, tab: str) -> Dict[str, Union[Array, ArrayAgg]]:
+def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
     """
     Function for annotation that defines specific values.
 
@@ -58,7 +62,7 @@ def annotate_acc(type: str, tab: str) -> Dict[str, Union[Array, ArrayAgg]]:
     :param str tab: info or related.
     """
 
-    def create_wrapper(name: str) -> str:
+    def create_wrapper(name: str) -> Union[Value,F,Cast]:
         # if name just anime or manga, then wrap in into Value() to pass itw original name into template.
         # This field need for defining type when referncing for adaptation or based_on, when can be either anime and manga
         if name in ['anime', 'manga']:
@@ -70,7 +74,7 @@ def annotate_acc(type: str, tab: str) -> Dict[str, Union[Array, ArrayAgg]]:
         else:
             return Cast(F(name), output_field=TextField(max_length=40))
 
-    def create_array(list: list) -> ArrayAgg:
+    def create_array(list: list[str]) -> ArrayAgg:
         # if let <=1, then use default ArrayAgg for values
         if len(list) <= 1:
             arr = [create_wrapper(name) for name in list]
@@ -126,7 +130,7 @@ def values_acc(type: str, tab: str) -> List[str]:
                  'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers',
                             'themes', 'magazines', 'related_posts', 'score'],
         'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                    '           title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                        'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 'anime': {
                     'info': ['id', 'description', 'title__original_name', 'title__russian_name',
                              'title__english_name', 'type__name', 'premiere',
@@ -137,7 +141,10 @@ def values_acc(type: str, tab: str) -> List[str]:
     return d_values[type][tab]
 
 
-def filter_by_models(request: HttpRequest, instance: QuerySet) -> Tuple[QuerySet, Dict[str, str]]:
+def filter_by_models(
+                request: HttpRequest, 
+                instance: QuerySet[Union[Manga,Anime]]
+                ) -> Tuple[ QuerySet[Union[Manga,Anime]], Dict[str, str]]:
     """
     Filter instance by its attributes.
 
@@ -147,7 +154,7 @@ def filter_by_models(request: HttpRequest, instance: QuerySet) -> Tuple[QuerySet
     """
     fil = Filter()
     # get attirubtes from query parameters
-    params: Dict[str, str] = parse_qs(urlsplit(request.get_full_path()).query)
+    params: Dict[str, List[str]] = parse_qs(urlsplit(request.get_full_path()).query)
     # check if  in url params exist page attr
     if 'page' in params:
         del params['page']

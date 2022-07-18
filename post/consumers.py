@@ -1,5 +1,5 @@
 import json
-from typing import Dict
+from typing import Dict, Union
 
 from django.http import Http404
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -25,7 +25,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive(self, text_data:json):
+    async def receive(self, text_data:Union[str, bytes]):
         text_json_load = json.loads(text_data)
         if text_json_load['type'] == 'increment_views':
             new_comment = await self.increment()
@@ -68,7 +68,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_comment(self, data:json)->Dict:
+    def create_new_comment(self, data:Dict[str,str])->Dict[str,Union[str,int]]:
         get_parent=data.get('parent', None)
         parent = Comment.objects.get(id=get_parent) if get_parent else None
 
@@ -83,14 +83,14 @@ class CommentsConsumer(AsyncWebsocketConsumer):
             'author_id': new_comment.author.id,
             'author': new_comment.author.username,
             'author_image': str(new_comment.author.profile.photo),
-            'parent': getattr(new_comment.parent, 'id', None),
+            'parent': str(getattr(new_comment.parent, 'id', None)),
             'content': new_comment.content,
             'created': new_comment.created.strftime("%b %d %H:%M")
 
         }
 
     @database_sync_to_async
-    def _delete_comment(self, data:json)->Dict:
+    def _delete_comment(self, data:Dict[str,str])->Dict[str,Union[str,int]]:
         try:
             comment = Comment.objects.get(id=data['comment_id'])
             comment.delete()

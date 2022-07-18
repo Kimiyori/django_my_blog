@@ -89,7 +89,7 @@ class TitleDetail(TemplateResponseMixin, View):
         # if got in cache, then create queryset in cache it
         if model is None:
             # get info from model based on type and tab
-            model: Dict = apps.get_model(app_label='titles',
+            model = apps.get_model(app_label='titles',
                                          model_name=type
                                          ).objects.filter(id=self.kwargs['pk']).annotate(
                 **annotate_acc(type, tab)

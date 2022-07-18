@@ -1,8 +1,10 @@
 
 import json
-from typing import Any, Dict, Optional, Union
+import types
+from typing import Any, Dict, Optional, Type, Union
+from typing_extensions import reveal_type
 import uuid
-from django.forms import Form
+from django.forms import Form, ModelForm
 
 from django.forms.models import modelform_factory
 from django.apps import apps
@@ -48,7 +50,7 @@ class ContentOrderView(View):
         data:Dict[str,int] = json.loads(data_json)
         for id, order in data.items():
             Content.objects.filter(id=id,
-                                   post__author=request.user).update(order=order)
+                                   ).update(order=order)
         file_logger.info('Successful swap contents order')
         return JsonResponse({'response': 'success'})
 
@@ -64,7 +66,7 @@ class PostList(ListView):
 
     def get_queryset(self)-> QuerySet:
         console_logger.info('Get list of posts')
-        post: Dict[str,Any]= Post.objects.all().values('id', 'publish', 'title', 'main_image', 'author')
+        post: QuerySet= Post.objects.all().values('id', 'publish', 'title', 'main_image', 'author')
         return post
 
 
@@ -77,7 +79,7 @@ class PostDetail(TemplateResponseMixin, View):
     template_name = 'post/manage/detail.html'
     context_object_name = 'post'
 
-    def get_views(self,pk:int)->int:
+    def get_views(self,pk:uuid.UUID)->int:
         """
         Increment view value for given post
 
@@ -99,10 +101,10 @@ class PostDetail(TemplateResponseMixin, View):
         console_logger.info(f'Trying to get detail post with id - {pk}')
          # search in cache post by key
         cache_post_key:str = f'postid:{pk}'
-        post: Optional[str]= cache.get(cache_post_key)
+        post= cache.get(cache_post_key)
         # if not, then create and cache it
         if post is None:
-            post:QuerySet = Post.objects.filter(id=pk).values(
+            post = Post.objects.filter(id=pk).values(
                 'id', 'title', 'main_image').first()
             if not post:
                 raise Http404('Cannot find post with given id')
@@ -110,11 +112,11 @@ class PostDetail(TemplateResponseMixin, View):
 
         # search in cache content fo given post by key
         cache_content_key = f'contentpostid:{pk}'
-        content:Optional[str] = cache.get(cache_content_key)
+        content:Optional[QuerySet] = cache.get(cache_content_key)
         # if not, then create and cache  it
         if content is None:
             # get content list with Case function that check type of content if then extract it
-            content:QuerySet = Content.objects.filter(post__id=pk).annotate(cont=Case(
+            content= Content.objects.filter(post__id=pk).annotate(cont=Case(
                 When(text__gte=1, then=ArrayAgg(
                     Array(F('text__text'), Value('text')))),
                 When(image__gte=1, then=ArrayAgg(
@@ -150,7 +152,7 @@ class GetModelAndForm:
                                   model_name=model_name)
         return None
 
-    def get_form(self, model:str, *args:Any, **kwargs:Any)->Form:
+    def get_form(self, model:Union[Text,Video,Image,File,None], *args:Any, **kwargs:Any)->ModelForm:
         # create form
         Form = modelform_factory(model, exclude=['post',
                                                  'order',
@@ -231,15 +233,21 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
     """
     template_name = 'post/manage/content/form_test.html'
 
-    def dispatch(self, request:HttpRequest, pk:int):
+    def dispatch(self, request, pk):
         # get post instance
         self.module = Post.objects.filter(id=pk).only(
             'id', 'title', 'author',  'main_image').first()
         # check if request user and author not the same person; only author can edit own posts
-        if request.user != self.module.author:
-            file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
-                'request_user': request.user,
-                'author': self.module.author})
+        if self.module:
+            if request.user != self.module.author:
+                file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
+                    'request_user': request.user,
+                    'author': getattr(self.module,'author',None)})
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        else:
+            file_logger.warning(f'Post does not exist', extra={
+                    'request_user': request.user,
+                    'author': getattr(self.module,'author',None)})
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return super().dispatch(request, pk)
 
@@ -278,8 +286,8 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
                                         'items': list_of_values,
                                         })
 
-    def get_main_form(self, model:Post, field:str, *args:Any, **kwargs:Any)->Form:
-        Form = modelform_factory(model, fields=[field])
+    def get_main_form(self, model:Type[Post], field:str, *args:Any, **kwargs:Any)->ModelForm:
+        Form= modelform_factory(model, fields=[field])
         return Form(*args, **kwargs)
 
     def post(self, request:HttpRequest, pk)->JsonResponse:
@@ -308,12 +316,12 @@ class ContentDeleteView(View):
         post = get_object_or_404(Post,
                                  id=post_id,)
 
-        content = get_object_or_404(Content,
+        content:Content= get_object_or_404(Content,
                                     id=id,
                                     post=post)
-
-        content.item.delete()
-        content.delete()
+        if content:
+            content.item.delete()
+            content.delete()
         file_logger.info('Successful delete content in post', extra={
             'post_id': post_id,
             'content_id': id,
