@@ -40,6 +40,7 @@ class TitleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         file_logger.info(
             f'Trying create instance of title model with following fields',extra={'fields':{*[x for x in validated_data.keys()],}})
+
         original_name = validated_data.pop('original_name', None)
         english_name = validated_data.pop('english_name', None)
         russian_name = validated_data.pop('russian_name', None)
@@ -58,7 +59,7 @@ class TitleSerializer(serializers.ModelSerializer):
         instance.russian_name = validated_data.pop(
             'russian_name', instance.russian_name)
         instance.save()
-        file_logger.info('Successful update instance of item model')
+        file_logger.info('Successful update instance of title model')
         return instance
 
 
@@ -102,6 +103,27 @@ class GenreSerializer(serializers.ModelSerializer):
         model = Genre
         fields = ['name']
 
+class ThemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Theme
+        fields = ['name']
+class PublisherSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Publisher
+        fields = ['name']
+class DemographicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Demographic
+        fields = ['name']
+
+class MagazineSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Magazine    
+        fields = ['name']
 
 class MangaSerializer(DynamicFieldsModelSerializer):
     title = TitleSerializer()
@@ -119,8 +141,8 @@ class MangaSerializer(DynamicFieldsModelSerializer):
         queryset=Magazine.objects.all(), many=True, slug_field='name', required=False)
     demographic = serializers.SlugRelatedField(
         queryset=Demographic.objects.all(), slug_field='name', required=False)
-    type = serializers.PrimaryKeyRelatedField(
-        queryset=MangaType.objects.all(), required=False)
+    type = serializers.SlugRelatedField(
+        queryset=MangaType.objects.all(), slug_field='name',required=False)
 
     image = ImageSerializer(required=False)
     description = serializers.CharField(required=False)
@@ -141,21 +163,23 @@ class MangaSerializer(DynamicFieldsModelSerializer):
 
         title = Title.objects.create(**validated_data.pop('title'))
 
-        authors = validated_data.pop('authors')
-        author = authors.pop('author', None)
-        if author:
-            author, created = AuthorTable.objects.get_or_create(**author)
-        artist = authors.pop('artist', None)
-        if artist:
-            artist, created = AuthorTable.objects.get_or_create(**artist)
-        authors = Authors.objects.create(author=author, artist=artist)
+        authors = validated_data.pop('authors',None)
+        if authors:
+            author = authors.pop('author', None)
+            if author:
+                author, created = AuthorTable.objects.get_or_create(**author)
+            artist = authors.pop('artist', None)
+            if artist:
+                artist, created = AuthorTable.objects.get_or_create(**artist)
+            authors = Authors.objects.create(author=author, artist=artist)
         image = validated_data.pop('image', None)
         genre = validated_data.pop('genre', [])
         theme = validated_data.pop('theme', [])
         publisher = validated_data.pop('publisher', [])
         magazine = validated_data.pop('magazine', [])
         manga = Manga.objects.create(**validated_data)
-        manga.authors = authors
+        if authors:
+            manga.authors = authors
         manga.title = title
         manga.genre.set(genre)
         manga.theme.set(theme)
@@ -222,8 +246,8 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
         queryset=Genre.objects.all(), many=True, slug_field='name', required=False)
     theme = serializers.SlugRelatedField(
         queryset=Theme.objects.all(), many=True, slug_field='name', required=False)
-    type = serializers.PrimaryKeyRelatedField(
-        queryset=AnimeType.objects.all(), required=False)
+    type = serializers.SlugRelatedField(
+        queryset=AnimeType.objects.all(), slug_field='name',required=False)
     studio = serializers.SlugRelatedField(
         queryset=Studio.objects.all(), many=True, slug_field='name', required=False)
     image = ImageSerializer(required=False)
@@ -242,9 +266,8 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
     def create(self, validated_data):
         file_logger.info(
             f'Starting create instance of anime model with folloving fields',extra={'fields':{*[x for x in validated_data.keys()],}})
-
         title = Title.objects.create(**validated_data.pop('title'))
-
+        
         image = validated_data.pop('image', None)
         genre = validated_data.pop('genre', [])
         theme = validated_data.pop('theme', [])
@@ -266,8 +289,9 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
     @transaction.atomic
     def update(self, instance, validated_data):
 
-        file_logger.info(
-            f'Starting update instance of anime model with folloving fields:',extra={'fields':{*[x for x in validated_data.keys()],}})
+        console_logger.info(
+            f'Starting update instance of anime model with folloving fields:',
+            extra={'fields':{*[x for x in validated_data.keys()],}})
         # default fields
         fields = ['type',  'premiere',
                   'episodes',

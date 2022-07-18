@@ -50,7 +50,7 @@ def generate_thumbnail(sender: Any, instance: QuerySet, **kwargs: Any) -> NoRetu
         )
     # case for delete. if thumbnail exist, but not image, then delete thumbnail too
     elif instance.thumbnail and not instance.image:
-        file_logger.info(
+        console_logger.info(
             "Delete thumbnail for  %d",
             instance.image,
         )

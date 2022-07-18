@@ -279,3 +279,516 @@
 {"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-16T06:27:30.958854Z", "level": "INFO"}
 {"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-16T06:27:35.734188Z", "level": "INFO"}
 {"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-16T06:27:52.280587Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "0327d3be-fa9c-4555-980a-bd91d5a67824", "content_id": 1, "request_user": "test", "timestamp": "2022-07-16T09:11:24.139265Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "0327d3be-fa9c-4555-980a-bd91d5a67824", "content_id": 1, "request_user": "test", "timestamp": "2022-07-16T09:11:24.160996Z", "level": "INFO"}
+{"message": "Successful get detail post with id - b80440a8-3127-4ce7-b276-76609d3c2f1f for editing", "timestamp": "2022-07-16T09:11:25.581413Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-16T09:11:25.643530Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-16T09:11:25.665698Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-16T09:11:26.141262Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "a04104ea-e8dc-425a-b771-1111069e9ea5", "content_id": 1, "request_user": "test", "timestamp": "2022-07-16T09:23:18.073066Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "a04104ea-e8dc-425a-b771-1111069e9ea5", "content_id": 1, "request_user": "test", "timestamp": "2022-07-16T09:23:18.082269Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 1bc4d3d4-ce66-4b75-82c4-c169f4c268b6 for editing", "timestamp": "2022-07-16T09:23:19.421482Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-16T09:23:19.456293Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-16T09:23:19.478064Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-16T09:23:19.940725Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T05:19:22.257382Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9a926096-c0a8-4356-8f56-aa7a1a213dc3", "fields": null, "timestamp": "2022-07-18T05:20:03.180105Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 435f7757-c9a2-47da-904a-a0904ddcd5a0", "fields": null, "timestamp": "2022-07-18T05:52:45.108587Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a2b1a1f8-d586-48a4-8357-888a95cb0f08", "fields": null, "timestamp": "2022-07-18T05:59:59.254364Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9a926096-c0a8-4356-8f56-aa7a1a213dc3", "fields": null, "timestamp": "2022-07-18T06:28:53.615256Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3eee9084-2feb-4a5c-9f38-ced4b13c39cc", "fields": null, "timestamp": "2022-07-18T06:40:48.526960Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 22968ab7-8569-4a36-8b81-0b1fe8ff6bf4", "fields": null, "timestamp": "2022-07-18T06:41:04.853339Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f0a0d541-5ecb-4448-afab-4c8c36ebbbc9", "fields": null, "timestamp": "2022-07-18T06:44:21.393283Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9a926096-c0a8-4356-8f56-aa7a1a213dc3", "fields": null, "timestamp": "2022-07-18T06:44:27.057699Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9a926096-c0a8-4356-8f56-aa7a1a213dc3", "fields": null, "timestamp": "2022-07-18T06:53:54.887690Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3c2d0dcb-4f2e-40c8-900f-1688f1590a2d", "fields": null, "timestamp": "2022-07-18T06:59:14.083650Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a30d28fe-6a79-4fed-b7a5-300d6ee9647e", "fields": null, "timestamp": "2022-07-18T06:59:47.589206Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 213613af-7029-4584-8fd2-7c02ea66e0cd", "fields": null, "timestamp": "2022-07-18T07:04:47.562401Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d7836e96-9067-4791-ba5f-f5d575c1d789", "fields": null, "timestamp": "2022-07-18T07:04:56.626019Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f9c1cea4-747b-4b9a-ae59-b9749c98369e", "fields": null, "timestamp": "2022-07-18T07:05:10.887877Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 694300b6-5929-492d-aa87-bd81566e1350", "fields": null, "timestamp": "2022-07-18T07:05:34.034495Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 2097d973-e157-42a6-b348-ca1fb85ca79d", "fields": null, "timestamp": "2022-07-18T07:05:52.505619Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 158f1459-108b-4424-9a27-b373f6efc09a", "fields": null, "timestamp": "2022-07-18T07:06:13.177328Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 32defb3a-cf18-475e-8eab-325422836a03", "fields": null, "timestamp": "2022-07-18T07:09:45.586203Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'premiere', 'image', 'type', 'genre', 'description', 'episodes', 'title', 'theme', 'studio'}", "timestamp": "2022-07-18T07:23:56.275184Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name', 'english_name', 'russian_name')", "timestamp": "2022-07-18T07:23:56.290485Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T07:23:56.292666Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T07:23:56.297051Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'image', 'type', 'genre', 'description', 'episodes', 'title', 'theme', 'studio'}", "timestamp": "2022-07-18T07:24:38.833352Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T07:24:39.171630Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9a926096-c0a8-4356-8f56-aa7a1a213dc3", "fields": null, "timestamp": "2022-07-18T07:27:00.206350Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id dc48df58-ef75-42e5-9ad3-dd702d874d1c", "fields": null, "timestamp": "2022-07-18T07:28:05.555675Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 1bbfbf60-1874-474d-96c2-fcfc695c128f", "fields": null, "timestamp": "2022-07-18T07:32:11.322990Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id acff1dbf-f589-4dcd-9945-0bf6e1d2be97", "fields": null, "timestamp": "2022-07-18T08:12:17.544763Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id bb1a41a8-b1e6-450f-a61c-3cbb2ba1724c", "fields": null, "timestamp": "2022-07-18T08:12:56.923200Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 801d40c9-5db4-4400-910c-762bbf2f1225", "fields": null, "timestamp": "2022-07-18T08:13:03.854622Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d76b9ff8-81ba-4939-b22d-d909265b9637", "fields": null, "timestamp": "2022-07-18T08:13:04.451183Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 76ba66b6-00fa-4eee-9076-4c444c2b162a", "fields": null, "timestamp": "2022-07-18T08:18:57.783955Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d24c2afe-c198-4f53-b000-0aa0ba6c6350", "fields": null, "timestamp": "2022-07-18T08:25:53.801017Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 7635858e-c558-4a44-8dbc-dc48e044123c", "fields": null, "timestamp": "2022-07-18T08:27:49.219832Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 2b351ab5-312d-40c5-acce-912ca7755194", "fields": null, "timestamp": "2022-07-18T08:29:47.712853Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3fc7117e-8659-4fce-89a5-a59ac5dcf070", "fields": null, "timestamp": "2022-07-18T08:31:38.860720Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 8ea20253-3c76-4606-9c92-842ac4baa97e", "fields": null, "timestamp": "2022-07-18T08:31:57.287073Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 616a49aa-ccf1-4923-9731-e1779717ebba", "fields": null, "timestamp": "2022-07-18T08:32:19.064042Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 6b20ab20-9e9a-4a84-ba84-48e67a1aec1d", "fields": null, "timestamp": "2022-07-18T08:32:51.742990Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'genre', 'theme', 'title', 'studio', 'type', 'description', 'premiere'}", "timestamp": "2022-07-18T08:49:03.044487Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T08:49:03.077217Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id c0a6a0bc-dfdd-41ff-ac73-3e98443fbc07", "fields": null, "timestamp": "2022-07-18T08:49:27.591488Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 89888d02-f2bc-41d1-9e5a-4f3c77ac800c", "fields": null, "timestamp": "2022-07-18T08:50:20.784254Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 752bf2ba-2e90-4c18-8889-4542483533bd", "fields": null, "timestamp": "2022-07-18T08:52:20.686481Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 13452738-0336-4c36-a6b2-eec2589b2f70", "fields": null, "timestamp": "2022-07-18T08:52:37.301411Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a675b050-6bb2-48f4-88e7-bb5e4994902e", "fields": null, "timestamp": "2022-07-18T09:04:41.750713Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 66e6ceca-3df9-4249-94bd-33644581d9e6", "fields": null, "timestamp": "2022-07-18T09:05:20.737333Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3e00d684-9eb5-446c-9798-1eb17ad508ce", "fields": null, "timestamp": "2022-07-18T09:05:34.726751Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id ef62782c-79f4-4457-be6b-d2f3cae75981", "fields": null, "timestamp": "2022-07-18T09:07:51.592087Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 657b557d-bafc-4302-854d-e7d4781002e1", "fields": null, "timestamp": "2022-07-18T09:19:17.592858Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f3b338c8-a7d7-41fc-a711-b6f77a44ca17", "fields": null, "timestamp": "2022-07-18T09:19:47.876322Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 107e0661-28f2-4ea1-a123-94ae08fbf8db", "fields": null, "timestamp": "2022-07-18T09:22:44.790400Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id c76d75f0-df34-4cb5-8226-2e88164c3827", "fields": null, "timestamp": "2022-07-18T09:23:09.016349Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 5ff9f266-0033-4eab-b55d-5ac57d6269d5", "fields": null, "timestamp": "2022-07-18T09:25:15.586841Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 5370e9d6-d02b-432e-95d5-590a1c072152", "fields": null, "timestamp": "2022-07-18T09:28:15.352046Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 2bf2cb63-50a1-4b72-84f2-c97948e05e35", "fields": null, "timestamp": "2022-07-18T09:33:35.159900Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 59af8af9-bf7e-4a89-b911-b492342da4f7", "fields": null, "timestamp": "2022-07-18T09:33:51.349646Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e3875cbe-2b8d-4903-b86a-5e5353077096", "fields": null, "timestamp": "2022-07-18T09:34:08.881152Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 471393b7-6395-49b4-ba2c-abfc5b33199c", "fields": null, "timestamp": "2022-07-18T09:35:28.191573Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 5769a42b-7d5c-456f-b37a-1c7684fa4431", "fields": null, "timestamp": "2022-07-18T09:35:46.646348Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id cf2760c3-9fc6-4da4-be70-25e8c0cfe93d", "fields": null, "timestamp": "2022-07-18T09:38:50.983797Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 933db958-08b5-4047-8576-6b2cd64492e8", "fields": null, "timestamp": "2022-07-18T09:40:56.553740Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 89df52c3-8e4c-4617-bd4a-e48d8e30e925", "fields": null, "timestamp": "2022-07-18T09:41:57.003029Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 31ee3355-8319-4c80-9f81-972b6cd26bfe", "fields": null, "timestamp": "2022-07-18T09:42:59.201136Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 48859f56-aae2-4f8f-adcf-5032f1150e20", "fields": null, "timestamp": "2022-07-18T09:45:40.560814Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 07ce3b00-4694-4f20-a228-65bbbacc670e", "fields": null, "timestamp": "2022-07-18T09:46:12.576928Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 2ac7b814-e866-4518-9ecc-a4ccb5c81a44", "fields": null, "timestamp": "2022-07-18T09:47:45.232440Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 40deb056-2b54-4af6-a045-f9f7511dac55", "fields": null, "timestamp": "2022-07-18T09:48:51.799723Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id fe040208-9bad-4279-9226-57c221dfb004", "fields": null, "timestamp": "2022-07-18T09:54:01.630765Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a938b7b5-b880-4eb9-889f-0c559552cd6f", "fields": null, "timestamp": "2022-07-18T09:55:34.237756Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4bffd0d9-0f59-4e39-aa4f-a5044d4df46e with api", "fields": null, "timestamp": "2022-07-18T09:56:09.205461Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 40ff1037-9d78-4c4a-bd1c-1d9f36e66878 with api", "fields": null, "timestamp": "2022-07-18T09:57:25.184990Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 5c5c090a-4467-4c27-994e-0713aa3aba49 with api", "fields": null, "timestamp": "2022-07-18T09:58:40.169137Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4e5cfa2b-a71c-4037-ac2c-20a0f82bc4ea with api", "fields": null, "timestamp": "2022-07-18T10:00:11.870083Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 51e5ea45-96a3-49e5-894d-c06fc92cfe2f with api", "fields": null, "timestamp": "2022-07-18T10:32:23.415654Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 730e8517-f1ed-4ca0-888d-d773e0355b42 with api", "fields": null, "timestamp": "2022-07-18T11:33:41.438297Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 30261766-9d41-476a-9a85-1c2a16066977 with api", "fields": null, "timestamp": "2022-07-18T11:35:22.892768Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 05e7401a-c2fa-4d67-953c-c6d899712369 with api", "fields": null, "timestamp": "2022-07-18T11:38:35.291495Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e3d1274a-bfd2-4031-8a4d-65c5f1138055 with api", "fields": null, "timestamp": "2022-07-18T11:39:16.588125Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 51f1f29a-4e5a-4b33-ad94-1e465214a083 with api", "fields": null, "timestamp": "2022-07-18T11:40:15.493844Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 38876e03-4bac-4c5c-a580-3bc583a2adf7 with api", "fields": null, "timestamp": "2022-07-18T11:43:21.086430Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 74f430c1-f723-446b-a268-78a92f9a8be1 with api", "fields": null, "timestamp": "2022-07-18T11:43:39.570514Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 689a34a5-fd0f-481e-ac21-5b78b33fae47 with api", "fields": null, "timestamp": "2022-07-18T11:44:21.531111Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'episodes', 'description', 'premiere'}", "timestamp": "2022-07-18T11:44:22.086209Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:44:22.105005Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4580298b-2122-4e69-90df-545ded98f5b5 with api", "fields": null, "timestamp": "2022-07-18T11:47:51.062518Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 04311faf-b874-4b81-9dc4-fd61685bcee1 with api", "fields": null, "timestamp": "2022-07-18T11:51:32.205965Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'premiere', 'episodes', 'description'}", "timestamp": "2022-07-18T11:51:32.801893Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:51:32.809571Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id b86210b0-ca5d-4202-b8dc-73297fe02066 with api", "fields": null, "timestamp": "2022-07-18T11:52:17.658610Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'premiere', 'episodes', 'description'}", "timestamp": "2022-07-18T11:52:18.236686Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:52:18.242527Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 52530344-5a7c-4338-bbe3-f15f10936032 with api", "fields": null, "timestamp": "2022-07-18T11:53:02.059700Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'title', 'episodes', 'description'}", "timestamp": "2022-07-18T11:53:02.612519Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:53:02.618435Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id df15d994-c05b-496d-8cd0-f6a43b18af62 with api", "fields": null, "timestamp": "2022-07-18T11:53:21.049343Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'premiere', 'title', 'episodes'}", "timestamp": "2022-07-18T11:53:21.688156Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:53:21.694354Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id da97ed1a-38a6-4ecd-bc0e-1b66a8b67bba with api", "fields": null, "timestamp": "2022-07-18T11:53:40.629643Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'episodes', 'description', 'premiere'}", "timestamp": "2022-07-18T11:53:41.184793Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:53:41.190513Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 0fa56860-88dc-491a-85f4-2689968cf242 with api", "fields": null, "timestamp": "2022-07-18T11:54:04.221350Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'episodes', 'description', 'title'}", "timestamp": "2022-07-18T11:54:04.766010Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:54:04.776331Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 6e1e1910-4220-4978-abc7-c22828825679 with api", "fields": null, "timestamp": "2022-07-18T11:57:01.778659Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'title', 'episodes', 'description'}", "timestamp": "2022-07-18T11:57:02.354893Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:57:02.361921Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id fd4db65b-f155-4777-9297-501e2bc77406 with api", "fields": null, "timestamp": "2022-07-18T11:57:11.878369Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'description', 'premiere', 'episodes'}", "timestamp": "2022-07-18T11:57:12.420621Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:57:12.426528Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 39b180f2-d09c-4226-b956-5bdf58f5225a with api", "fields": null, "timestamp": "2022-07-18T11:57:38.015884Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'title', 'premiere', 'description'}", "timestamp": "2022-07-18T11:57:38.578335Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:57:38.584344Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f4b96bb3-6a0b-48a9-89df-1c0fc0083e5b with api", "fields": null, "timestamp": "2022-07-18T11:58:08.191504Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'episodes', 'premiere', 'title'}", "timestamp": "2022-07-18T11:58:08.747176Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T11:58:08.753691Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id b5b40d82-80a6-484d-a9c5-4d0608a9f2f7 with api", "fields": null, "timestamp": "2022-07-18T12:04:36.634305Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'episodes', 'title', 'description'}", "timestamp": "2022-07-18T12:04:37.201978Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T12:04:37.209815Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 311c9061-c5f3-4181-b411-cc6ae1615c13 with api", "fields": null, "timestamp": "2022-07-18T12:05:05.888805Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'episodes', 'premiere', 'description'}", "timestamp": "2022-07-18T12:05:06.470679Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T12:05:06.476855Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'title', 'episodes', 'premiere', 'description'}", "timestamp": "2022-07-18T12:05:06.842227Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name', 'english_name', 'russian_name')", "timestamp": "2022-07-18T12:05:06.843208Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:05:06.844843Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:05:06.846287Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d2da5983-e61c-491a-9861-ebeb93f9827e with api", "fields": null, "timestamp": "2022-07-18T12:05:30.180816Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'episodes', 'description', 'premiere'}", "timestamp": "2022-07-18T12:05:30.739134Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T12:05:30.744791Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'title', 'episodes', 'description', 'premiere'}", "timestamp": "2022-07-18T12:05:31.108635Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name', 'english_name', 'russian_name')", "timestamp": "2022-07-18T12:05:31.109441Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:05:31.110813Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:05:31.112209Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 34c9c732-0472-4947-9063-b5aae9a4335a with api", "fields": null, "timestamp": "2022-07-18T12:46:59.171280Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'description', 'episodes', 'title'}", "timestamp": "2022-07-18T12:46:59.750800Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T12:46:59.786288Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'premiere', 'description', 'episodes', 'title'}", "timestamp": "2022-07-18T12:47:00.193459Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T12:47:00.194264Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:47:00.195872Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:47:00.197695Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 25f51826-72bf-45be-a5b0-d4958b996e09 with api", "fields": null, "timestamp": "2022-07-18T12:47:23.326927Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'episodes', 'description', 'title'}", "timestamp": "2022-07-18T12:47:23.875134Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T12:47:23.882250Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'premiere', 'episodes', 'description', 'title'}", "timestamp": "2022-07-18T12:47:24.248464Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T12:47:24.249305Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:47:24.250979Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:47:24.252453Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'title'}", "timestamp": "2022-07-18T12:57:05.450136Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T12:57:05.451889Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:57:05.464282Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:57:05.468109Z", "level": "INFO"}
+{"message": "Starting update instance of anime model with folloving fields:", "fields": "{'title'}", "timestamp": "2022-07-18T12:57:51.979361Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T12:57:51.982406Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T12:57:51.988431Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T12:57:51.992227Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e332d35e-3ba1-4ecb-8654-57a5a77d964b with api", "fields": null, "timestamp": "2022-07-18T13:07:14.054032Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'title', 'description', 'premiere'}", "timestamp": "2022-07-18T13:07:14.611961Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:07:14.618138Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:07:15.017047Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T13:07:15.018904Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:07:15.021290Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 2bd21892-788f-4a7d-9343-9d6fb7bc258a with api", "fields": null, "timestamp": "2022-07-18T13:11:59.749957Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'premiere', 'title'}", "timestamp": "2022-07-18T13:12:00.423460Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:12:00.430828Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:12:00.796343Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T13:12:00.798639Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:12:00.800180Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id ef8da8e1-a78b-459e-88b4-e060befefc52 with api", "fields": null, "timestamp": "2022-07-18T13:16:02.640466Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'title', 'premiere', 'episodes'}", "timestamp": "2022-07-18T13:16:03.197373Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:16:03.204103Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:16:03.569033Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T13:16:03.570473Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:16:03.571836Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id c3d9dff4-092e-41de-b244-88f4d7abff0a with api", "fields": null, "timestamp": "2022-07-18T13:16:47.085600Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'premiere', 'title'}", "timestamp": "2022-07-18T13:16:47.649325Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:16:47.654963Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:16:48.017835Z", "level": "INFO"}
+{"message": "Successful update instance of item model", "timestamp": "2022-07-18T13:16:48.020120Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:16:48.021735Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id c277c1ed-51da-4ac7-bf41-7e191b740695 with api", "fields": null, "timestamp": "2022-07-18T13:20:11.601597Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'title', 'premiere'}", "timestamp": "2022-07-18T13:20:12.151089Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:20:12.157020Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:20:12.530625Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:20:12.532688Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:20:12.534074Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d7649497-055b-4d3c-8d72-779ec636d96e with api", "fields": null, "timestamp": "2022-07-18T13:25:06.778621Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'premiere', 'title'}", "timestamp": "2022-07-18T13:25:07.323903Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:25:07.331108Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:25:07.713914Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:25:07.715401Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:25:07.716847Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 73d832d2-58d9-4c49-81c5-c3ebe3ca66eb with api", "fields": null, "timestamp": "2022-07-18T13:32:16.422603Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'title', 'premiere'}", "timestamp": "2022-07-18T13:32:17.090952Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:32:17.097505Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:32:17.481810Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:32:17.483124Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:32:17.484555Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id b3c28786-2a79-414a-90fd-2f7ab453698e with api", "fields": null, "timestamp": "2022-07-18T13:32:17.520018Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 614e3d6f-81bd-45f2-8292-1d2742bd73f2 with api", "fields": null, "timestamp": "2022-07-18T13:32:55.551961Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:32:56.112805Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:32:56.114456Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:32:56.115997Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'title', 'premiere', 'episodes'}", "timestamp": "2022-07-18T13:32:56.476160Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:32:56.482675Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:32:56.909087Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:32:56.910323Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:32:56.911593Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 0f17c1ae-ac6c-403c-adf2-d4f417a4d7e9 with api", "fields": null, "timestamp": "2022-07-18T13:32:56.947530Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d01f5a66-7368-4287-ba16-beeeb4b689c2 with api", "fields": null, "timestamp": "2022-07-18T13:38:37.059097Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:38:37.617320Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:38:37.618672Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:38:37.619981Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'premiere', 'episodes', 'description'}", "timestamp": "2022-07-18T13:38:37.988132Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:38:37.993725Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:38:38.362030Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:38:38.363605Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:38:38.364939Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id cca06e1a-7cfa-4856-bcf8-6b94230ba5b2 with api", "fields": null, "timestamp": "2022-07-18T13:38:38.397204Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 83d1ff4c-c479-46a2-8b7d-e20ee65551ee with api", "fields": null, "timestamp": "2022-07-18T13:43:34.543532Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:43:35.112038Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:43:35.113276Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:43:35.114655Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'premiere', 'title', 'episodes'}", "timestamp": "2022-07-18T13:43:35.481559Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:43:35.487959Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:43:35.861186Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:43:35.862740Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:43:35.864475Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 5df3abf5-b559-429f-9b74-32f93348954c with api", "fields": null, "timestamp": "2022-07-18T13:43:35.897372Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id c950d2d7-23c3-49ee-a9fd-124c6cdc426f with api", "fields": null, "timestamp": "2022-07-18T13:46:44.942215Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:46:45.494665Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:46:45.496169Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:46:45.498194Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'episodes', 'title', 'premiere'}", "timestamp": "2022-07-18T13:46:45.869721Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:46:45.874820Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:46:46.248678Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:46:46.250475Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:46:46.251879Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4bfb4e35-e737-42cd-9c14-64a03aa603e5 with api", "fields": null, "timestamp": "2022-07-18T13:46:46.283807Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4faa4895-b4fb-4dcd-aee1-678ec5c2b4e1 with api", "fields": null, "timestamp": "2022-07-18T13:47:12.818960Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:47:13.384556Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:47:13.386409Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:47:13.389216Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'premiere', 'title'}", "timestamp": "2022-07-18T13:47:13.822137Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T13:47:13.830630Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T13:47:14.203916Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T13:47:14.205404Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T13:47:14.206702Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id fc42639e-d61d-4cc4-90de-a6c8ac42768f with api", "fields": null, "timestamp": "2022-07-18T13:47:14.240994Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 379f6a68-3cde-4859-a03c-08fa02422aa5 with api", "fields": null, "timestamp": "2022-07-18T14:19:12.454971Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:19:13.053937Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:19:13.055350Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:19:13.056950Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'premiere', 'episodes', 'title'}", "timestamp": "2022-07-18T14:19:13.498218Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T14:19:13.504432Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:19:13.872644Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:19:13.874115Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:19:13.875461Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 41c34e48-c523-40d3-adae-1909fc3ae394 with api", "fields": null, "timestamp": "2022-07-18T14:19:13.907949Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 00dd16a3-4f55-42af-82c9-afa42085fa97 with api", "fields": null, "timestamp": "2022-07-18T14:19:31.561163Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:19:32.194390Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:19:32.197035Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:19:32.199264Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'premiere', 'title', 'episodes'}", "timestamp": "2022-07-18T14:19:32.567853Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T14:19:32.574912Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:19:32.937519Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:19:32.939494Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:19:32.940854Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f58e8e8b-3a08-4208-9e8a-b74c6a0ada5a with api", "fields": null, "timestamp": "2022-07-18T14:19:32.972482Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 128127c7-cabd-48be-81c5-1d9058ef12b6 with api", "fields": null, "timestamp": "2022-07-18T14:20:49.995210Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:20:50.704044Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:20:50.705361Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:20:50.706740Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'description', 'episodes', 'premiere'}", "timestamp": "2022-07-18T14:20:51.079512Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T14:20:51.084924Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:20:51.460073Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:20:51.461787Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:20:51.464219Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3984eb86-9601-471d-9f28-f1b5bf826f39 with api", "fields": null, "timestamp": "2022-07-18T14:20:51.513270Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e8252beb-a3b5-427c-a53d-92745574206b with api", "fields": null, "timestamp": "2022-07-18T14:21:10.762311Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:21:11.405363Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:21:11.407512Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:21:11.410031Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'title', 'premiere'}", "timestamp": "2022-07-18T14:21:12.036326Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T14:21:12.047820Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T14:21:12.519290Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T14:21:12.521034Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T14:21:12.530931Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4ea3bac4-812b-457b-94f2-45fdb468ec49 with api", "fields": null, "timestamp": "2022-07-18T14:21:12.589106Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 0806ca7e-a1a9-4abc-a447-afd1f1ecbfd4 with api", "fields": null, "timestamp": "2022-07-18T18:24:13.851578Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T18:24:14.486905Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T18:24:14.488709Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T18:24:14.490419Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'premiere', 'title', 'type'}", "timestamp": "2022-07-18T18:24:14.890484Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T18:24:14.897737Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T18:24:15.360252Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T18:24:15.362045Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T18:24:15.363688Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 111a9bcf-2408-487b-94d1-8f32a87c7085 with api", "fields": null, "timestamp": "2022-07-18T18:24:15.401394Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 59a2d612-b534-485c-9cfe-fb1904f5e795 with api", "fields": null, "timestamp": "2022-07-18T19:23:41.342289Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:23:42.033257Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:23:42.034909Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:23:42.036612Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'title', 'description', 'type', 'premiere'}", "timestamp": "2022-07-18T19:23:42.474287Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:23:42.482170Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:23:42.922309Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:23:42.925809Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:23:42.928288Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3c429eba-5a8a-4358-8489-8e1fa4b08405 with api", "fields": null, "timestamp": "2022-07-18T19:23:42.969566Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id ad4b3672-4ffa-4f27-ac50-5affff9b7827 with api", "fields": null, "timestamp": "2022-07-18T19:24:14.979003Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:24:15.530737Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:24:15.532117Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:24:15.533540Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'episodes', 'title', 'premiere', 'description'}", "timestamp": "2022-07-18T19:24:15.901729Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:24:15.910527Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:24:16.285570Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:24:16.286811Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:24:16.288100Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 26fb45e7-d0f4-4c49-ba6c-e38b13d86255 with api", "fields": null, "timestamp": "2022-07-18T19:24:16.321594Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 892b2e0f-ea89-4096-96d2-7463fda68913 with api", "fields": null, "timestamp": "2022-07-18T19:27:45.814625Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:27:46.371856Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:27:46.373809Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:27:46.375325Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'type', 'title', 'premiere'}", "timestamp": "2022-07-18T19:27:46.744987Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:27:46.752330Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:27:47.137087Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:27:47.138557Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:27:47.140114Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 96dc3f99-ba32-4128-9576-ad9539888636 with api", "fields": null, "timestamp": "2022-07-18T19:27:47.173455Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3a03e536-c2e9-4222-b13b-d981d2a7da6e with api", "fields": null, "timestamp": "2022-07-18T19:43:49.540599Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:43:50.087925Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:43:50.089307Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:43:50.090688Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'premiere', 'type', 'title', 'episodes'}", "timestamp": "2022-07-18T19:43:50.453943Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:43:50.459720Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:43:50.825189Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:43:50.827079Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:43:50.828481Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id f6d91318-8bf9-4e7d-8d60-6733b18096f9 with api", "fields": null, "timestamp": "2022-07-18T19:43:51.026412Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4bf50760-f14b-4088-a579-761d965b47d8 with api", "fields": null, "timestamp": "2022-07-18T19:43:51.137970Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 66b64118-ecd0-4720-b720-951df3b51551 with api", "fields": null, "timestamp": "2022-07-18T19:44:48.117403Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:44:48.696164Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:44:48.697649Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:44:48.699223Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'episodes', 'description', 'title', 'type', 'premiere'}", "timestamp": "2022-07-18T19:44:49.063862Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:44:49.069657Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:44:49.440622Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:44:49.442120Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:44:49.444000Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id ff43fd3f-bcc5-45d5-8cb3-2aec5b671b6f with api", "fields": null, "timestamp": "2022-07-18T19:44:49.978321Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 4da3a389-8a39-49ca-a8b1-61fe2d2bc26a with api", "fields": null, "timestamp": "2022-07-18T19:45:46.791314Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:45:47.371275Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:45:47.373268Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:45:47.374989Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'episodes', 'title', 'type', 'premiere'}", "timestamp": "2022-07-18T19:45:47.748414Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:45:47.757303Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:45:48.126490Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:45:48.127954Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:45:48.129350Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3fdc36dd-c4e8-4ae3-a580-d1dc44d486ab with api", "fields": null, "timestamp": "2022-07-18T19:45:48.536720Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 6388996b-ffbb-4545-a877-a5824fad6167 with api", "fields": null, "timestamp": "2022-07-18T19:46:32.795074Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:46:33.345789Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:46:33.347369Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:46:33.349146Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'description', 'title', 'type', 'episodes', 'premiere'}", "timestamp": "2022-07-18T19:46:33.711980Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:46:33.717651Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:46:34.092475Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:46:34.093886Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:46:34.095710Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 37f1f92a-3211-41ec-93ce-8f804b169edc with api", "fields": null, "timestamp": "2022-07-18T19:46:34.593123Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 9fd6387e-8b46-46b1-9503-f1f9209664c1 with api", "fields": null, "timestamp": "2022-07-18T19:47:07.520016Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:47:08.083936Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:47:08.085342Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:47:08.086955Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'title', 'description', 'premiere', 'episodes', 'type'}", "timestamp": "2022-07-18T19:47:08.447613Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:47:08.454311Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:47:08.858435Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:47:08.860150Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:47:08.862060Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id ec3bab5f-357a-4b57-9393-750afe8a5d50 with api", "fields": null, "timestamp": "2022-07-18T19:47:09.064394Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 69786055-cfe6-4f50-b939-3cf972888d45 with api", "fields": null, "timestamp": "2022-07-18T19:47:09.351038Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 807be147-7b2c-4c0c-83ed-bb9266eb85ed with api", "fields": null, "timestamp": "2022-07-18T19:47:49.664440Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:47:50.214169Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:47:50.215778Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:47:50.217343Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'title', 'episodes', 'description', 'premiere'}", "timestamp": "2022-07-18T19:47:50.579114Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:47:50.585398Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:47:50.966696Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:47:50.968347Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:47:50.969823Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a203584b-c75f-4332-85d2-2a389ef9fed6 with api", "fields": null, "timestamp": "2022-07-18T19:47:51.235796Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 59123128-3282-4451-8be1-54a656277be3 with api", "fields": null, "timestamp": "2022-07-18T19:47:51.454042Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 7f0ca94e-5ca0-4f29-825f-54728a5edf1d with api", "fields": null, "timestamp": "2022-07-18T19:56:28.447580Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:56:28.997040Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:56:28.998532Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:56:29.000187Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'type', 'episodes', 'title', 'description'}", "timestamp": "2022-07-18T19:56:29.356676Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T19:56:29.363017Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:56:29.726061Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:56:29.727318Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T19:56:29.728693Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e01f4d74-48d2-4c94-b004-740f28ecc4a2 with api", "fields": null, "timestamp": "2022-07-18T19:56:29.928866Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T19:56:30.586258Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T19:56:31.188388Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:56:31.189234Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:56:31.190982Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T19:56:31.192293Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T19:56:31.920016Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T19:56:31.920837Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T19:56:31.922157Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T19:56:31.923586Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T19:56:32.130880Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id eb247958-e976-47eb-86eb-08814b9ad4a9 with api", "fields": null, "timestamp": "2022-07-18T19:56:32.167800Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a3b72c62-13a9-4c54-ae1a-41c53ad3d033 with api", "fields": null, "timestamp": "2022-07-18T20:05:15.507152Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:05:16.072201Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:05:16.074070Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:05:16.075642Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'premiere', 'description', 'episodes', 'title'}", "timestamp": "2022-07-18T20:05:16.444059Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T20:05:16.450410Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:05:16.829669Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:05:16.831144Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:05:16.833559Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id a472cda3-7bac-42c8-be9c-8f58091d1915 with api", "fields": null, "timestamp": "2022-07-18T20:05:17.035126Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:05:17.711465Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:05:18.297236Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:05:18.298889Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:05:18.300583Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:05:18.303491Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:05:19.047708Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:05:19.050886Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:05:19.052500Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:05:19.054229Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:05:19.271852Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id edc79cd0-4988-4af9-9fe9-b70b1f078739 with api", "fields": null, "timestamp": "2022-07-18T20:05:19.301050Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 640bf441-0464-4df1-a7c5-b34d01a62362 with api", "fields": null, "timestamp": "2022-07-18T20:06:21.826626Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:06:22.394663Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:06:22.395875Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:06:22.398789Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'premiere', 'type', 'title', 'episodes', 'description'}", "timestamp": "2022-07-18T20:06:22.761173Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T20:06:22.767406Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:06:23.160384Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:06:23.161671Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:06:23.163035Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 26b13979-2d47-484e-a49f-2b8e0ee184b5 with api", "fields": null, "timestamp": "2022-07-18T20:06:23.359803Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:06:24.029423Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:06:24.615594Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:06:24.617802Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:06:24.619431Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:06:24.621557Z", "level": "INFO"}
+{"message": "Starting create instance of manga model with folloving fields", "fields": "{'chapters', 'premiere', 'type', 'title', 'description'}", "timestamp": "2022-07-18T20:06:24.989671Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:06:25.529727Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:06:25.530422Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:06:25.532022Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:06:25.533841Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:06:25.739284Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id e907c938-ef43-4511-8eff-84811b7f22cb with api", "fields": null, "timestamp": "2022-07-18T20:06:25.770842Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 3a81c66a-32fe-4f51-9231-a6bf6e977012 with api", "fields": null, "timestamp": "2022-07-18T20:08:39.845947Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:08:40.511035Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:08:40.512152Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:08:40.513530Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'title', 'premiere', 'episodes', 'description'}", "timestamp": "2022-07-18T20:08:40.874318Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T20:08:40.879753Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:08:41.244920Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:08:41.246102Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:08:41.247503Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id fff0ec78-5238-444b-9025-a53f108c288c with api", "fields": null, "timestamp": "2022-07-18T20:08:41.443713Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:08:42.109644Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:08:42.723170Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:08:42.723995Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:08:42.725630Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:08:42.726964Z", "level": "INFO"}
+{"message": "Starting create instance of manga model with folloving fields", "fields": "{'type', 'title', 'premiere', 'chapters', 'description'}", "timestamp": "2022-07-18T20:08:43.090137Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:08:43.518118Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:08:43.518900Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:08:43.520388Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:08:43.521766Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:08:43.733125Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 34fc078f-3281-40ae-89da-8a7313c65498 with api", "fields": null, "timestamp": "2022-07-18T20:08:43.768841Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id d1a3b796-0cee-488c-b027-45905a1b27a5 with api", "fields": null, "timestamp": "2022-07-18T20:09:19.433408Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:09:20.012848Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:09:20.014239Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:09:20.015684Z", "level": "INFO"}
+{"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'description', 'episodes', 'title', 'premiere'}", "timestamp": "2022-07-18T20:09:20.376529Z", "level": "INFO"}
+{"message": "Successful create instance of anime model", "timestamp": "2022-07-18T20:09:20.382058Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:09:20.792517Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:09:20.793888Z", "level": "INFO"}
+{"message": "Successful update instance of anime model", "timestamp": "2022-07-18T20:09:20.795248Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id 354ede0a-441f-4314-8475-8ec8414498a8 with api", "fields": null, "timestamp": "2022-07-18T20:09:20.989639Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:09:21.657951Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:09:22.231476Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:09:22.232399Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:09:22.234037Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:09:22.235555Z", "level": "INFO"}
+{"message": "Starting create instance of manga model with folloving fields", "fields": "{'type', 'description', 'chapters', 'title', 'premiere'}", "timestamp": "2022-07-18T20:09:22.602592Z", "level": "INFO"}
+{"message": "Successful create instance of manga model", "timestamp": "2022-07-18T20:09:22.609194Z", "level": "INFO"}
+{"message": "Starting update instance of manga model with folloving fields:('title', 'premiere', 'chapters', 'description')", "timestamp": "2022-07-18T20:09:22.986286Z", "level": "INFO"}
+{"message": "Starting update instance of title model with folloving fields:('original_name',)", "timestamp": "2022-07-18T20:09:22.987138Z", "level": "INFO"}
+{"message": "Successful update instance of title model", "timestamp": "2022-07-18T20:09:22.988628Z", "level": "INFO"}
+{"message": "Successful update instance of manga model", "timestamp": "2022-07-18T20:09:22.990121Z", "level": "INFO"}
+{"message": "Successful get api manga title with following id <built-in function id>", "fields": null, "timestamp": "2022-07-18T20:09:23.194277Z", "level": "INFO"}
+{"message": "Successful get api anime title with following id b758605a-0fe1-48fd-bff3-61b9e7354413 with api", "fields": null, "timestamp": "2022-07-18T20:09:23.222115Z", "level": "INFO"}

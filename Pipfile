@@ -27,6 +27,9 @@ django-mptt = "*"
 channels-redis = "*"
 celery = "*"
 flower = "*"
+pyyaml = "*"
+uritemplate = "*"
+drf-yasg = "*"
 
 [dev-packages]
 

@@ -3,7 +3,7 @@ from api.permissions import IsAdminOrReadOnly
 from post.models import Content, Post
 from rest_framework import status, viewsets, permissions
 from titles.models import Anime, Demographic, Magazine, Manga, Genre, Publisher, Theme
-from .serializers import AnimeSerializer, MangaSerializer, PostSerializer, GenreSerializer
+from .serializers import AnimeSerializer, DemographicSerializer, MagazineSerializer, MangaSerializer, PostSerializer, GenreSerializer, PublisherSerializer, ThemeSerializer
 from .pagination import StandardResultsSetPagination
 from rest_framework.response import Response
 from rest_framework import status
@@ -40,6 +40,7 @@ class AnimeList(viewsets.ModelViewSet):
         permissions.IsAuthenticatedOrReadOnly, IsAdminOrReadOnly, ]
     serializer_class = AnimeSerializer
 
+
     def get_queryset(self,):
         query = Anime.objects.select_related('type', 'title', 'image').prefetch_related(
             'genre', 'theme', 'studio', 'related_post')
@@ -51,7 +52,7 @@ class AnimeList(viewsets.ModelViewSet):
 
     @method_decorator(cache_page(CACHE_TIME))
     def retrieve(self, request, pk=None):
-        console_logger.info(f'Get anime title with following {id}')
+        console_logger.info(f'Get anime title with following {pk} with api')
         queryset = self.get_queryset().get(pk=pk)
         serializer_context = {
             'request': request,
@@ -62,7 +63,7 @@ class AnimeList(viewsets.ModelViewSet):
             arguments['fields']=fields.split(',')
 
         queryset = AnimeSerializer(**arguments).data
-        file_logger.info(f'Successful get api anime title with following id {id}',extra={'fields':fields})
+        file_logger.info(f'Successful get api anime title with following id {pk} with api',extra={'fields':fields})
         return Response(queryset)
 
 
@@ -104,6 +105,7 @@ class MangaList(EnablePartialUpdateMixin, viewsets.ModelViewSet):
 class GenreList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
 
     def list(self, request):
         console_logger.info('Get list of genres with api')
@@ -113,6 +115,7 @@ class GenreList(generics.ListAPIView):
 class ThemeList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
 
     def list(self, request):
         console_logger.info('Get list of themes  with api')
@@ -122,6 +125,7 @@ class ThemeList(generics.ListAPIView):
 class PublisherList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializerserializer_class = PublisherSerializer
 
     def list(self, request):
         console_logger.info('Get list of publishers with api')
@@ -131,6 +135,7 @@ class PublisherList(generics.ListAPIView):
 class DemographicList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Demographic.objects.all()
+    serializer_class = DemographicSerializer
 
     def list(self, request):
         console_logger.info('Get list of demographic with api')
@@ -140,7 +145,7 @@ class DemographicList(generics.ListAPIView):
 class MagazineList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Magazine.objects.all()
-
+    serializer_class = MagazineSerializer
     def list(self, request):
         console_logger.info('Get list of magazines with api')
         return Response(self.get_queryset().values_list("name", flat=True))

@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'embed_video',
     'debug_toolbar',
     'mptt',
-    'channels'
+    'channels',
+    'drf_yasg',
 
 ]
 
@@ -214,6 +215,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' 
 
 }
 CORS_ORIGIN_ORIGINS = (
@@ -280,13 +282,13 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    'update_scores': {
-        'task': 'titles.tasks.update_anime_scores',
+    'update_anime_scores': {
+        'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=8, minute=30, ),  # midnight,
         'args':('anime')
     },
-    'update_scores': {
-        'task': 'titles.tasks.update_manga_scores',
+    'update_manga_scores': {
+        'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=10, minute=30, ),
         'args':('manga') # midnight,
     },

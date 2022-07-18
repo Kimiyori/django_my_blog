@@ -173,7 +173,7 @@ class MetaTitle(models.Model):
         editable=False)
     title = models.ForeignKey(Title, on_delete=models.CASCADE,
                              related_name='%(class)s',null=True)
-    premiere = models.DateField(blank=True)
+    premiere = models.DateField(null=True,blank=True)
     genre = models.ManyToManyField(
         Genre, related_name='%(class)s', blank=True)
     theme = models.ManyToManyField(
