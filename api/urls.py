@@ -18,7 +18,6 @@ schema_view = get_schema_view(  # new
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
-
 )
 
 
@@ -36,6 +35,17 @@ urlpatterns = [
     path('themes', ThemeList.as_view(), name='api_themes'),
     path('magazines', MagazineList.as_view(), name='api_magazines'),
     path('api-token-auth/', CustomAuthToken.as_view(), name='api-token-auth'),
+    path('swagger/', schema_view.with_ui(  # new
+        'swagger', cache_timeout=0), name='schema-swagger-ui'), 
+    path('redoc/', schema_view.with_ui(  # new
+        'redoc', cache_timeout=0), name='schema-redoc'),
+    path('openapi', shemas(  # new
+        title="Blog API",
+        description="A sample API for learning DRF",
+        version="1.0.0"
+    ), name='openapi-schema'),
+
+
     path('swagger/', schema_view.with_ui(  # new
         'swagger', cache_timeout=0), name='schema-swagger-ui'), 
     path('redoc/', schema_view.with_ui(  # new
