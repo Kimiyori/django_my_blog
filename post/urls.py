@@ -1,10 +1,14 @@
 from django.urls import path
-from .views import PostList, ContentCreateUpdateView, PostDetail, PostDetailChange, ContentDeleteView,ContentOrderView
+from .views import PostCreate, PostDelete, PostList, ContentCreateUpdateView, PostDetail, PostDetailChange, ContentDeleteView,ContentOrderView
 urlpatterns = [
     path('', PostList.as_view(), name='post_list'),
     path('<uuid:pk>', PostDetail.as_view(), name='post_detail'),
     path('<uuid:pk>/change/', PostDetailChange.as_view(),
          name='post_detail_change'),
+     path('<uuid:pk>/delete/', PostDelete.as_view(),
+         name='post_delete'),
+     path('create/', PostCreate.as_view(),
+         name='post_detail_create'),
     path('<uuid:post_id>/content/create/<model_name>',
          ContentCreateUpdateView.as_view(),
          name='module_content_create'),

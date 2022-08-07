@@ -164,7 +164,13 @@ class Image(models.Model):
     thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
 
 class Urls(models.Model):
-    mal=models.URLField()
+    mal=models.URLField(blank=True,null=True)
+    shiki=models.URLField(blank=True,null=True)
+    manga_updates=models.URLField(blank=True,null=True)
+    anilist=models.URLField(blank=True,null=True)
+    world_art=models.URLField(blank=True,null=True)
+    manga_dex=models.URLField(blank=True,null=True)
+    manga_lib=models.URLField(blank=True,null=True)
 
 class MetaTitle(models.Model):
     id = models.UUIDField(

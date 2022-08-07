@@ -21,16 +21,27 @@ import django_stubs_ext
 django_stubs_ext.monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&dr@m!m%ly^t7k*i!qsp@9s^th(a&fm7so-@gyz@5*)#wzvgh&'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+if ENVIRONMENT == 'production':
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SESSION_COOKIE_SECURE = True # new
+    CSRF_COOKIE_SECURE = True # new
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG',1)
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
@@ -63,6 +74,7 @@ INSTALLED_APPS = [
     'mptt',
     'channels',
     'drf_yasg',
+    'comments.apps.CommentsConfig'
 
 ]
 
@@ -120,9 +132,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # changed from sqlite
-        'NAME': 'postgres',  # development settings, will change in production
-        'USER': 'postgres',  # development settings, will change in production
-        'PASSWORD': 'postgres',  # development settings, will change in production
+        'NAME': os.environ.get('POSTGRES_NAME'),  # development settings, will change in production
+        'USER': os.environ.get('POSTGRES_USER'),  # development settings, will change in production
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),  # development settings, will change in production
         'HOST': 'db',
         'PORT': 5432
     },
@@ -302,11 +314,11 @@ CELERY_BEAT_SCHEDULE = {
     'update_anime_scores': {
         'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=8, minute=30, ),  # midnight,
-        'args':('anime')
+        'args':('anime',)
     },
     'update_manga_scores': {
         'task': 'titles.tasks.update_scores',
         'schedule': crontab(hour=10, minute=30, ),
-        'args':('manga') # midnight,
+        'args':('manga',) # midnight,
     },
 }   

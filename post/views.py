@@ -9,11 +9,14 @@ from django.forms import Form, ModelForm
 from django.forms.models import modelform_factory
 from django.apps import apps
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import File, Image, Post, Content, Text, Video,Comment
+from django.urls import reverse
+from .models import File, Image, Post, Content, Text, Video
+from comments.models import CommentPost
 from django.views.generic.base import TemplateResponseMixin, View
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, UpdateView
-from .forms import NewCommentForm, PostForm
+from .forms import PostForm
+from comments.forms import CommentForm
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import F
 from django.db.models.fields import CharField, TextField
@@ -104,8 +107,8 @@ class PostDetail(TemplateResponseMixin, View):
         post= cache.get(cache_post_key)
         # if not, then create and cache it
         if post is None:
-            post = Post.objects.filter(id=pk).values(
-                'id', 'title', 'main_image').first()
+            post = Post.objects.values(
+                'id', 'title', 'main_image').get(id=pk)
             if not post:
                 raise Http404('Cannot find post with given id')
             cache.set(cache_post_key, post)
@@ -123,22 +126,31 @@ class PostDetail(TemplateResponseMixin, View):
                     Array(F('image__image'), Value('image')))),
                 When(file__gte=1, then=ArrayAgg(
                     Array(F('file__file'), Value('file')))),
-                When(video__gte=1, then=ArrayAgg(Array(F('video__video'), Value('video')))), output_field=TextField())).\
+                When(video__gte=1, then=ArrayAgg(
+                    Array(F('video__video'), Value('video')))), 
+                    output_field=TextField())).\
                 order_by('order').values('cont')
             cache.set(cache_content_key, content)
 
-        comments=Comment.objects.select_related('author__profile').filter(post__id=pk)
+        comments=CommentPost.objects.select_related('author__profile').filter(post=pk)
 
         # increate in redis number of views in post
         total_views:int= self.get_views(pk)
         console_logger.info(f'Successful get detail post with id - {pk}')
-        comment_form = NewCommentForm()
+        comment_form = CommentForm(CommentPost)
         return self.render_to_response({'post': post, 
                                         'content': content, 
                                         'total_views': total_views,
                                         'comments':comments,
                                         'comment_form': comment_form,})
 
+class PostCreate( TemplateResponseMixin, View):
+    """
+    View for creating posts
+    """
+    model = Post
+    template_name = 'post/manage/create.html'
+    context_object_name = 'post'
 
 class GetModelAndForm:
     """
@@ -159,6 +171,10 @@ class GetModelAndForm:
                                                  'created',
                                                  'updated'])
         return Form(*args, **kwargs)
+
+
+
+
 
 
 class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
@@ -226,7 +242,23 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
 
         return JsonResponse(data)
 
-
+class PostCreate(GetModelAndForm, TemplateResponseMixin, View):
+    """
+    View for create post
+    """
+    template_name = 'post/manage/content/form_create.html'
+    def get(self,request):
+        main_form = PostForm()
+        return self.render_to_response({'main_form': main_form,
+                                        })
+    def post(self,request):
+        print(request.POST)
+        form=PostForm(data=request.POST,files=request.FILES)
+        if form.is_valid():
+            inst=form.save(commit=False)
+            inst.author=get_user_model().objects.get(id=request.user.id)
+            inst.save()
+            return  redirect(reverse('post_detail_change', kwargs={'pk':inst.id}))
 class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
     """
     View for editing Post
@@ -235,23 +267,24 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
 
     def dispatch(self, request, pk):
         # get post instance
-        self.module = Post.objects.filter(id=pk).only(
-            'id', 'title', 'author',  'main_image').first()
-        # check if request user and author not the same person; only author can edit own posts
-        if self.module:
-            if request.user != self.module.author:
-                file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
-                    'request_user': request.user,
-                    'author': getattr(self.module,'author',None)})
+        if pk:
+            self.module = Post.objects.filter(id=pk).only(
+                'id', 'title', 'author',  'main_image').first()
+            # check if request user and author not the same person; only author can edit own posts
+            if self.module:
+                if request.user != self.module.author:
+                    file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
+                        'request_user': request.user,
+                        'author': getattr(self.module,'author',None)})
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            else:
+                file_logger.warning(f'Post does not exist', extra={
+                        'request_user': request.user,
+                        'author': getattr(self.module,'author',None)})
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        else:
-            file_logger.warning(f'Post does not exist', extra={
-                    'request_user': request.user,
-                    'author': getattr(self.module,'author',None)})
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return super().dispatch(request, pk)
 
-    def get(self, request:HttpRequest, pk:uuid.UUID)->HttpResponse:
+    def get(self, request:HttpRequest, pk:uuid.UUID)->HttpResponse: 
         console_logger.info(
             f'Trying to get detail post with id - {pk} for editing')
         # get content using case
@@ -262,7 +295,8 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
                 'image__image'), Value('image'), output_field=TextField()))),
             When(file__gte=1, then=ArrayAgg(Array(Cast(F('file__id'), output_field=CharField()), F(
                 'file__file'), Value('file'), output_field=TextField()))),
-            When(video__gte=1, then=ArrayAgg(Array(Cast(F('video__id'), output_field=CharField()), F('video__video'), Value('video'), output_field=TextField()))))).\
+            When(video__gte=1, then=ArrayAgg(Array(Cast(F('video__id'), output_field=CharField()), F(
+                'video__video'), Value('video'), output_field=TextField()))))).\
             values('id', 'order', 'content').order_by('order')
 
         list_of_values = []
@@ -301,6 +335,17 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
         file_logger.info(f'Successful  update post instance')
         return JsonResponse({request.POST['type']: 'ok'})
 
+
+class PostDelete( View):
+
+    def post(self,request,pk:uuid.UUID):
+        try:
+            post=Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            file_logger.debug('failed to delete post',extra={'id':pk})
+            return Http404()
+        post.delete()
+        return redirect(reverse('post_list'))
 
 class ContentDeleteView(View):
     """

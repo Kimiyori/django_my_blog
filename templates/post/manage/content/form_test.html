@@ -16,11 +16,22 @@ Add new content
 
     <div class="detail-post">
     {% if main_form %}
-    <div class="edit-title ">
-        <form action="{% url 'post_detail_change' object.id %}" method="post" enctype="multipart/form-data">
-            {{main_form.title}}
+    <div class='delete_post'>
+        <form action="{% url 'post_delete' object.id  %}" 
+        method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Delete Post</button>
+            </form>
+        </a>
 
     </div>
+    <div class="edit-title ">
+        <form action={% if object %} "{% url 'post_detail_change' object.id %}" 
+        {% else %} "{% url 'post_detail_create' %}" 
+        {% endif %}method="post" enctype="multipart/form-data">
+            {{main_form.title}}
+        
+ 
     <div class="img-main">
         <div class="post-img">
             <a  href="/media/{{item.main_image.value}}">
@@ -30,13 +41,16 @@ Add new content
             <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
 
         </div>
-        <div class="related">
+        <!--<div class="related">
 
             {{main_form.related_to}}
             {% csrf_token %}
+        </div>-->
         </form>
         </div>
     {% endif %}
+
+
     {% if items %}
     {% for item in items %}
     <div class='item-change' data-order="{{item.order}}" draggable="true">
@@ -50,6 +64,7 @@ Add new content
         <div class='item-create' data-model='video'  data-url="{% url 'module_content_create' object.id 'image' item.order %}" role="link" aria-disabled="true" >
             Video</div>
     </div>
+    
         {% if item.model == 'image' %}
         <div class="img-main">
             <div class="post-img">
@@ -166,13 +181,18 @@ function swapItems(fromIndex, toIndex) {
         }
     }).then(response => {
         if (!response.ok) throw Error(response.statusText);
-        console.log('ok')
+        const first = Array.from(toIndex.children);
+        const second = Array.from(fromIndex.children);
+        fromIndex.removeChild(fromIndex.lastChild)
+        fromIndex.appendChild(first[1])
+        toIndex.removeChild(toIndex.lastChild)
+        toIndex.appendChild(second[1])
+        //fromIndex.replaceChildren(...first);
+        //toIndex.replaceChildren(...second);
+        
         return response.json();
     });
-    const first = Array.from(toIndex.children);
-    const second = Array.from(fromIndex.children);
-    fromIndex.replaceChildren(...first);
-    toIndex.replaceChildren(...second);
+
 }
 
 
@@ -544,6 +564,7 @@ edit_main_img.addEventListener('change', function(e) {
         //parent_url.href = url_img_src
     })
 })
+/*
 let related=document.querySelector('.related select')
 related.addEventListener('change', function(e) {
     const csrftoken = getCookie('csrftoken');
@@ -564,5 +585,5 @@ related.addEventListener('change', function(e) {
         return response.json();
     })
 })
-
+*/
     {% endblock %}

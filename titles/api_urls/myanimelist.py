@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 from typing import Callable, Mapping, Sequence, Optional, Any
 import functools
 import re
@@ -6,8 +7,8 @@ import json
 from requests_oauthlib import OAuth2Session
 import secrets
 
-MAL_CLIENT_ID = '531e6940ede6724ca1a08c41d9e1f1a3'
-MAL_CLIENT_SECRET = '8f5cbd5083fb0c3bd6356672cd2c535addd55053ddac3d83a81271056f67dac1'
+MAL_CLIENT_ID = os.environ.get('MAL_CLIENT_ID')
+MAL_CLIENT_SECRET = os.environ.get('MAL_CLIENT_SECRET')
 
 
 class MyAnimeList:

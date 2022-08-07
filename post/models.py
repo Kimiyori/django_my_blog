@@ -126,19 +126,4 @@ class Video(ItemBase):
                                object_id_field='object_id', related_query_name='video')
 
 
-class Comment(MPTTModel):
-    post = models.ForeignKey(Post,
-                             related_name='comments',
-                             on_delete=models.CASCADE)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE,
-                            null=True, blank=True, related_name='children')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-    #updated = models.DateTimeField(auto_now=True)
 
-    class MPTTMeta:
-        order_insertion_by=['created']
-
-    def __str__(self)->str:
-        return f'Comment by {self.author}'

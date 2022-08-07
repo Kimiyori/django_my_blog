@@ -2,9 +2,11 @@
 from typing import Any, Dict, Optional, Type, Union
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, HttpResponse
 from django.views.generic import ListView
-from .models import Anime, Genre,  Demographic, AnimeType, Manga, MangaType, Publisher, Studio, Theme
+
+from comments.forms import CommentForm
+from .models import Anime, Genre,  Demographic, AnimeType, Manga, MangaType, Publisher, Studio, Theme, Urls
 import logging
-from .filters import filter_by_name, annotate_acc, values_acc, filter_by_models
+from .filters import filter_by_name, annotate_acc, get_comments, values_acc, filter_by_models
 from django.core.cache import cache
 from django.apps import apps
 from django.views.generic.base import TemplateResponseMixin, View
@@ -14,6 +16,7 @@ from django.db.models import QuerySet
 # logging
 file_logger = logging.getLogger('file_logger')
 console_logger = logging.getLogger('console_logger')
+CACHE_TIME = 60*5
 
 
 class TitleList(ListView):
@@ -39,10 +42,9 @@ class TitleList(ListView):
         model, params = filter_by_models(request=self.request, instance=model)
         # get q if need filter by title and then filter
         model, title_name = filter_by_name(request=self.request,  item=model)
-        # optimize by taking only necessary values and order it
-        model: Dict[str, str] = model.values('id',
-                                             'title__original_name',
-                                             'image__thumbnail').order_by('title__original_name')
+
+        model = model.values('id', 'title__original_name',
+                             'image__thumbnail').order_by('title__original_name')
         console_logger.info(f'Successfil get list of {self.type}', extra={
                             'filers': params, 'title_filter': title_name})
         return model
@@ -54,13 +56,17 @@ class TitleList(ListView):
         # check if in cache and if not, create filter_dict and put it in cache
         filter_dict: str = cache.get(cache_key)
         if filter_dict is None:
-            filter_list_models: Dict[str, Dict[str, QuerySet]] = {'manga': {'Theme': Theme, 'Genre': Genre, 'Type': MangaType, 'Demographic': Demographic, 'Publisher': Publisher},
-                                                                  'anime': {'Theme': Theme, 'Genre': Genre, 'Type': AnimeType, 'Studio': Studio}}
+            filter_list_models: Dict[str, Dict[str, QuerySet]] = {'manga':
+                                                                  {'Theme': Theme, 'Genre': Genre, 'Type': MangaType,
+                                                                   'Demographic': Demographic, 'Publisher': Publisher},
+                                                                  'anime':
+                                                                  {'Theme': Theme, 'Genre': Genre,
+                                                                   'Type': AnimeType, 'Studio': Studio}}
             filter_dict: Dict[str, QuerySet] = {}
             for key, item in filter_list_models[self.type].items():
                 filter_dict[key] = item.objects.all().values(
                     'name').order_by('name')
-            cache.set(cache_key, filter_dict, 5*60)
+            cache.set(cache_key, filter_dict, CACHE_TIME)
         # get q from query string, using it for title search
         query: str = self.request.GET.get("q")
         # update context
@@ -90,12 +96,20 @@ class TitleDetail(TemplateResponseMixin, View):
         if model is None:
             # get info from model based on type and tab
             model = apps.get_model(app_label='titles',
-                                         model_name=type
-                                         ).objects.filter(id=self.kwargs['pk']).annotate(
+                                   model_name=type
+                                   ).objects.annotate(
                 **annotate_acc(type, tab)
-            ).values(*values_acc(type, tab))
+            ).values(*values_acc(type, tab)).get(id=self.kwargs['pk'])
             if not model:
                 raise Http404('Cannot find title with given id')
-            cache.set(key, model, 5*60)  # cache queryset
+            cache.set(key, model, CACHE_TIME)  # cache queryset
+        comments = get_comments(type, pk)
+        comment_form=CommentForm(apps.get_model(app_label='comments',
+                                   model_name=f'comment{type}'
+                                   ))
         console_logger.info(f'Successful get detail about {type} with id {pk}')
-        return self.render_to_response({'item': model, 'model': type, 'tab': tab})
+        return self.render_to_response({'item': model,
+                                        'model': type,
+                                        'tab': tab,
+                                        'comments': comments,
+                                        'comment_form': comment_form,})

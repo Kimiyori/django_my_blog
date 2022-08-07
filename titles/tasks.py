@@ -100,7 +100,7 @@ def update_scores(type:str)-> NoReturn:
     # log mal api
     api = myanimelist.log()
     updated_list: List[model] = []
-    for title in model.iterator():
+    for title in model.objects.all():
         if getattr(title ,'urls') and getattr(title.urls,'mal'):
             try:
                 mal_id: str= re.findall(
@@ -117,7 +117,7 @@ def update_scores(type:str)-> NoReturn:
             elif type=='manga':
                 upd_score: int= api.manga(int(mal_id)).GET(
                     fields='mean').get('mean', 0)
-            if score != upd_score:
+            if int(score) != int(upd_score):
                 title.score = upd_score
                 updated_list.append(title)
         else:

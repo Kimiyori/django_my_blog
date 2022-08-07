@@ -5,6 +5,7 @@ from django.views.generic import TemplateView,DetailView
 from requests import get
 
 from accounts.forms import ProfileForm
+from post.models import Post
 from .models import Profile, CustomUser
 from allauth.account.views import SignupView
 from django.core.exceptions import PermissionDenied
@@ -17,11 +18,12 @@ class ProfileDetail(TemplateResponseMixin, View):
     context_object_name = 'profile'
     def dispatch(self, request,pk):
 
-        self.profile=Profile.objects.filter(user__id=pk).select_related('user').first()
+        self.profile=Profile.objects.filter(user__id=pk).select_related('user',).first()
 
         return super().dispatch( request,pk)
     def get(self,request,pk,) :
-        return  self.render_to_response({'profile':self.profile})
+        self.posts=CustomUser.objects.get(id=pk).post.all().values('id','title','main_image')
+        return  self.render_to_response({'profile':self.profile,'posts':self.posts})
     
     def post(self,request,pk):
         if self.profile.user!=request.user:

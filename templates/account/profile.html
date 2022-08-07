@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load exist %}
 {% block title %} {{ profile.user.username }} Profile{% endblock %}
 {% block content %}
 
@@ -23,6 +24,33 @@
     <div class="profile-info">
         <textarea class="profile-text" {% if request.user != profile.user %} readonly {% endif %}>{{profile.info}}</textarea>
     </div>
+    {% if  posts %}
+    <div class="related-blog">
+        <div class="name">Блог</div>
+        <div id='manga-list'>
+            {% for item in posts %}
+            <div class='manga-item'> 
+                <a class='title' href="">
+                <span>{{ item.title }}</span>
+                </a>
+                <div class='cover'>
+                <a class='test' href="{% url 'post_detail' item.id %}">
+                    {% if item.main_image %}
+                 
+                    <img class="mangaimg" src="/media/{{  item.main_image }}" alt="{{ item.title }}">
+              
+                    {% else %}
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    
+</div>
+{% endif %}
+
     
 </div>
 {% endblock %}

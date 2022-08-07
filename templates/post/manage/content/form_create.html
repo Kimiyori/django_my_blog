@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load embed_video_tags %}
+
+{% load thumbnail %}
+{% block title %}
+{% if object %}
+Edit content {{ object.title }}
+{% else %}
+Add new content
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="module">
+
+
+    <div class="detail-post">
+
+    <div class="edit-title ">
+        <form action="{% url 'post_detail_create'  %}" 
+        method="post" enctype="multipart/form-data">
+            {{main_form.title}}
+        
+ 
+    <div class="img-main">
+        <div class="post-img">
+            <a  href="/media/{{item.main_image.value}}">
+            <img  src='/media/{{ main_form.main_image.value}}'>
+            </a>
+        </div>
+            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
+
+        </div>
+        <!--<div class="related">
+
+            {{main_form.related_to}}
+            {% csrf_token %}
+        </div>-->
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Save</button>
+        </form>
+        </div>
+
+    
+    {% endblock content %}

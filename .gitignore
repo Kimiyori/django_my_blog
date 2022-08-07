@@ -1,65 +1,32 @@
-*.jpg
-*.jpeg
-*.jpe
-*.jif
-*.jfif
-*.jfi
+# .gitignore
+### Python template
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# JPEG 2000
-*.jp2
-*.j2k
-*.jpf
-*.jpx
-*.jpm
-*.mj2
+# Media and Static directories
+/media/
+!/media/.gitkeep
+/static/
+!/static/.gitkeep
+# Django stuff:
+*.log
+db.sqlite3
 
-# JPEG XR
-*.jxr
-*.hdp
-*.wdp
 
-# Graphics Interchange Format
-*.gif
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
 
-# RAW
-*.raw
 
-# Web P
-*.webp
-
-# Portable Network Graphics
-*.png
-
-# Animated Portable Network Graphics
-*.apng
-
-# Multiple-image Network Graphics
-*.mng
-
-# Tagged Image File Format
-*.tiff
-*.tif
-
-# Scalable Vector Graphics
-*.svg
-*.svgz
-
-# Portable Document Format
-*.pdf
-
-# X BitMap
-*.xbm
-
-# BMP
-*.bmp
-*.dib
-
-# ICO
-*.ico
-
-# 3D Images
-*.3dm
-*.max
-
-logging/
-
+.env

@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from post.views import PostList
 
 
-urlpatterns:list[URLResolver]= [
+urlpatterns= [
     path('admin/', admin.site.urls),
     path('users/', include('accounts.urls')),
     path("accounts/", include("allauth.urls")),

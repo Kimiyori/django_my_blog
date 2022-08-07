@@ -3,11 +3,13 @@
 {% load exist %}
 {% load dynamic_url %}
 {% load urlparams %}
+{% load get_url_name %}
 {% load thumbnail %}
+{% load mptt_tags %}
 {% block title %}{{ item.title__original_name  }}{% endblock title %}
 {% block content %}
 
-{% with item.0 as item %}
+
 <div id='manga-detail'>
     <div class='main-info'>
         <div class="upper-image">
@@ -98,6 +100,22 @@
             </div>
         </div>
         {% endif %}
+        {% if item.urls_list %}
+        <div class="items">
+            <div class="name">Links</div>
+            <div class="item-list">
+                {% for name in item.urls_list.0 %}
+                {% if name %}
+                <a class='item' href="{{name}}">
+                    <span>
+                        {{ name|get_url_name }}
+                    </span>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         {% if item.publishers %}
         <div class="items">
             <div class="name">Издатель</div>
@@ -180,7 +198,11 @@
             <div class="name">Оценка</div>
             <div class="item-list">
                 <a class='item' ><span>
+                    {% if item.score %}
                     {{ item.score}}
+                    {% else %}
+                    N/A
+                    {% endif %}
                 </span></a>
             </div>
         </div>
@@ -321,5 +343,175 @@
 {% endif %}
 
 {% endif %}
-{% endwith %}
+Comments
+<hr>
+<div class="comments">
+
+{% recursetree comments %}
+        <div id="{{node.id}}">
+            <div class="comment-upper">
+        <div class="base-img"><img src="/media/{{ node.author.profile.photo }}" ></div>
+        <div class="comment-upper-info">
+        <div class="">{{ node.author.username }}</div>
+        <div>{{ node.created|date:"M d"}} {{ node.created|date:"H:i"}}</div>
+            </div>
+        </div>
+        <div class="comment-content">{{node.content}}</div>
+        {% if request.user.is_authenticated %}
+        <button class="button" onclick="invoke_reply({{ node.id }})">Reply</button>
+        {% if request.user == node.author %}
+        <button class="button" onclick="delete_comment({{ node.id }})">Delete</button>
+        {% endif %}
+        {% endif %}
+        {% if not node.os_leaf_node %}
+        <div class="children">{{children}}</div>
+        {% endif %}
+    </div>
+{% endrecursetree %}
+</div>
+<hr>
+{% if request.user.is_authenticated %}
+<div id="myDIV" >
+    <form id="myForm" method="post">
+      <h2>Create new comment</h2>
+      {{ comment_form.as_p }}
+      {% csrf_token %}
+      <button type="submit" onclick="comment_submit(event)" >Submit</button>
+    </form>
+  </div>
+</div>
+{%  endif %}
 {% endblock content %}
+
+{% block script %}
+
+function getCookie(name) { 
+    let cookieValue=null; 
+    if (document.cookie && document.cookie !=='' ) { 
+        const cookies=document.cookie.split(';'); 
+        for (let i=0; i < cookies.length; i++) { 
+            const cookie=cookies[i].trim(); 
+            // Does this cookie string begin with the name we want? 
+            if (cookie.substring(0, name.length + 1)===(name + '=' )) { 
+                cookieValue=decodeURIComponent(cookie.substring(name.length + 1)); 
+                break; 
+            } 
+        } 
+    } 
+    return cookieValue; 
+} 
+
+const commentsConsumer=new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/{{model}}/'
+    + '{{item.id}}'
+    + '/'
+)
+
+function create_comment_node(data) {
+    let  comments = data['message']['parent']=='None'? document.querySelector('.comments') : document.getElementById(data['message']['parent']).querySelector('.children');
+    let elem=document.createElement('div')
+    elem.setAttribute('id',`${data['message']['id']}`)
+    elem.innerHTML = `<div class="comment-upper">
+        <div class="base-img"><img src="/media/${data['message']['author_image']}" ></div>
+        <div class="comment-upper-info">
+    <div class="">By ${data['message']['author']}</div>
+    <div>${data['message']['created']}</div>
+</div>
+</div>
+    <div class="comment-content">${data['message']['content']}</div>
+    `
+    if ('{{request.user}}' !== 'AnonymousUser') {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="invoke_reply(${data['message']['id']})">Reply</button>`)
+    }
+    if ('{{request.user.id}}' == data['message']['author_id']) {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="delete_comment(${data['message']['id']})">Delete</button>`)
+    }
+    elem.insertAdjacentHTML('beforeend',`<div class="children"></div>`)
+    comments.appendChild(elem)
+    formExit(); 
+}
+
+function delete_comment_node(data) {
+
+    let com=document.getElementById(data['message']['id']);
+    com.remove();
+}
+
+
+commentsConsumer.onmessage = function(e) {
+    const data= JSON.parse(e.data)
+    if (data['type']=='new_comment') {
+        create_comment_node(data)
+    }
+    else if (data['type']=='delete_comment') {
+        delete_comment_node(data)
+    }
+    else if (data['type']=='increment_views'){
+        count=document.querySelector('.count')
+        count.innerText = `${data['message']['count']} views`
+    }
+}
+
+
+function formExit() {
+    if (document.contains(document.getElementById("newForm"))) {
+    document.getElementById("newForm").remove();
+    }
+  }
+
+function invoke_reply(id) {
+    if (document.contains(document.getElementById("newForm"))) { 
+        if (document.getElementById("newForm").parentNode.parentNode.id==id) {
+            return formExit();
+        } else {
+            formExit();
+        }
+      }
+      const parent_id = document.getElementById(id);
+      const children=parent_id.querySelector('.children')
+      const placeholder = document.createElement("div");
+        placeholder.innerHTML = `<form id="newForm" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-between"><h2>Reply:</h2> \
+            <select name="parent" class="d-none" id="id_parentt" hidden> \
+            <option value=${id} selected=${id}></option> \
+            </select> \
+            <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" onclick="comment_submit(event,id)" >Submit</button> \
+          </form>`;
+      parent_id.insertBefore(placeholder,children)
+}
+
+function delete_comment(id) {
+    let data = {}
+    data={}
+    data['comment_id']=id
+    data['type']= 'delete_comment'
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
+}
+
+function comment_submit(e, id ) {
+    let comment_btn = id!== undefined ? document.querySelector('#newForm'):document.querySelector('#myDIV');
+    e.preventDefault()
+    let data = {}
+    let content = comment_btn.querySelector('#id_content').value
+    let parent = comment_btn.querySelector('#id_parentt')
+    data['author']= {{request.user.id}}
+    data['content']= content
+    data['type']= 'new_comment'
+    data['model_type']= '{{model}}'
+    if (parent) {
+        parent = parent.options[parent.selectedIndex].value;
+        data['parent']= parent
+        }
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
+}
+
+
+ {% endblock %} 

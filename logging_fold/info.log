@@ -1110,3 +1110,112 @@
 {"message": "Successful create instance of anime model", "timestamp": "2022-07-21T13:06:42.656718Z", "level": "INFO"}
 {"message": "Starting create instance of anime model with folloving fields", "fields": "{'type', 'description', 'premiere', 'title', 'episodes'}", "timestamp": "2022-07-21T13:06:42.845311Z", "level": "INFO"}
 {"message": "Successful create instance of anime model", "timestamp": "2022-07-21T13:06:42.851140Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:27:04.249340Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:27:17.283663Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-22T12:27:20.106055Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:28:11.807962Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:28:18.721068Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-22T12:28:23.924787Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-22T12:28:31.193137Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:30:40.495554Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:33:11.017262Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:33:14.316640Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-22T12:33:17.323994Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:33:19.467601Z", "level": "INFO"}
+{"message": "Successful  update post instance", "timestamp": "2022-07-22T12:33:21.579830Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:33:22.630098Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:35:46.318227Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:35:47.900009Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:35:52.024585Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:36:15.808956Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:36:20.542734Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-22T12:37:11.556371Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 175a83ee-1fdb-4f0d-88b7-bd0ff261298d for editing", "timestamp": "2022-07-22T15:14:12.131067Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 175a83ee-1fdb-4f0d-88b7-bd0ff261298d for editing", "timestamp": "2022-07-22T15:21:43.318620Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "175a83ee-1fdb-4f0d-88b7-bd0ff261298d", "content_id": 401, "request_user": "Kimiyori", "timestamp": "2022-07-22T15:21:57.917526Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "175a83ee-1fdb-4f0d-88b7-bd0ff261298d", "content_id": 401, "request_user": "Kimiyori", "timestamp": "2022-07-22T15:21:57.951956Z", "level": "INFO"}
+{"message": "Successful get detail post with id - 175a83ee-1fdb-4f0d-88b7-bd0ff261298d for editing", "timestamp": "2022-07-22T15:21:58.963748Z", "level": "INFO"}
+{"message": "Successful get detail post with id - ce2128fa-0e30-48a9-909a-b6217b42fb97 for editing", "timestamp": "2022-07-22T16:23:23.712297Z", "level": "INFO"}
+{"message": "Successful get detail post with id - ce2128fa-0e30-48a9-909a-b6217b42fb97 for editing", "timestamp": "2022-07-22T16:23:44.292779Z", "level": "INFO"}
+{"message": "Successful get detail post with id - ce2128fa-0e30-48a9-909a-b6217b42fb97 for editing", "timestamp": "2022-07-22T16:25:42.371849Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:23:43.286665Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:36:03.395789Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:37:41.267507Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:37:42.550215Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:37:43.325833Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:37:51.127821Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:37:52.147120Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:38:00.152582Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:44:35.800969Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:44:42.063361Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:44:54.770421Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:45:03.895619Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:45:19.885767Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:45:20.829330Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:45:36.483676Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:45:36.484673Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:46:53.341897Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:46:55.750444Z", "level": "INFO"}
+{"message": "Successful get detail post with id - d5c130ba-8e3b-4ae5-8558-41b8dcc3e113 for editing", "timestamp": "2022-07-25T11:48:36.765062Z", "level": "INFO"}
+{"message": "Successful get detail post with id - ce2128fa-0e30-48a9-909a-b6217b42fb97 for editing", "timestamp": "2022-07-25T11:48:40.385477Z", "level": "INFO"}
+{"message": "Anime with id 29eb0d61-6ab8-4874-9e82-200564fac5b7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:31:00.120940Z", "level": "DEBUG"}
+{"message": "Anime with id abbd1212-f65e-4627-8eb0-53192920eda7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:31:02.996519Z", "level": "DEBUG"}
+{"message": "Anime with id 101a5454-e183-4005-a487-129eb9f69dbc doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:31:23.950718Z", "level": "DEBUG"}
+{"message": "Anime with id bfb0fbd4-38a9-4e8d-b8cf-58d022100288 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:31:23.951310Z", "level": "DEBUG"}
+{"message": "Updated anime scores for 56 instances", "timestamp": "2022-07-25T12:31:23.969884Z", "level": "INFO"}
+{"message": "Anime with id 29eb0d61-6ab8-4874-9e82-200564fac5b7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:33:00.095009Z", "level": "DEBUG"}
+{"message": "Anime with id abbd1212-f65e-4627-8eb0-53192920eda7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:33:02.412670Z", "level": "DEBUG"}
+{"message": "Anime with id 101a5454-e183-4005-a487-129eb9f69dbc doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:33:22.563727Z", "level": "DEBUG"}
+{"message": "Anime with id bfb0fbd4-38a9-4e8d-b8cf-58d022100288 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:33:22.564365Z", "level": "DEBUG"}
+{"message": "Updated anime scores for 56 instances", "timestamp": "2022-07-25T12:33:22.582174Z", "level": "INFO"}
+{"message": "Anime with id 29eb0d61-6ab8-4874-9e82-200564fac5b7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:37:00.077946Z", "level": "DEBUG"}
+{"message": "Anime with id abbd1212-f65e-4627-8eb0-53192920eda7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:37:02.739594Z", "level": "DEBUG"}
+{"message": "Anime with id 101a5454-e183-4005-a487-129eb9f69dbc doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:37:23.225087Z", "level": "DEBUG"}
+{"message": "Anime with id bfb0fbd4-38a9-4e8d-b8cf-58d022100288 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:37:23.225549Z", "level": "DEBUG"}
+{"message": "Updated anime scores for 56 instances", "timestamp": "2022-07-25T12:37:23.243442Z", "level": "INFO"}
+{"message": "Anime with id 29eb0d61-6ab8-4874-9e82-200564fac5b7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:39:00.074124Z", "level": "DEBUG"}
+{"message": "Anime with id abbd1212-f65e-4627-8eb0-53192920eda7 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:39:02.325294Z", "level": "DEBUG"}
+{"message": "Anime with id 101a5454-e183-4005-a487-129eb9f69dbc doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:39:22.080035Z", "level": "DEBUG"}
+{"message": "Anime with id bfb0fbd4-38a9-4e8d-b8cf-58d022100288 doesnt have either urls or urls.mal", "timestamp": "2022-07-25T12:39:22.082014Z", "level": "DEBUG"}
+{"message": "Updated anime scores for 0 instances", "timestamp": "2022-07-25T12:39:22.084538Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:40:33.841668Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:41:57.090645Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:42:00.235122Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:42:03.399877Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:42:11.928975Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:42:32.486849Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:42:34.927346Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:42:37.644016Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:42:38.559533Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:42:40.097747Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:42:40.596550Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T14:45:41.403441Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T14:45:43.830352Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:09:31.511852Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:09:40.524722Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:10:34.773635Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:11:26.825638Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 403, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:11:31.216636Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 403, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:11:31.300169Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:11:32.970984Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:11:35.997771Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:14:57.639694Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:15:00.101703Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:16:50.457386Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:16:53.412012Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:16:56.063957Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:16:59.649370Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:17:02.998691Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:17:26.970190Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:17:30.417649Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:17:40.769279Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:17:43.370482Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:17:46.047187Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:17:49.737893Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:17:52.637385Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:18:00.980822Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:18:15.268113Z", "level": "INFO"}
+{"message": "Successful swap contents order", "timestamp": "2022-07-25T15:18:22.708075Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:18:28.841474Z", "level": "INFO"}
+{"message": "Trying to delete content in post...", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 404, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:18:33.191505Z", "level": "INFO"}
+{"message": "Successful delete content in post", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 404, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:18:33.239423Z", "level": "INFO"}

@@ -11,7 +11,7 @@ from django.db.models import QuerySet
 
 from typing import Dict, List, Optional, Tuple, Union
 from django.http import HttpRequest
-
+from django.apps import apps
 from titles.models import Anime, Manga
 
 
@@ -26,7 +26,7 @@ class Filter:
         }
 
 
-def filter_by_name(request: HttpRequest, item: QuerySet[Union[Manga,Anime]]) -> Tuple[QuerySet, Optional[str]]:
+def filter_by_name(request: HttpRequest, item: QuerySet[Union[Manga, Anime]]) -> Tuple[QuerySet, Optional[str]]:
     """
     Function for filtering by title name if it given in request.
 
@@ -62,7 +62,7 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
     :param str tab: info or related.
     """
 
-    def create_wrapper(name: str) -> Union[Value,F,Cast]:
+    def create_wrapper(name: str) -> Union[Value, F, Cast]:
         # if name just anime or manga, then wrap in into Value() to pass itw original name into template.
         # This field need for defining type when referncing for adaptation or based_on, when can be either anime and manga
         if name in ['anime', 'manga']:
@@ -92,6 +92,7 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
          'publishers': ['publisher__name'],
          'themes': ['theme__name'],
          'magazines': ['magazine__name'],
+         'urls_list': ['urls__mal', 'urls__shiki', 'urls__manga_updates', 'urls__manga_dex', 'urls__manga_lib'],
          'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
         'related':
         {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'anime'],
@@ -103,6 +104,7 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
         {'genres': ['genre__name'],
          'themes': ['theme__name'],
          'studios': ['studio__name'],
+         'urls_list': ['urls__mal', 'urls__shiki', 'urls__anilist', 'urls__world_art'],
          'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
         'related':
         {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'manga'],
@@ -128,13 +130,13 @@ def values_acc(type: str, tab: str) -> List[str]:
         'info': ['id', 'description', 'title__original_name', 'title__russian_name',
                  'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
                  'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers',
-                            'themes', 'magazines', 'related_posts', 'score'],
+                            'themes', 'magazines', 'related_posts', 'score', 'urls_list'],
         'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                        'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                    'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 'anime': {
                     'info': ['id', 'description', 'title__original_name', 'title__russian_name',
                              'title__english_name', 'type__name', 'premiere',
-                             'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts', 'score'],
+                             'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts', 'score', 'urls_list'],
                     'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
                                 'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
                 }
@@ -142,9 +144,9 @@ def values_acc(type: str, tab: str) -> List[str]:
 
 
 def filter_by_models(
-                request: HttpRequest, 
-                instance: QuerySet[Union[Manga,Anime]]
-                ) -> Tuple[ QuerySet[Union[Manga,Anime]], Dict[str, str]]:
+    request: HttpRequest,
+    instance: QuerySet[Union[Manga, Anime]]
+) -> Tuple[QuerySet[Union[Manga, Anime]], Dict[str, str]]:
     """
     Filter instance by its attributes.
 
@@ -154,7 +156,8 @@ def filter_by_models(
     """
     fil = Filter()
     # get attirubtes from query parameters
-    params: Dict[str, List[str]] = parse_qs(urlsplit(request.get_full_path()).query)
+    params: Dict[str, List[str]] = parse_qs(
+        urlsplit(request.get_full_path()).query)
     # check if  in url params exist page attr
     if 'page' in params:
         del params['page']
@@ -166,3 +169,13 @@ def filter_by_models(
         for item in list:
             instance = instance.filter(**fil(name=model, item=item))
     return instance, params
+
+
+def get_comments(type: str, id: int) -> QuerySet[Union[Manga, Anime]]:
+    """
+    Get comments for title
+    """
+    mapper = {'manga': 'commentmanga', 'anime': 'commentmanga'}
+    return apps.get_model(app_label='comments',
+                          model_name=f'comment{type}'
+                          ).objects.select_related('author__profile').filter(model=id)

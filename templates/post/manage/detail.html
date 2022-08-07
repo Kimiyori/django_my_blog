@@ -31,8 +31,10 @@
     {% endif %}
 
 {% endfor %}
+Comments
 <hr>
 <div class="comments">
+
 {% recursetree comments %}
         <div id="{{node.id}}">
             <div class="comment-upper">
@@ -96,7 +98,8 @@ const commentsConsumer=new WebSocket(
 )
 
 function create_comment_node(data) {
-    let  comments = data['message']['parent']==null? document.querySelector('.comments') : document.getElementById(data['message']['parent']).querySelector('.children');
+    console.log(data['message']['parent'])
+    let  comments = data['message']['parent']=='None'? document.querySelector('.comments') : document.getElementById(data['message']['parent']).querySelector('.children');
     let elem=document.createElement('div')
     elem.setAttribute('id',`${data['message']['id']}`)
     elem.innerHTML = `<div class="comment-upper">
@@ -189,6 +192,7 @@ function comment_submit(e, id ) {
     data['author']= {{request.user.id}}
     data['content']= content
     data['type']= 'new_comment'
+    data['model_type']= 'post'
     if (parent) {
         parent = parent.options[parent.selectedIndex].value;
         data['parent']= parent

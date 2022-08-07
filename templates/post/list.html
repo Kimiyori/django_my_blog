@@ -9,6 +9,11 @@
 <hr>
 
 <div class="post-wrap">
+    <div class='create_post'>
+        <a class='create_url' href="{% url 'post_detail_create' %}">
+            Create Post
+        </a>
+    </div>
     {% for post in list %}
     <div class='post-item'>
         <div class="shadow">
