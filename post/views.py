@@ -132,7 +132,7 @@ class PostDetail(TemplateResponseMixin, View):
                 order_by('order').values('cont')
             cache.set(cache_content_key, content)
 
-        comments=CommentPost.objects.select_related('author__profile').filter(post=pk)
+        comments=CommentPost.objects.select_related('author__profile').filter(model=pk)
 
         # increate in redis number of views in post
         total_views:int= self.get_views(pk)
