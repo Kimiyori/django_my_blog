@@ -1,36 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load exist %}
 {% load dynamic_url %}
 {% load urlparams %}
+{% load get_url_name %}
 {% load thumbnail %}
-{% block title %}{{ item.title }}{% endblock title %}
+{% load mptt_tags %}
+{% block title %}{{ item.title__original_name  }}{% endblock title %}
 {% block content %}
 
 
 <div id='manga-detail'>
     <div class='main-info'>
         <div class="upper-image">
-            {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.title.original_name }}">
+            {% if item.image__image %}
+            <img src="/media/{{ item.image__image }}" alt="{{ item.title__original_name }}">
             {% else %}
-            <img src="{% static 'img/no-image.png' %}" alt="{{ item.title.original_name }}">
+            <img src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name}}">
             {% endif %}
         </div>
         <div class="title-block">
             <div class="title-block2">
                 <div class="main-image">
-                    {% if item.image %}
-                        <img class='img2' src="{{ item.image.url }}" alt="{{ item.title.original_name }}">
+                    {% if item.image__image %}
+                        <img class='img2' src="/media/{{ item.image__image }}" alt="{{item.title__original_name }}">
                         {% else %}
-                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ item.title.original_name }}">
+                        <img class='img2' src="{% static 'img/no-image.png' %}" alt="{{ item.title__original_name }}">
                         {% endif %}
                 </div>
                 <div class='title'>
-                    {% with item.title as name %}
-                    <h4 class="main-title">{{name.original_name }}</h4>
-                    <h2>{{name.russian_name }}</h2>
-                    <h1>{{name.english_name }}</h1>
-                    {% endwith %}
+                    <h4 class="main-title">{{item.title__original_name }}</h4>
+                    <h2>{{item.title__russian_name }}</h2>
+                    <h1>{{item.title__english_name }}</h1>
                 </div>
                 <div class="tabs">
                     <a class="item" href="?tab=info">
@@ -45,71 +46,51 @@
         </div>
     </div>
     {% if tab == 'info' %}
+
     <div class="info">
         <div class="desc">
             <div class="name">Описание</div>
-            <p>{{item.get_desc}}</p>
+            <p>{{item.description}}</p>
         </div>
-        {% if item.authors.author %}
+        {% if item.authors__author__name %}
         <div class="items">
             <div class="name">Автор</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.authors.author %}"><span>{{ item.authors.author }}</span></a>
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams author=item.authors__author__name %}"><span>{{ item.authors__author__name }}</span></a>
             </div>
         </div>
         {% endif %}
-        {% if item.authors.artist %}
+        {% if item.authors__artist__name %}
         <div class="items">
             <div class="name">Художник</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams artist=item.authors.artist %}"><span>{{ item.authors.artist }}</span></a>
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams artist=item.authors__artist__name %}"><span>{{ item.authors__artist__name }}</span></a>
             </div>
         </div>
         {% endif %}
-        {% if item.type %}
+        {% if item.type__name %}
         <div class="items">
             <div class="name">Тип</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type %}"><span>{{ item.type }}</span></a>
+                
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams type=item.type__name %}"><span>{{ item.type__name }}</span></a>
             </div>
         </div>
         {% endif %}
-        {% if item.based_on.first.based_on %}
-        {% with source=item.based_on.first %}
+    
+        {% if item.demographic__name %}
         <div class="items">
             <div class="name">Демография</div>
             <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams source=source.based_on %}">
-                    <span>
-                        {{ source.based_on.demographic }}
-                    </span>
-                </a>
-            </div>
-        </div>
-
-        {% if source.demographic %}
-        <div class="items">
-            <div class="name">Демография</div>
-            <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=source.demographic %}"><span>{{ source.demographic }}</span></a>
+                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=item.demographic__name %}"><span>{{ item.demographic__name }}</span></a>
             </div>
         </div>
         {% endif %}
-        {% endwith %}
-        {% endif %}
-        {% if item.demographic %}
-        <div class="items">
-            <div class="name">Демография</div>
-            <div class="item-list">
-                <a class='item' href="{% dynamic_url type=model %}{% urlparams demographic=item.demographic %}"><span>{{ item.demographic }}</span></a>
-            </div>
-        </div>
-        {% endif %}
-        {% if item.studio %}
+        {% if item.studios %}
         <div class="items">
             <div class="name">Студия</div>
             <div class="item-list">
-                {% for name in item.studio.all %}
+                {% for name in item.studios %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams studio=name %}">
                     <span>
                         {{ name }}
@@ -119,11 +100,27 @@
             </div>
         </div>
         {% endif %}
-        {% if item.publisher %}
+        {% if item.urls_list %}
+        <div class="items">
+            <div class="name">Links</div>
+            <div class="item-list">
+                {% for name in item.urls_list.0 %}
+                {% if name %}
+                <a class='item' href="{{name}}">
+                    <span>
+                        {{ name|get_url_name }}
+                    </span>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if item.publishers %}
         <div class="items">
             <div class="name">Издатель</div>
             <div class="item-list">
-                {% for name in item.publisher.all %}
+                {% for name in item.publishers %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams publisher=name %}">
                     <span>
                         {{ name }}
@@ -133,31 +130,31 @@
             </div>
         </div>
         {% endif %}
-        {% if item.magazine.all %}
+        {% if item.magazines %}
         <div class="items">
             <div class="name">Журнал</div>
             <div class="item-list">
-                {% for name in item.magazine.all %}
+                {% for name in item.magazines %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams magazine=name %}"><span>{{ name}}</span></a>
                 {% endfor %}
             </div>
         </div>
         {% endif %}
-        {% if item.genre.all %}
+        {% if item.genres %}
         <div class="items">
             <div class="name">Жанры</div>
             <div class="item-list">
-                {% for name in item.genre.all %}
+                {% for name in item.genres %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams genre=name %}"><span>{{ name}}</span></a>
                 {% endfor %}
             </div>
         </div>
         {% endif %}
-        {% if item.theme.all %}
+        {% if item.themes %}
         <div class="items">
             <div class="name">Темы</div>
             <div class="item-list">
-                {% for name in item.theme.all %}
+                {% for name in item.themes %}
                 <a class='item' href="{% dynamic_url type=model %}{% urlparams theme=name %}"><span>{{ name}}</span></a>
                 {% endfor %}
             </div>
@@ -197,24 +194,38 @@
             </div>
         </div>
         {% endif %}
+        <div class="items">
+            <div class="name">Оценка</div>
+            <div class="item-list">
+                <a class='item' ><span>
+                    {% if item.score %}
+                    {{ item.score}}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </span></a>
+            </div>
+        </div>
+
     </div>
-    {% if  item.related.post.all %}
+
+    {% if  item.related_posts|exist %}
     <div class="related-blog">
         <div class="name">Блог</div>
         <div id='manga-list'>
-            {% for item in item.related.post.all %}
+            {% for item in item.related_posts %}
             <div class='manga-item'> 
                 <a class='title' href="">
-                <span>{{ item.title }}</span>
+                <span>{{ item.1 }}</span>
                 </a>
                 <div class='cover'>
-                <a class='test' href="{% url 'post_detail' item.pk %}">
-                    {% if item.main_image %}
-                    {% thumbnail item.main_image "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
+                <a class='test' href="{% url 'post_detail' item.0 %}">
+                    {% if item.2 %}
+                 
+                    <img class="mangaimg" src="/media/{{  item.2 }}" alt="{{ item.2 }}">
+              
                     {% else %}
-                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.1 }}">
                     {% endif %}
                 </a>
             </div>
@@ -226,21 +237,21 @@
 {% endif %}
 {% endif %}
 {% if tab == 'related' %}
-{% if  item.adaptation.all %}
+{% if  item.adaptations|exist %}
     <div class="related-blog">
         <div class="name">Adaptation</div>
         <div id='manga-list'>
-            {% for item in item.adaptation.all %}
+            {% for item in item.adaptations %}
             <div class='manga-item'> 
-                <a class='title' href="{{ item.adaptation.get_absolute_url }}{% urlparams tab='info' %}">
-                <span>{{ item.adaptation.title }}</span>
+                
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                <span>{{ item.2  }}</span>
                 </a>
                 <div class='cover'>
-                <a class='test' href="{{ item.adaptation.get_absolute_url }}{% urlparams tab='info' %}">
-                    {% if item.adaptation.image %}
-                    {% thumbnail item.adaptation.image "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                    {% if item.1 %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                     {% endif %}
@@ -253,21 +264,20 @@
 </div>
 {% endif %}
 
-{% if  item.based_on.all %}
+{% if  item.based_ons|exist %}
     <div class="related-blog">
         <div class="name">Based on</div>
         <div id='manga-list'>
-            {% for item in item.based_on.all %}
+            {% for item in item.based_ons %}
             <div class='manga-item'> 
-                <a class='title' href="{{ item.based_on.get_absolute_url }}{% urlparams tab='info' %}">
-                <span>{{ item.based_on.title }}</span>
+                <a class='title' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                <span>{{ item.2  }}</span>
                 </a>
                 <div class='cover'>
-                <a class='test' href="{{ item.based_on.get_absolute_url }}{% urlparams tab='info' %}">
-                    {% if item.based_on.image %}
-                    {% thumbnail item.based_on.image "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
+                <a class='test' href="{% dynamic_url  type=item.3 id=item.0 %}{% urlparams tab='info' %}">
+                    {% if item.1 %}
+                    <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
                     {% else %}
                     <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
                     {% endif %}
@@ -280,59 +290,228 @@
 </div>
 {% endif %}
 
-{% if  item.sequel.all %}
-    <div class="related-blog">
-        <div class="name">Sequel</div>
-        <div id='manga-list'>
-            {% for item in item.sequel.all %}
-            <div class='manga-item'> 
-                <a class='title' href="{{ item.sequel.get_absolute_url }}{% urlparams tab='info' %}">
-                <span>{{ item.sequel.title }}</span>
-                </a>
-                <div class='cover'>
-                <a class='test' href="{{ item.sequel.get_absolute_url }}{% urlparams tab='info' %}">
-                    {% if item.sequel.image %}
-                    {% thumbnail item.sequel.image "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
-                    {% else %}
-                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
-                    {% endif %}
-                </a>
-            </div>
+{% if  item.sequels|exist %}
+<div class="related-blog">
+    <div class="name">Sequel</div>
+    <div id='manga-list'>
+        {% for item in item.sequels %}
+        <div class='manga-item'> 
+            <a class='title' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+            <span>{{ item.2  }}</span>
+            </a>
+            <div class='cover'>
+            <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+                {% if item.1 %}
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+                {% else %}
+                <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                {% endif %}
+            </a>
         </div>
-            {% endfor %}
     </div>
-    
+        {% endfor %}
+</div>
+
 </div>
 {% endif %}
 
-{% if  item.prequel.all %}
-    <div class="related-blog">
-        <div class="name">Prequel</div>
-        <div id='manga-list'>
-            {% for item in item.prequel.all %}
-            <div class='manga-item'> 
-                <a class='title' href="{{ item.prequel.get_absolute_url }}{% urlparams tab='info' %}">
-                <span>{{ item.prequel.title }}</span>
-                </a>
-                <div class='cover'>
-                <a class='test' href="{{ item.prequel.get_absolute_url }}{% urlparams tab='info' %}">
-                    {% if item.prequel.image %}
-                    {% thumbnail item.prequel.image "600x600" format="PNG" as im  %}
-                    <img class="mangaimg" src="{{  im.url }}" alt="{{ item.title }}">
-                    {% endthumbnail %}
-                    {% else %}
-                    <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
-                    {% endif %}
-                </a>
-            </div>
+{% if  item.prequels|exist %}
+<div class="related-blog">
+    <div class="name">Prequel</div>
+    <div id='manga-list'>
+        {% for item in item.prequels %}
+        <div class='manga-item'> 
+            <a class='title' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+            <span>{{ item.2  }}</span>
+            </a>
+            <div class='cover'>
+            <a class='test' href="{% dynamic_url  type=model id=item.0 %}{% urlparams tab='info' %}">
+                {% if item.1 %}
+
+                <img class="mangaimg" src="/media/{{  item.1 }}" alt="{{ item.title }}">
+
+                {% else %}
+                <img class="mangaimg" src="{% static 'img/no-image.png' %}" alt="{{ item.title }}">
+                {% endif %}
+            </a>
         </div>
-            {% endfor %}
     </div>
-    
+        {% endfor %}
+</div>
+
 </div>
 {% endif %}
 
 {% endif %}
+Comments
+<hr>
+<div class="comments">
+
+{% recursetree comments %}
+        <div id="{{node.id}}">
+            <div class="comment-upper">
+        <div class="base-img"><img src="/media/{{ node.author.profile.photo }}" ></div>
+        <div class="comment-upper-info">
+        <div class="">{{ node.author.username }}</div>
+        <div>{{ node.created|date:"M d"}} {{ node.created|date:"H:i"}}</div>
+            </div>
+        </div>
+        <div class="comment-content">{{node.content}}</div>
+        {% if request.user.is_authenticated %}
+        <button class="button" onclick="invoke_reply({{ node.id }})">Reply</button>
+        {% if request.user == node.author %}
+        <button class="button" onclick="delete_comment({{ node.id }})">Delete</button>
+        {% endif %}
+        {% endif %}
+        {% if not node.os_leaf_node %}
+        <div class="children">{{children}}</div>
+        {% endif %}
+    </div>
+{% endrecursetree %}
+</div>
+<hr>
+{% if request.user.is_authenticated %}
+<div id="myDIV" >
+    <form id="myForm" method="post">
+      <h2>Create new comment</h2>
+      {{ comment_form.as_p }}
+      {% csrf_token %}
+      <button type="submit" onclick="comment_submit(event)" >Submit</button>
+    </form>
+  </div>
+</div>
+{%  endif %}
 {% endblock content %}
+
+{% block script %}
+
+function getCookie(name) { 
+    let cookieValue=null; 
+    if (document.cookie && document.cookie !=='' ) { 
+        const cookies=document.cookie.split(';'); 
+        for (let i=0; i < cookies.length; i++) { 
+            const cookie=cookies[i].trim(); 
+            // Does this cookie string begin with the name we want? 
+            if (cookie.substring(0, name.length + 1)===(name + '=' )) { 
+                cookieValue=decodeURIComponent(cookie.substring(name.length + 1)); 
+                break; 
+            } 
+        } 
+    } 
+    return cookieValue; 
+} 
+
+const commentsConsumer=new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/{{model}}/'
+    + '{{item.id}}'
+    + '/'
+)
+
+function create_comment_node(data) {
+    let  comments = data['message']['parent']=='None'? document.querySelector('.comments') : document.getElementById(data['message']['parent']).querySelector('.children');
+    let elem=document.createElement('div')
+    elem.setAttribute('id',`${data['message']['id']}`)
+    elem.innerHTML = `<div class="comment-upper">
+        <div class="base-img"><img src="/media/${data['message']['author_image']}" ></div>
+        <div class="comment-upper-info">
+    <div class="">By ${data['message']['author']}</div>
+    <div>${data['message']['created']}</div>
+</div>
+</div>
+    <div class="comment-content">${data['message']['content']}</div>
+    `
+    if ('{{request.user}}' !== 'AnonymousUser') {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="invoke_reply(${data['message']['id']})">Reply</button>`)
+    }
+    if ('{{request.user.id}}' == data['message']['author_id']) {
+        elem.insertAdjacentHTML('beforeend',`<button class="button" onclick="delete_comment(${data['message']['id']})">Delete</button>`)
+    }
+    elem.insertAdjacentHTML('beforeend',`<div class="children"></div>`)
+    comments.appendChild(elem)
+    formExit(); 
+}
+
+function delete_comment_node(data) {
+
+    let com=document.getElementById(data['message']['id']);
+    com.remove();
+}
+
+
+commentsConsumer.onmessage = function(e) {
+    const data= JSON.parse(e.data)
+    if (data['type']=='new_comment') {
+        create_comment_node(data)
+    }
+    else if (data['type']=='delete_comment') {
+        delete_comment_node(data)
+    }
+    else if (data['type']=='increment_views'){
+        count=document.querySelector('.count')
+        count.innerText = `${data['message']['count']} views`
+    }
+}
+
+
+function formExit() {
+    if (document.contains(document.getElementById("newForm"))) {
+    document.getElementById("newForm").remove();
+    }
+  }
+
+function invoke_reply(id) {
+    if (document.contains(document.getElementById("newForm"))) { 
+        if (document.getElementById("newForm").parentNode.parentNode.id==id) {
+            return formExit();
+        } else {
+            formExit();
+        }
+      }
+      const parent_id = document.getElementById(id);
+      const children=parent_id.querySelector('.children')
+      const placeholder = document.createElement("div");
+        placeholder.innerHTML = `<form id="newForm" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-between"><h2>Reply:</h2> \
+            <select name="parent" class="d-none" id="id_parentt" hidden> \
+            <option value=${id} selected=${id}></option> \
+            </select> \
+            <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" onclick="comment_submit(event,id)" >Submit</button> \
+          </form>`;
+      parent_id.insertBefore(placeholder,children)
+}
+
+function delete_comment(id) {
+    let data = {}
+    data={}
+    data['comment_id']=id
+    data['type']= 'delete_comment'
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
+}
+
+function comment_submit(e, id ) {
+    let comment_btn = id!== undefined ? document.querySelector('#newForm'):document.querySelector('#myDIV');
+    e.preventDefault()
+    let data = {}
+    let content = comment_btn.querySelector('#id_content').value
+    let parent = comment_btn.querySelector('#id_parentt')
+    data['author']= {{request.user.id}}
+    data['content']= content
+    data['type']= 'new_comment'
+    data['model_type']= '{{model}}'
+    if (parent) {
+        parent = parent.options[parent.selectedIndex].value;
+        data['parent']= parent
+        }
+    commentsConsumer.send(JSON.stringify(
+        data
+    ))
+}
+
+
+ {% endblock %} 

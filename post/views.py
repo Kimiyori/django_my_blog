@@ -144,17 +144,11 @@ class PostDetail(TemplateResponseMixin, View):
                                         'comments':comments,
                                         'comment_form': comment_form,})
 
-class PostCreate( TemplateResponseMixin, View):
-    """
-    View for creating posts
-    """
-    model = Post
-    template_name = 'post/manage/create.html'
-    context_object_name = 'post'
+
 
 class GetModelAndForm:
     """
-    Meta class foe cummon methods
+    Meta class for common methods
     """
 
     def get_model(self, model_name:str)->Union[Text,Video,Image,File,None]:
@@ -182,7 +176,6 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
     View for editing or creating Content/Item instances
     """
     obj=None
-    template_name = 'post/manage/content/form_add.html'
 
     def dispatch(self, request, post_id, model_name, id=None, order=None):
         # get post instance
@@ -259,11 +252,12 @@ class PostCreate(GetModelAndForm, TemplateResponseMixin, View):
             inst.author=get_user_model().objects.get(id=request.user.id)
             inst.save()
             return  redirect(reverse('post_detail_change', kwargs={'pk':inst.id}))
+
 class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
     """
     View for editing Post
     """
-    template_name = 'post/manage/content/form_test.html'
+    template_name = 'post/manage/content/form.html'
 
     def dispatch(self, request, pk):
         # get post instance

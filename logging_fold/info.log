@@ -1219,3 +1219,5 @@
 {"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-07-25T15:18:28.841474Z", "level": "INFO"}
 {"message": "Trying to delete content in post...", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 404, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:18:33.191505Z", "level": "INFO"}
 {"message": "Successful delete content in post", "post_id": "df3caddd-cec6-40e7-847a-095b8bb79c9c", "content_id": 404, "request_user": "Kimiyori", "timestamp": "2022-07-25T15:18:33.239423Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-08-08T11:00:53.694449Z", "level": "INFO"}
+{"message": "Successful get detail post with id - df3caddd-cec6-40e7-847a-095b8bb79c9c for editing", "timestamp": "2022-08-08T11:00:57.601303Z", "level": "INFO"}

@@ -1,208 +1,199 @@
 {% extends "base.html" %}
 {% load static %}
 {% load embed_video_tags %}
-{% load cache %}
+
 {% load thumbnail %}
 {% block title %}
 {% if object %}
-Edit content {{ object }}
+Edit content {{ object.title }}
 {% else %}
 Add new content
 {% endif %}
 {% endblock %}
 {% block content %}
-
 <div class="module">
 
 
     <div class="detail-post">
-    {% if form|length > 1 %}
-    {% for instance, contact in form.items %}
-    {% if instance != 'main' %}
-    <div class='item-change' data-order="{{instance.order}}" draggable="true">
-    <div class="content-types">
-        <a class="del" data-id={{instance.id}}><img src="{% static 'img/del.png' %}"></a>
-        <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-        <a class='item-create' href="{% url 'module_content_create' object.id 'text' instance.order %}">
-            Text</a>
-        <a class='item-create' href="{% url 'module_content_create' object.id 'image' instance.order %}">
-            Image</a>
-        <a class='item-create' href="{% url 'module_content_create' object.id   'video' instance.order %}">
-            Video</a>
+    {% if main_form %}
+    <div class='delete_post'>
+        <form action="{% url 'post_delete' object.id  %}" 
+        method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Delete Post</button>
+            </form>
+        </a>
+
     </div>
-        {% if instance.item.get_model_name == 'image' %}
+    <div class="edit-title ">
+        <form action={% if object %} "{% url 'post_detail_change' object.id %}" 
+        {% else %} "{% url 'post_detail_create' %}" 
+        {% endif %}method="post" enctype="multipart/form-data">
+            {{main_form.title}}
+        
+ 
+    <div class="img-main">
+        <div class="post-img">
+            <a  href="/media/{{item.main_image.value}}">
+            <img  src='/media/{{ main_form.main_image.value}}'>
+            </a>
+        </div>
+            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
+
+        </div>
+        <!--<div class="related">
+
+            {{main_form.related_to}}
+            {% csrf_token %}
+        </div>-->
+        </form>
+        </div>
+    {% endif %}
+
+
+    {% if items %}
+    {% for item in items %}
+    <div class='item-change' data-order="{{item.order}}" draggable="true">
+    <div class="content-types" data-id={{item.id}}>
+        <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+        <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+        <div class='item-create' data-model='text'  data-url="{% url 'module_content_create' object.id 'text' item.order %}" role="link" aria-disabled="true">
+            Text</div>
+        <div class='item-create' data-model='image' data-url="{% url 'module_content_create' object.id 'image' item.order %}" role="link" aria-disabled="true" >
+            Image </div>
+        <div class='item-create' data-model='video'  data-url="{% url 'module_content_create' object.id 'image' item.order %}" role="link" aria-disabled="true" >
+            Video</div>
+    </div>
+    
+        {% if item.model == 'image' %}
         <div class="img-main">
             <div class="post-img">
-                <a  href="/media/{{contact.image.value}}">
-                {% thumbnail contact.image.value "1500"  quality=99 as im  %}
-                <img src="/media/{{im}}">
-                {% endthumbnail %}
+                <a  href="/media/{{item.form.image.value}}">
+
+                <img class='img' src="/media/{{item.form.image.value}}">
+
                 </a>
             </div>
-            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
+            <form class='target_img' action="{% url 'module_content_update' object.id item.model item.item_id %}" method="post" enctype="multipart/form-data">
                 <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
                 {% csrf_token %}
             </form>
         </div>
-        {% elif instance.item.get_model_name == 'text' %}
-            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
-                {{ contact.text}}
+        {% elif item.model == 'text' %}
+        <div class="text-main">
+            <form class='target_text' action="{% url 'module_content_update' object.id item.model item.item_id %}" method="post" enctype="multipart/form-data">
+                {{ item.form.text}}
                 {% csrf_token %}
             </form>
-        {% elif instance.item.get_model_name == 'video' %}
+        </div>
+        {% elif item.model == 'video' %}
         <div class="video-main">
-            {% video contact.video.value "100% x 700" %}
-            <form action="{% url 'module_content_update' object.id instance.item.get_model_name instance.item.id %}" method="post" enctype="multipart/form-data">
-                {{ contact.video }}
+            {% video item.form.video.value "100% x 700" %}
+            <form class='target_video' action="{% url 'module_content_update' object.id item.model item.item_id %}" method="post" enctype="multipart/form-data">
+                {{ item.form.video }}
                 {% csrf_token %}
             </form>
-            </div>
+        </div>
         {% endif %}
-        </div>
-    {% else %}
-    <div class="edit-title ">
-        <form action="" method="post" enctype="multipart/form-data">
-            {{contact.title}}
-            {% csrf_token %}
-        </form>
     </div>
-    <div class="img-main">
-        <div class="post-img">
-            <a  href="/media/{{contact.main_image.value}}">
-            {% thumbnail contact.main_image.value "1500"  quality=99 as im  %}
-            <img src='/media/{{im}}'>
-            {% endthumbnail %}
-            </a>
+        {% endfor %}
+        {% else %}
+        <div class='item-change' data-order=0 >
+        <div class="content-types" >
+            <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+            <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+            <div class='item-create' data-model='text'  data-url="{% url 'module_content_create' object.id 'text' 0 %}" role="link" aria-disabled="true">
+                Text</div>
+            <div class='item-create' data-model='image' data-url="{% url 'module_content_create' object.id 'image' 0 %}" role="link" aria-disabled="true" >
+                Image </div>
+            <div class='item-create' data-model='video'  data-url="{% url 'module_content_create' object.id 'image' 0%}" role="link" aria-disabled="true" >
+                Video</div>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
-            <input class="custom-file-input" type="file" name="main_image" accept="image/*" id="id_main_image">
-            {% csrf_token %}
-        </form>
         </div>
-        <div class="related">
-        <form action="" method="post" enctype="multipart/form-data">
-            {{contact.related_to}}
-            {% csrf_token %}
-        </form>
-        </div>
-    {% endif %}
-    {% endfor %}
+        {% endif %}
 
-    {% else %}
-        <div class="'edit-title">
-    <form action="" method="post" enctype="multipart/form-data">
-        {{form.main.title}}
-        {% csrf_token %}
-    </form>
-</div>
-    <div class="post-img">
-            <a  href="/media/{{form.main.main_image.value}}">
-            {% thumbnail form.main.main_image.value "1500"  quality=99 as im  %}
-            <img src='/media/{{im}}'>
-            {% endthumbnail %}
-            </a>
-    </div>
-    <form action="" method="post" enctype="multipart/form-data">
-        <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
-        {% csrf_token %}
-    </form>
-    <form action="" method="post" enctype="multipart/form-data">
-        {{form.main.related_to}}
-        {% csrf_token %}
-    </form>
-    <div class="content-types">
-        <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
-        <a href="{% url 'module_content_create' object.id 'text' 0 %}">
-            Text</a>
-        <a href="{% url 'module_content_create' object.id 'image' 0 %}">
-            Image</a>
-        <a href="{% url 'module_content_create' object.id   'video' 0 %}">
-            Video</a>
-    </div>
-    <p><input type="submit" value="Save content"></p>
-    {% endif %}
+    
+
     </div>
 </div>
 {% endblock %}
 
 {% block script %}
 
-
-
-function getCookie(name) { 
-    let cookieValue=null; 
-    if (document.cookie && document.cookie !=='' ) { 
-        const cookies=document.cookie.split(';'); 
-        for (let i=0; i < cookies.length; i++) { 
-            const cookie=cookies[i].trim(); 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
             // Does this cookie string begin with the name we want? 
-            if (cookie.substring(0, name.length + 1)===(name + '=' )) { 
-                cookieValue=decodeURIComponent(cookie.substring(name.length + 1)); 
-                break; 
-            } 
-        } 
-    } 
-    return cookieValue; 
-} 
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 const draggable = document.querySelectorAll('.item-change')
 let dragStartIndex;
 let dragEndIndex;
 
 function dragStart() {
+    dragStartIndex = this.closest('.item-change')
 
-  dragStartIndex = this.closest('.item-change')
-
-  }
+}
 function dragEnter() {
-    // console.log('Event: ', 'dragenter');
-
-
     this.classList.add('over');
-  }
-  
-  function dragLeave() {
-    // console.log('Event: ', 'dragleave');
-    this.classList.remove('over');
-  }
-  
-  function dragOver(e) {
-    // console.log('Event: ', 'dragover');
-    e.preventDefault();
-  }
-  
-  function dragDrop() {
-    // console.log('Event: ', 'drop');
-    dragEndIndex = this
+}
 
+function dragLeave() {
+    this.classList.remove('over');
+}
+
+function dragOver(e) {
+    e.preventDefault();
+}
+
+function dragDrop() {
+    dragEndIndex = this
     swapItems(dragStartIndex, dragEndIndex);
     this.classList.remove('over');
-  }
-  function swapItems(fromIndex, toIndex) {
-    const first_order=fromIndex.getAttribute('data-order');
-    const sec_order=toIndex.getAttribute('data-order');
-    let data={};
-    data[fromIndex.querySelector('.del').getAttribute('data-id')]=toIndex.getAttribute('data-order')
-    data[toIndex.querySelector('.del').getAttribute('data-id')]=fromIndex.getAttribute('data-order')
-    data1=JSON.stringify(data)
-    url='http://127.0.0.1:8000/blog/content/order/'
-    const csrftoken=getCookie('csrftoken'); 
-    let switch_url=fetch(url, { 
-        method: 'POST' , 
-        body:data1, 
-        mode:'cors',
-        headers:{'Content-Type':'application/json', 
-                'X-CSRFToken':'{{csrf_token}}'}
-    }).then(response=> {
-    if (!response.ok) throw Error(response.statusText);
-    return response.json();
+}
+function swapItems(fromIndex, toIndex) {
+    const first_order = fromIndex.getAttribute('data-order');
+    const sec_order = toIndex.getAttribute('data-order');
+    let data = {};
+    data[fromIndex.querySelector('.del').parentElement.getAttribute('data-id')] = toIndex.getAttribute('data-order')
+    data[toIndex.querySelector('.del').parentElement.getAttribute('data-id')] = fromIndex.getAttribute('data-order')
+    data1 = JSON.stringify(data)
+    url = 'http://127.0.0.1:8000/blog/content/order/'
+    const csrftoken = getCookie('csrftoken');
+    let switch_url = fetch(url, {
+        method: 'POST',
+        body: data1,
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRFToken': '{{csrf_token}}'
+        }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        const first = Array.from(toIndex.children);
+        const second = Array.from(fromIndex.children);
+        fromIndex.removeChild(fromIndex.lastChild)
+        fromIndex.appendChild(first[1])
+        toIndex.removeChild(toIndex.lastChild)
+        toIndex.appendChild(second[1])
+        //fromIndex.replaceChildren(...first);
+        //toIndex.replaceChildren(...second);
+        
+        return response.json();
     });
-    const first=Array.from(toIndex.children);
-    const second=Array.from(fromIndex.children);
-    fromIndex.replaceChildren(...first);
-    toIndex.replaceChildren(...second);
-  }
- 
+
+}
 
 
 draggable.forEach(item => {
@@ -211,56 +202,388 @@ draggable.forEach(item => {
     item.addEventListener('drop', dragDrop);
     item.addEventListener('dragenter', dragEnter);
     item.addEventListener('dragleave', dragLeave);
-  });
- 
-let textarea_elements=document.getElementsByTagName('textarea')
-
-Object.keys(textarea_elements).forEach(function(e) {
-    textarea_elements[e].style.height = 'auto';
-    textarea_elements[e].style.height = textarea_elements[e].scrollHeight +100+ 'px';
 });
-for (let i=0; i < textarea_elements.length; i++) {
-    textarea_elements[i].addEventListener('input', function (e) { 
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
+
+const tx = document.getElementsByTagName("textarea");
+for (let i = 0; i < tx.length; i++) {
+  tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+  tx[i].addEventListener("input", OnInput, false);
+}
+function OnInput() {
+  this.style.height = "auto";
+  this.style.height = (this.scrollHeight) + "px";
+}
+
+let target_images = document.querySelector('.detail-post').getElementsByClassName('target_img')
+
+for (let i = 0; i < target_images.length; i++) {
+    target_images[i].addEventListener('change', function (e) {
+        const csrftoken = getCookie('csrftoken');
+        let form = new FormData();
+        let data = target_images[i].querySelector('#id_image').files[0]
+        form.append('image', data);
+        let url = target_images[i].action;
+        let source_url = fetch(url, {
+            method: 'POST',
+            body: form,
+            headers: { "X-CSRFToken": csrftoken }
+        }).then(response => {
+            if (!response.ok) throw Error(response.statusText);
+            let name = form.get('image')['name']
+            let url_img = target_images[i].parentElement.querySelector('.img')
+            let parent_url = url_img.parentElement
+            let url_img_src = url_img.src
+            url_img_src = url_img_src.replace('http://127.0.0.1:8000', '')
+            url_img_src = url_img_src.substr(0, url_img_src.lastIndexOf("/") + 1) + name
+            target_images[i].parentElement.querySelector('.img').src = url_img_src
+            parent_url.href = url_img_src
+            return response.json();
+        })
+
     })
 }
 
-let parent = document.querySelector('.detail-post').getElementsByTagName('form')
-
-let forms = parent
-
-for (let i=0; i < forms.length; i++) {
-    forms[i].addEventListener('change', function (e) { 
-    this.submit()
+let target_texts = document.querySelector('.detail-post').getElementsByClassName('target_text')
+for (let i = 0; i < target_texts.length; i++) {
+    target_texts[i].addEventListener('change', function (e) {
+        const csrftoken = getCookie('csrftoken');
+        let form = new FormData();
+        let data = target_texts[i].getElementsByTagName('textarea')[0].value
+        form.append('text', data);
+        let url = target_texts[i].action;
+        let source_url = fetch(url, {
+            method: 'POST',
+            body: form,
+            headers: { "X-CSRFToken": csrftoken }
+        }).then(response => {
+            if (!response.ok) throw Error(response.statusText);
+            return response.json();
+        })
     })
 }
 
-let links = document.querySelector('.post-img').getElementsByTagName('a')
-for (let i=0; i < links.length; i++) {
-    links[i].addEventListener('click', function (e) { 
-    e.preventDefault()
+let target_videos = document.querySelector('.detail-post').getElementsByClassName('target_video')
+for (let i = 0; i < target_videos.length; i++) {
+    target_videos[i].addEventListener('change', function (e) {
+        const csrftoken = getCookie('csrftoken');
+        let form = new FormData();
+        let data = target_videos[i].getElementsByTagName('input')[0].value
+        form.append('video', data);
+        let url = target_videos[i].action;
+        let source_url = fetch(url, {
+            method: 'POST',
+            body: form,
+            headers: { "X-CSRFToken": csrftoken }
+        }).then(response => {
+            if (!response.ok) throw Error(response.statusText);
+            return response.json();
+        }).then(json => {
+            const url =   json.url         
+            let parent=target_videos[i].parentElement
+            let iframe=parent.getElementsByTagName('iframe')[0]
+            iframe.src=url
+        })
     })
 }
 
-let elements = document.getElementsByClassName(" del") 
-for (let i=0; i < elements.length; i++) {
-    elements[i].addEventListener('click', function (e) { 
-    const csrftoken=getCookie('csrftoken'); 
-    let id1=this.getAttribute('data-id'); 
-    data=JSON.stringify({ id:id1}) ;
-    let url='http://127.0.0.1:8000/blog/content/' + id1 +'/delete/' ;
-    let source_url=fetch(url, { 
-        method: 'POST' , 
-        data:data, 
-        headers:{"X-CSRFToken": csrftoken }
-    }).then(response=> {
-    if (!response.ok) throw Error(response.statusText);
-    this.parentElement.parentElement.remove()
-    return response.json();
+let links = document.querySelectorAll('.post-img a')
+for (let i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function (e) {
+        e.preventDefault()
     })
+}
+
+let elements = document.getElementsByClassName(" del")
+for (let i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('click', function (e) {
+        const csrftoken = getCookie('csrftoken');
+        let id1 = this.parentElement.getAttribute('data-id');
+        let post_id1='{{object.id}}'
+        let url = 'http://127.0.0.1:8000/blog/content/' +post_id1 +'/' + id1 + '/delete/';
+        data = JSON.stringify({ id: id1 ,post_id:post_id1});
+        let source_url = fetch(url, {
+            method: 'POST',
+            data: data,
+            headers: { "X-CSRFToken": csrftoken }
+        }).then(response => {
+            if (!response.ok) throw Error(response.statusText);
+            this.parentElement.parentElement.remove()
+            return response.json();
+        })
     });
-    }
+}
 
+let add_item = document.getElementsByClassName("item-create")
+function insertAfter(referenceNode, newNode) {
+    referenceNode.parentElement.insertBefore(newNode, referenceNode.nextSibling);
+  }
 
+function item_create_events(add_item) {
+for (let i = 0; i < add_item.length; i++) {
+    add_item[i].addEventListener('click', function (e) {
+        const model=add_item[i].getAttribute('data-model')
+        let parent=add_item[i].parentElement.parentElement
+        let order=parent.getAttribute('data-order')
+        let el = document.createElement("div");
+        let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+order
+        el.classList.add("item-change")
+        el.setAttribute('draggable', true);
+        if (model=='text') {
+            el.innerHTML = `
+                <div class="content-types" >
+                    <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+                    <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
+                        Text</div>
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
+                            Image</div>
+                            <div class='item-create' data-model='video'  role="link" aria-disabled="true">
+                                Video</div>
+                    </div>
+                        <div class="text-main">
+                            <form class='target_text'  method="post" enctype="multipart/form-data">
+                                <textarea name="text" cols="40" rows="10" required="" id="id_text" style="height: 384px;"></textarea>
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                   `;
+            el.addEventListener('change', function (e) {
+                const csrftoken = getCookie('csrftoken');
+                let form = new FormData();
+                let data = el.getElementsByTagName('textarea')[0].value
+                form.append('text', data);
+                let source_url = fetch(url, {
+                    method: 'POST',
+                    body: form,
+                    headers: { "X-CSRFToken": csrftoken }
+                }).then(response => {
+                    if (!response.ok) throw Error(response.statusText);
+                    return response.json();
+                }).then(json => {
+                    let user_id = json.user_id
+                    let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+ json.order;
+                    el.getElementsByTagName('form')[0].action=url
+                    el.dataset.order=json.order
+                    el.querySelector('.content-types').dataset.id=json.id
+                    let name_models=['text','image','video']
+                    let items=el.getElementsByClassName('item-create')
+                    for (let i = 0; i < items.length; i++) {
+                        let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
+                        items[i].dataset.url=url
+                    }
+
+            })
+            })
+        }
+        if (model=='image') {
+            el.innerHTML = `
+                <div class="content-types" >
+                    <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+                    <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
+                        Text</div>
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
+                            Image</div>
+                            <div class='item-create' data-model='video'  role="link" aria-disabled="true">
+                                Video</div>
+                    </div>
+                    <div class="img-main">
+                        <div class="post-img">
+                            <a  href="/media/{{item.form.image.value}}">
+            
+                            <img class='img' src="/media/{{item.form.image.value}}">
+            
+                            </a>
+                        </div>
+                        <form class='target_img'method="post" enctype="multipart/form-data">
+                            <input class="custom-file-input" type="file" name="image" accept="image/*" id="id_image">
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                   `;
+            el.addEventListener('change', function (e) {
+                    const csrftoken = getCookie('csrftoken');
+                    let form = new FormData();
+                    let data = el.querySelector('#id_image').files[0]
+                    form.append('image', data);
+                    let source_url = fetch(url, {
+                        method: 'POST',
+                        body: form,
+                        headers: { "X-CSRFToken": csrftoken }
+                    }).then(response => {
+                        if (!response.ok) throw Error(response.statusText);
+                        return response.json();
+                    }).then(json => {
+                        let name = form.get('image')['name']
+                        let user_id = json.user_id
+                        let url2= '/media/post/' +user_id +'/' +'{{object.id}}' +'/image/'+ name
+                        let url_img = el.querySelector('.img')
+                        let parent_url = url_img.parentElement
+                        let url_img_src = url_img.src
+                        el.querySelector('.img').src = url2
+                        parent_url.href =url2
+                        let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+ json.order;
+                        el.getElementsByTagName('form')[0].action=url
+                        el.dataset.order=json.order
+                        el.querySelector('.content-types').dataset.id=json.id
+                        let name_models=['text','image','video']
+                        let items=el.getElementsByClassName('item-create')
+                        for (let i = 0; i < items.length; i++) {
+                            let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
+                            items[i].dataset.url=url
+                        }
+
+                })
+                })
+        }
+        if (model=='video') {
+            el.innerHTML = `
+                <div class="content-types" >
+                    <a class="del" ><img src="{% static 'img/del.png' %}"></a>
+                    <a class="plus"><img src="{% static 'img/plus.png' %}"></a>
+                    <div class='item-create' data-model='text'   role="link" aria-disabled="true">
+                        Text</div>
+                        <div class='item-create' data-model='image'   role="link" aria-disabled="true">
+                            Image</div>
+                    <div class='item-create' data-model='video'  role="link" aria-disabled="true">
+                        Video</div>
+                    </div>
+                    <div class="video-main">
+                        <iframe width="100%" height="700" src="" loading="lazy" frameborder="0" allowfullscreen=""></iframe>
+                        <form class='target_video'  method="post" enctype="multipart/form-data">
+                            <input type="url" name="video" value="" maxlength="200" required="" id="id_video">
+                            {% csrf_token %}
+                        </form>
+                        </div>
+                   `;
+            el.addEventListener('change', function (e) {
+                    const csrftoken = getCookie('csrftoken');
+                    let form = new FormData();
+                    let data = el.querySelector('#id_video').value
+                    form.append('video', data);
+                    let video_url = el.querySelector('#id_video').value
+                    let source_url = fetch(url, {
+                        method: 'POST',
+                        body:form,
+                        headers: { "X-CSRFToken": csrftoken }
+                    }).then(response => {
+                        if (!response.ok) throw Error(response.statusText);
+                        return response.json();
+                    }).then(json => {
+                        console.log(json)
+                        let user_id = json.user_id
+                       
+                        let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+ json.order;
+                        el.getElementsByTagName('form')[0].action=url
+                        el.dataset.order=json.order
+                        el.querySelector('.content-types').dataset.id=json.id
+                        let name_models=['text','image','video']
+                        let items=el.getElementsByClassName('item-create')
+                        for (let i = 0; i < items.length; i++) {
+                            let url='/blog/'+ '{{object.id}}' +'/content/create/'+name_models[i]+'/'+ json.order;
+                            items[i].dataset.url=url
+                        }
+                        const embed_url =   json.url          
+                        let iframe=el.getElementsByTagName('iframe')[0]
+                        iframe.src=embed_url
+
+                })
+                })
+        }
+
+        insertAfter(parent,el)
+        let del=el.querySelector('.del')
+        del.addEventListener('click', function (e) {
+            const csrftoken = getCookie('csrftoken');
+            let id1 = this.parentElement.getAttribute('data-id');
+            let post_id1='{{object.id}}'
+            data = JSON.stringify({ id: id1 ,post_id:post_id1});
+
+            let url = 'http://127.0.0.1:8000/blog/content/' +post_id1 +'/' + id1 + '/delete/';
+            let source_url = fetch(url, {
+                method: 'POST',
+                data: data,
+                headers: { "X-CSRFToken": csrftoken }
+            }).then(response => {
+                if (!response.ok) throw Error(response.statusText);
+                return response.json();
+            }).catch(function(error) { console.log(error); })
+            .finally(() => { this.parentElement.parentElement.remove() });
+        });
+        let add_items=el.getElementsByClassName("item-create")
+        item_create_events(add_items)
+    })
+}
+}
+item_create_events(add_item)
+
+let edit_title=document.querySelector('.edit-title input')
+edit_title.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let title=edit_title.value
+    let url='{% url 'post_detail_change' object.id %}'
+    let form = new FormData();
+    form.append('title', title);
+    form.append('type','title')
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response)
+        return response.json();
+    })
+})
+let edit_main_img=document.querySelector('.img-main input')
+edit_main_img.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let main_image=edit_main_img.files[0]
+    let url='{% url 'post_detail_change' object.id %}'
+    //let data=JSON.stringify({'main_image':main_image})
+    let form = new FormData();
+    form.append('main_image', main_image);
+    form.append('type','main_image')
+    //let data=JSON.stringify({'main_image':form})
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+    }).then(json=>{
+        let name = form.get('main_image')['name']
+        let url_img = edit_main_img.parentElement.querySelector('.img-main a img')
+        let url_img_src = url_img.src
+        url_img_src = url_img_src.replace('http://127.0.0.1:8000', '')
+        url_img_src = url_img_src.substr(0, url_img_src.lastIndexOf("/") + 1) + name
+        edit_main_img.parentElement.querySelector('.img-main a img').src = url_img_src
+        //parent_url.href = url_img_src
+    })
+})
+/*
+let related=document.querySelector('.related select')
+related.addEventListener('change', function(e) {
+    const csrftoken = getCookie('csrftoken');
+    let value=related.value
+    let url='{% url 'post_detail_change' object.id %}'
+
+    let form = new FormData();
+    form.append('related_to', value);
+    form.append('type','related_to')
+    let source_url = fetch(url, {
+        method: 'POST',
+        body:form,
+        headers: {
+                    "X-CSRFToken": csrftoken }
+    }).then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        console.log(response)
+        return response.json();
+    })
+})
+*/
     {% endblock %}

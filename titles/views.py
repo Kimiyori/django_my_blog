@@ -81,7 +81,7 @@ class TitleDetail(TemplateResponseMixin, View):
     """
     Take a specific title instance
     """
-    template_name = 'titles/detail_test.html'
+    template_name = 'titles/detail.html'
     context_object_name = 'item'
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
@@ -104,12 +104,12 @@ class TitleDetail(TemplateResponseMixin, View):
                 raise Http404('Cannot find title with given id')
             cache.set(key, model, CACHE_TIME)  # cache queryset
         comments = get_comments(type, pk)
-        comment_form=CommentForm(apps.get_model(app_label='comments',
-                                   model_name=f'comment{type}'
-                                   ))
+        comment_form = CommentForm(apps.get_model(app_label='comments',
+                                                  model_name=f'comment{type}'
+                                                  ))
         console_logger.info(f'Successful get detail about {type} with id {pk}')
         return self.render_to_response({'item': model,
                                         'model': type,
                                         'tab': tab,
                                         'comments': comments,
-                                        'comment_form': comment_form,})
+                                        'comment_form': comment_form, })
