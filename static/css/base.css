@@ -796,6 +796,17 @@ textarea:focus {
     margin-left: 20px;
 }
 
+.comments *{
+    margin-bottom: 25px;
+
+}
+ hr {
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
 .comment-upper {
     display:flex;
     justify-content: flex-start;
@@ -810,5 +821,8 @@ textarea:focus {
     display:block;
 }
 .comment-content {
-    margin-left:10px;
+    margin-left:15px;
+}
+.children {
+    margin-left: 80px;
 }

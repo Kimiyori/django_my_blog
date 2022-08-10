@@ -42,6 +42,7 @@ class MyAnimeList:
         }
         self._client = self._get_client(scope, redirect_uri, token)
 
+
     def _get_client(self, scope, redirect_uri, token):
         client = OAuth2Session(self._client_id, auto_refresh_url=self._TOKEN_URL, auto_refresh_kwargs=self._extra,
                                scope=scope, redirect_uri=redirect_uri, token=token, token_updater=self._token_saver)

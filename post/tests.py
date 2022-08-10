@@ -155,7 +155,7 @@ class PostTests(TestCase):
             reverse('post_detail_change', args=[self.post.pk]))
         self.assertEqual(response_get.status_code, 200)
         self.assertTemplateUsed(
-            response_get, 'post/manage/content/form_test.html')
+            response_get, 'post/manage/content/form.html')
         data_title = {'type': 'title', 'title': 'Test post request', }
         old_title = self.post.title
         response_post_title = self.client.post(

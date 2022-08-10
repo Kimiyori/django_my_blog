@@ -25,10 +25,11 @@ class TestToken(APITestCase):
         self.user.is_superuser = True
         self.user.is_staff = True
         self.user.save()
+        self.token=Token.objects.get(user=self.user)
+
     
     def test_token(self):
-        token=Token.objects.get(user=self.user)
-        self.assertEqual(self.user.auth_token,token)
+        self.assertEqual(self.user.auth_token,self.token)
 
     def test_post(self):
         data = {
@@ -153,8 +154,7 @@ class TestAnime(APITestCase):
 
             "description": "Cultural subject explain major"
         }
-
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.post(self.uri, data=data, format='json')
         self.assertEqual(response.status_code, 201,
                          'Expected Response Code 201, received {0} instead.'
@@ -175,7 +175,7 @@ class TestAnime(APITestCase):
         }
         self.assertEqual(self.anime.title.original_name, 'Tetsugaka Letra')
         self.assertEqual(self.anime.episodes, None)
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.put(self.uri_id, data=data, format='json')
         self.assertEqual(response.status_code, 200,
                          'Expected Response Code 200 , received {0} instead.'
@@ -197,7 +197,7 @@ class TestAnime(APITestCase):
             "description": "Cultural subject explain major"
         }
         self.assertEqual(self.anime.title.original_name, 'Tetsugaka Letra')
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.patch(self.uri_id, data=data, format='json')
         self.assertEqual(response.status_code, 200,
                          'Expected Response Code 200, received {0} instead.'
@@ -207,7 +207,7 @@ class TestAnime(APITestCase):
 
     def test_delete(self):
         self.assertEqual(Anime.objects.count(), 1)
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.delete(self.uri_id)
         self.assertEqual(response.status_code, 204,
                          'Expected Response Code 204, received {0} instead.'
@@ -266,7 +266,7 @@ class TestManga(APITestCase):
             "description": "Cultural subject explain major"
         }
 
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.post(self.uri, data=data, format='json')
         self.assertEqual(response.status_code, 201,
                          'Expected Response Code 201, received {0} instead.'
@@ -287,7 +287,7 @@ class TestManga(APITestCase):
         }
         self.assertEqual(self.anime.title.original_name, 'Tetsugaka Letra')
         self.assertEqual(self.anime.chapters, None)
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.put(self.uri_id, data=data, format='json')
         self.assertEqual(response.status_code, 200,
                          'Expected Response Code 200 , received {0} instead.'
@@ -309,7 +309,7 @@ class TestManga(APITestCase):
             "description": "Cultural subject explain major"
         }
         self.assertEqual(self.anime.title.original_name, 'Tetsugaka Letra')
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.patch(self.uri_id, data=data, format='json')
         self.assertEqual(response.status_code, 200,
                          'Expected Response Code 200, received {0} instead.'
@@ -319,7 +319,7 @@ class TestManga(APITestCase):
 
     def test_delete(self):
         self.assertEqual(Manga.objects.count(), 1)
-        self.client.login(username='foo', password='bar')
+        self.client.force_authenticate(user=self.user,token=self.user.auth_token)
         response = self.client.delete(self.uri_id)
         self.assertEqual(response.status_code, 204,
                          'Expected Response Code 204, received {0} instead.'

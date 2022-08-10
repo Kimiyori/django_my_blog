@@ -1,5 +1,6 @@
 
 from typing import Any, Dict, Optional, Type, Union
+from uuid import uuid4
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, HttpResponse
 from django.views.generic import ListView
 
@@ -74,6 +75,7 @@ class TitleList(ListView):
             'filter': filter_dict,
             'model': self.type.capitalize(),
             'query': query})
+
         return context
 
 
@@ -84,26 +86,29 @@ class TitleDetail(TemplateResponseMixin, View):
     template_name = 'titles/detail.html'
     context_object_name = 'item'
 
-    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+    def get(self, request: HttpRequest, pk: uuid4) -> HttpResponse:
         # get tab(info or related,depending of query params)
         tab: str = self.request.GET.get('tab', 'info')
+        if tab!='info' and tab !='related': 
+            tab='info'
         # get type if url(anime or manga)
         type: str = self.request.resolver_match.url_name.split('_')[0]
+        modeltype: Type[Anime|Manga] =apps.get_model(app_label='titles',
+                                    model_name=type)
         console_logger.info(f'Trying get detail about {type} with id {pk}')
         key: str = f'titledetail:{tab}:{self.kwargs["pk"]}'  # create cache key
         model: Optional[str] = cache.get(key)
         # if got in cache, then create queryset in cache it
         if model is None:
-            # get info from model based on type and tab
-            model = apps.get_model(app_label='titles',
-                                   model_name=type
-                                   ).objects.annotate(
-                **annotate_acc(type, tab)
-            ).values(*values_acc(type, tab)).get(id=self.kwargs['pk'])
-            if not model:
+            try:
+                # get info from model based on type and tab
+                model = modeltype.objects.annotate(
+                    **annotate_acc(type, tab)
+                ).values(*values_acc(type, tab)).get(id=self.kwargs['pk'])
+            except modeltype.DoesNotExist:
                 raise Http404('Cannot find title with given id')
             cache.set(key, model, CACHE_TIME)  # cache queryset
-        comments = get_comments(type, pk)
+        comments: QuerySet= get_comments(type, pk)
         comment_form = CommentForm(apps.get_model(app_label='comments',
                                                   model_name=f'comment{type}'
                                                   ))

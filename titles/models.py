@@ -1,8 +1,11 @@
+from io import BytesIO
+from typing import Iterable, Optional
 from django.db import models
 import uuid
 from django.urls import reverse
 from django_cleanup import cleanup
-
+from django.core.files.base import ContentFile
+from PIL import Image as PILImage
 # Create your models here.
 
 class Demographic(models.Model):
@@ -91,13 +94,13 @@ class Title(models.Model):
 
     def __str__(self)->str:
         if self.original_name:
-            return str(self.original_name)
+            return self.original_name
         elif self.english_name:
-            return str(self.english_name)
+            return self.english_name
         elif self.russian_name:
-            return str(self.russian_name)
+            return self.russian_name
         else:
-            return "Doesn't have name"
+            return "Name does not exist"
 
 
 
@@ -163,6 +166,26 @@ class Image(models.Model):
     image = models.ImageField(upload_to=image_path, max_length=300,blank=True)
     thumbnail=models.ImageField(upload_to=image_thumb_path,max_length=300, blank=True)
 
+    def save(self, *args, **kwargs) -> None:
+        THUMBNAIL_SIZE = (400, 400)
+        if self.image:
+            image = PILImage.open(self.image)
+            image = image.convert("RGB")
+            image.thumbnail(THUMBNAIL_SIZE, PILImage.ANTIALIAS)
+            temp_thumb = BytesIO()
+            image.save(temp_thumb, "JPEG")
+            temp_thumb.seek(0)
+            self.thumbnail.save(
+                self.image.name,
+                ContentFile(temp_thumb.read()),
+                save=False,
+            )
+            temp_thumb.close()
+        elif self.thumbnail and not self.image:
+            self.thumbnail.delete()
+        return super().save( *args, **kwargs)
+    
+   
 class Urls(models.Model):
     mal=models.URLField(blank=True,null=True)
     shiki=models.URLField(blank=True,null=True)
@@ -197,21 +220,13 @@ class MetaTitle(models.Model):
         abstract=True
 
     def __str__(self)-> str:
-        name='Not name' 
-        if self.title:
-            if getattr(self.title,'original_name'):
-                name= str(self.title.original_name)
-            elif getattr(self.title,'english_name'):
-                name=  str(self.title.english_name)
-            elif getattr(self.title,'russian_name'):
-                name= str(self.title.russian_name)
-        return name
+        return str(self.title) if self.title else 'Name does not exist' 
             
     def get_desc(self)->str:
         if self.description:
             return self.description
         else:
-            return "Нет описания"
+            return "No description"
 
 
 class Manga(MetaTitle):

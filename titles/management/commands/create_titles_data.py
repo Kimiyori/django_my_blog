@@ -139,17 +139,16 @@ TITLE_LANGUAGES={
 
 NAMEDB = 'test_db'
 
-NUMBER_MANGA = 500
+NUMBER_MANGA = 50
 
-NUMBER_ANIME = 500
+NUMBER_ANIME = 50
 
-NUMBER_ADAPTATION = 400
+NUMBER_ADAPTATION = 30
 
-NUMBER_ADAPTATIONREVERSE =  400
+NUMBER_ADAPTATIONREVERSE =  30
 
-NUMBER_SEQUELPREQUEL = 400
-NUMBER_PREQUELSEQUEL = 400
-
+NUMBER_SEQUELPREQUEL = 30
+NUMBER_PREQUELSEQUEL = 30
 NUMBER_POST=50
 
 class Provider(faker.providers.BaseProvider):
@@ -370,24 +369,27 @@ class Command(BaseCommand):
         locale_list = ['en-US', 'ja-JP', 'ru_RU']
         fake = Faker(locale_list)
 
-        models = [Adaptation, AdaptationReverse, Anime, AnimeType, AuthorTable, Authors, Genre, Demographic, Magazine,
-                  Manga, MangaType, Publisher, SequelPrequelAnime, SequelPrequelManga, Theme, Studio, Title, ImageModel]
-        #Urls.objects.all().delete()
+        default_models=[ AnimeType,  Genre, Demographic, Magazine,MangaType, 
+                  Publisher, Theme, Studio, ]
+
+        models = [Adaptation, AdaptationReverse, Anime, AuthorTable, Authors, 
+                  Manga, SequelPrequelAnime, SequelPrequelManga,  Title, ImageModel,Urls]
+
         #self.delete_all_data(models)
 
         #self.create_default_data()
 
-       # self.create_manga(fake)
+        self.create_manga(fake)
 
-        #self.create_anime(fake)
+        self.create_anime(fake)
 
-        #self.create_adaptations(fake)
+        self.create_adaptations(fake)
 
-        #self.create_reverse_adaptations(fake)
+        self.create_reverse_adaptations(fake)
 
-        #self.create_sequel_prequel(fake)
+        self.create_sequel_prequel(fake)
 
-        #self.create_prequel_sequel(fake)
+        self.create_prequel_sequel(fake)
 
-        self.populate_api()
+        #self.populate_api()
 

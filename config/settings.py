@@ -132,9 +132,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # changed from sqlite
-        'NAME': os.environ.get('POSTGRES_NAME'),  # development settings, will change in production
-        'USER': os.environ.get('POSTGRES_USER'),  # development settings, will change in production
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),  # development settings, will change in production
+        'NAME': os.environ.get('POSTGRES_NAME','postgres'),  # development settings, will change in production
+        'USER': os.environ.get('POSTGRES_USER','postgres'),  # development settings, will change in production
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','postgres'),  # development settings, will change in production
         'HOST': 'db',
         'PORT': 5432
     },

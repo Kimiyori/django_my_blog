@@ -87,31 +87,47 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
         return r
     # dictionary with values for specific tab for certail title model
     d_anno = {'manga': {
-        'info':
-        {'genres': ['genre__name'],
-         'publishers': ['publisher__name'],
-         'themes': ['theme__name'],
-         'magazines': ['magazine__name'],
-         'urls_list': ['urls__mal', 'urls__shiki', 'urls__manga_updates', 'urls__manga_dex', 'urls__manga_lib'],
-         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
-        'related':
-        {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'anime'],
-         'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'anime'],
-         'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
-         'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}},
-        'anime': {
-        'info':
-        {'genres': ['genre__name'],
-         'themes': ['theme__name'],
-         'studios': ['studio__name'],
-         'urls_list': ['urls__mal', 'urls__shiki', 'urls__anilist', 'urls__world_art'],
-         'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']},
-        'related':
-        {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 'adaptation__adaptation__title__original_name', 'manga'],
-         'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 'based_on__based_on__title__original_name', 'manga'],
-         'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 'sequel__sequel__title__original_name'],
-         'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 'prequel__prequel__title__original_name']}
-    }}
+                'info':
+                    {'genres': ['genre__name'],
+                    'publishers': ['publisher__name'],
+                    'themes': ['theme__name'],
+                    'magazines': ['magazine__name'],
+                    'urls_list': ['urls__mal', 'urls__shiki', 'urls__manga_updates', 
+                                    'urls__manga_dex', 'urls__manga_lib'],
+                    'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']
+                    },
+                'related':
+                    {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 
+                                    'adaptation__adaptation__title__original_name', 'anime'],
+                    'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 
+                                    'based_on__based_on__title__original_name', 'anime'],
+                    'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 
+                                'sequel__sequel__title__original_name'],
+                    'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 
+                                    'prequel__prequel__title__original_name']
+                    }
+                        },
+                            
+            'anime': {
+                'info':
+                    {'genres': ['genre__name'],
+                    'themes': ['theme__name'],
+                    'studios': ['studio__name'],
+                    'urls_list': ['urls__mal', 'urls__shiki', 'urls__anilist', 'urls__world_art'],
+                    'related_posts': ['related_post__id', 'related_post__title', 'related_post__main_image']
+                    },
+                'related':
+                    {'adaptations': ['adaptation__adaptation__id', 'adaptation__adaptation__image__thumbnail', 
+                                    'adaptation__adaptation__title__original_name', 'manga'],
+                    'based_ons': ['based_on__based_on__id', 'based_on__based_on__image__thumbnail', 
+                                    'based_on__based_on__title__original_name', 'manga'],
+                    'sequels': ['sequel__sequel__id', 'sequel__sequel__image__thumbnail', 
+                                    'sequel__sequel__title__original_name'],
+                    'prequels': ['prequel__prequel__id', 'prequel__prequel__image__thumbnail', 
+                                    'prequel__prequel__title__original_name']
+                                    }
+                        }
+            }
     # compile dict for annotate
     annotate_dict = {key: create_array(value)
                      for (key, value) in d_anno[type][tab].items()}
@@ -127,18 +143,23 @@ def values_acc(type: str, tab: str) -> List[str]:
     :param str tab: info or related.
     """
     d_values = {'manga': {
-        'info': ['id', 'description', 'title__original_name', 'title__russian_name',
-                 'title__english_name', 'type__name', 'authors__author__name', 'authors__artist__name', 'premiere',
-                 'volumes', 'chapters', 'demographic__name', 'image__image', 'genres', 'publishers',
-                            'themes', 'magazines', 'related_posts', 'score', 'urls_list'],
-        'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                    'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                    'info': ['id', 'description', 'title__original_name', 'title__russian_name',
+                            'title__english_name', 'type__name', 'authors__author__name', 
+                            'authors__artist__name', 'premiere','volumes', 'chapters', 
+                            'demographic__name', 'image__image', 'genres', 'publishers',
+                                        'themes', 'magazines', 'related_posts', 'score', 'urls_list'],
+                    'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
+                                'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']
+                        },
+
                 'anime': {
                     'info': ['id', 'description', 'title__original_name', 'title__russian_name',
                              'title__english_name', 'type__name', 'premiere',
-                             'episodes', 'image__image', 'genres', 'themes', 'studios', 'related_posts', 'score', 'urls_list'],
+                             'episodes', 'image__image', 'genres', 'themes', 'studios', 
+                             'related_posts', 'score', 'urls_list'],
                     'related': ['id', 'image__image', 'title__original_name', 'title__russian_name',
-                                'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']},
+                                'title__english_name', 'adaptations', 'based_ons', 'sequels', 'prequels']
+                        },
                 }
     return d_values[type][tab]
 

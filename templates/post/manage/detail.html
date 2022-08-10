@@ -2,7 +2,7 @@
 {% load static %}
 {% load embed_video_tags %}
 {% load thumbnail %}
-{% load mptt_tags %}
+
 {% block title %}{{ post.title }}{% endblock title %}
 {% block content %}
 
@@ -31,44 +31,7 @@
     {% endif %}
 
 {% endfor %}
-Comments
-<hr>
-<div class="comments">
-
-{% recursetree comments %}
-        <div id="{{node.id}}">
-            <div class="comment-upper">
-        <div class="base-img"><img src="/media/{{ node.author.profile.photo }}" ></div>
-        <div class="comment-upper-info">
-        <div class="">{{ node.author.username }}</div>
-        <div>{{ node.created|date:"M d"}} {{ node.created|date:"H:i"}}</div>
-            </div>
-        </div>
-        <div class="comment-content">{{node.content}}</div>
-        {% if request.user.is_authenticated %}
-        <button class="button" onclick="invoke_reply({{ node.id }})">Reply</button>
-        {% if request.user == node.author %}
-        <button class="button" onclick="delete_comment({{ node.id }})">Delete</button>
-        {% endif %}
-        {% endif %}
-        {% if not node.os_leaf_node %}
-        <div class="children">{{children}}</div>
-        {% endif %}
-    </div>
-{% endrecursetree %}
-</div>
-<hr>
-{% if request.user.is_authenticated %}
-<div id="myDIV" >
-    <form id="myForm" method="post">
-      <h2>Create new comment</h2>
-      {{ comment_form.as_p }}
-      {% csrf_token %}
-      <button type="submit" onclick="comment_submit(event)" >Submit</button>
-    </form>
-  </div>
-</div>
-{%  endif %}
+{% include 'components/comments.html' %}
 {% endblock content %}
 
 {% block script %}

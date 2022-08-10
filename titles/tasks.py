@@ -47,7 +47,7 @@ def add_score(id: UUID, type: str) -> Optional[int]:
     try:
         instance = model.objects.get(id=id)
     except model.DoesNotExist:
-        raise ValueError('Did not find an instance for given id')
+        raise ValueError(f'Did not find an instance for given {type} id')
     if not getattr(instance, 'score'):
         if getattr(instance, 'urls') and getattr(instance.urls, 'mal'):
             try:
@@ -61,15 +61,11 @@ def add_score(id: UUID, type: str) -> Optional[int]:
             # log in mal api
             api: Type[myanimelist.MyAnimeList]= myanimelist.log()
             if type == 'anime':
-                score:int = api.anime(int(mal_id)).GET(
+                score: int = api.anime(int(mal_id)).GET(
                     fields='mean').get('mean', 0)
             elif type == 'manga':
                 score:int = api.manga(int(mal_id)).GET(
                     fields='mean').get('mean', 0)
-            else:
-                file_logger.debug(
-                    f'error when adding score to a title because type of a title is invalid')
-                raise ValidationError('Not correct type of title')
             instance.score = score
             instance.save()
             console_logger.info(
@@ -99,7 +95,7 @@ def update_scores(type:str)-> NoReturn:
                            model_name=type)
     # log mal api
     api = myanimelist.log()
-    updated_list: List[model] = []
+    updated_list: Optional[List[Type[Anime | Manga]]] = []
     for title in model.objects.all():
         if getattr(title ,'urls') and getattr(title.urls,'mal'):
             try:
@@ -110,13 +106,14 @@ def update_scores(type:str)-> NoReturn:
                                     with gived id {title.id} and existing urls.mal could not be parsed 
                                     with link reference to get id""")
                 continue
-            score :int= getattr(title,'score',0)
+            score :int= getattr(title,'score',0) if getattr(title,'score',0)!=None else 0
             if type=='anime':
                 upd_score:int= api.anime(int(mal_id)).GET(
                     fields='mean').get('mean', 0)
             elif type=='manga':
                 upd_score: int= api.manga(int(mal_id)).GET(
                     fields='mean').get('mean', 0)
+
             if int(score) != int(upd_score):
                 title.score = upd_score
                 updated_list.append(title)
@@ -124,3 +121,4 @@ def update_scores(type:str)-> NoReturn:
             file_logger.debug(f'{type.capitalize()} with id {title.id} doesnt have either urls or urls.mal')
     model.objects.bulk_update(updated_list, ['score'])
     file_logger.info(f'Updated {type} scores for {len(updated_list)} instances')
+    return updated_list
