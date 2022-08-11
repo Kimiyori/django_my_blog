@@ -52,7 +52,7 @@ class Post(models.Model):
         ordering = ('-publish',)
 
     def __str__(self)->str:
-        return self.title
+        return str(self.title)
 
 
 class Content(models.Model):
@@ -72,7 +72,7 @@ class Content(models.Model):
         ordering = ['order']
 
     def __str__(self)->str:
-        return f'{self.post.title} {self.order}'
+        return f'{self.post} {self.order}'
 
 
 def path(instance, filename):

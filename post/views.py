@@ -72,7 +72,24 @@ class PostList(ListView):
         post: QuerySet= Post.objects.all().values('id', 'publish', 'title', 'main_image', 'author')
         return post
 
+def get_views(pk:uuid.UUID)->int:
+    """
+    Increment view value for given post
 
+    """
+    try:
+        # connect to redis
+        r = redis.Redis(host=settings.REDIS_HOST,
+                        port=settings.REDIS_PORT,
+                        db=settings.REDIS_DB)
+        # increate in redis number of views in post
+        total_views: int = r.get(f'post:{pk}:views')
+        if not total_views:
+            total_views: int = r.incr(f'post:{pk}:views')
+        return total_views
+    except redis.ConnectionError:
+        file_logger.debug('Connect redis error')
+        raise CustomError('Connect redis error')
 
 class PostDetail(TemplateResponseMixin, View):
     """
@@ -81,23 +98,6 @@ class PostDetail(TemplateResponseMixin, View):
     model = Post
     template_name = 'post/manage/detail.html'
     context_object_name = 'post'
-
-    def get_views(self,pk:uuid.UUID)->int:
-        """
-        Increment view value for given post
-
-        """
-        try:
-            # connect to redis
-            r = redis.Redis(host=settings.REDIS_HOST,
-                            port=settings.REDIS_PORT,
-                            db=settings.REDIS_DB)
-            # increate in redis number of views in post
-            total_views:int = r.get(f'post:{pk}:views')
-            return total_views
-        except redis.ConnectionError:
-            file_logger.debug('Connect redis error')
-            raise CustomError('Connect redis error')
 
     #@method_decorator(cache_page(CACHE_TIME))
     def get(self, request:HttpRequest, pk:uuid.UUID)->HttpResponse:
@@ -135,7 +135,7 @@ class PostDetail(TemplateResponseMixin, View):
         comments=CommentPost.objects.select_related('author__profile').filter(model=pk)
 
         # increate in redis number of views in post
-        total_views:int= self.get_views(pk)
+        total_views:int= get_views(pk)
         console_logger.info(f'Successful get detail post with id - {pk}')
         comment_form = CommentForm(CommentPost)
         return self.render_to_response({'post': post, 
@@ -165,8 +165,6 @@ class GetModelAndForm:
                                                  'created',
                                                  'updated'])
         return Form(*args, **kwargs)
-
-
 
 
 
@@ -213,7 +211,7 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
             obj.save()
             # if we have id attribute, then we need just update out item and code below doesnt need for us, its for new obj
             if not id:
-                # if we dont have order, then create content withoud order. Its case when we create first obj and issign it order 1
+                # if we dont have order, then create content withoud order. Its case when we create first obj and assign it order 1
                 if not order:
                     content = Content.objects.create(post=self.post_obj,
                                                      item=obj)
@@ -245,7 +243,6 @@ class PostCreate(GetModelAndForm, TemplateResponseMixin, View):
         return self.render_to_response({'main_form': main_form,
                                         })
     def post(self,request):
-        print(request.POST)
         form=PostForm(data=request.POST,files=request.FILES)
         if form.is_valid():
             inst=form.save(commit=False)
@@ -260,29 +257,26 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
     template_name = 'post/manage/content/form.html'
 
     def dispatch(self, request, pk):
-        # get post instance
-        if pk:
-            self.module = Post.objects.filter(id=pk).only(
-                'id', 'title', 'author',  'main_image').first()
-            # check if request user and author not the same person; only author can edit own posts
-            if self.module:
-                if request.user != self.module.author:
-                    file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
-                        'request_user': request.user,
-                        'author': getattr(self.module,'author',None)})
-                    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-            else:
-                file_logger.warning(f'Post does not exist', extra={
-                        'request_user': request.user,
-                        'author': getattr(self.module,'author',None)})
+        try:
+            self.module = Post.objects.only(
+            'id', 'title', 'author',  'main_image').get(id=pk)
+            if request.user != self.module.author:
+                file_logger.warning(f'Error for access edit post page. Request user is not the author of that post', extra={
+                    'request_user': request.user,
+                    'author': getattr(self.module,'author',None)})
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        except Post.DoesNotExist:
+            file_logger.warning(f'Post does not exist', extra={
+                    'request_user': request.user,
+                    'author': getattr(self.module,'author',None)})
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return super().dispatch(request, pk)
 
     def get(self, request:HttpRequest, pk:uuid.UUID)->HttpResponse: 
         console_logger.info(
             f'Trying to get detail post with id - {pk} for editing')
         # get content using case
-        self.contents = Content.objects.filter(post=self.module).select_related('text').annotate(content=Case(
+        self.contents = Content.objects.filter(post=self.module).annotate(content=Case(
             When(text__gte=1, then=ArrayAgg(Array(Cast(F('text__id'), output_field=CharField()), F(
                 'text__text'), Value('text'), output_field=TextField()))),
             When(image__gte=1, then=ArrayAgg(Array(Cast(F('image__id'), output_field=CharField()), F(
@@ -292,7 +286,6 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
             When(video__gte=1, then=ArrayAgg(Array(Cast(F('video__id'), output_field=CharField()), F(
                 'video__video'), Value('video'), output_field=TextField()))))).\
             values('id', 'order', 'content').order_by('order')
-
         list_of_values = []
         console_logger.info('Collect content for post in list...')
         for x in self.contents:
@@ -307,6 +300,7 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
             del x['content']
             list_of_values.append(x)
         main_form = PostForm(instance=self.module)
+
         file_logger.info(
             f'Successful get detail post with id - {pk} for editing')
         return self.render_to_response({'main_form': main_form,
@@ -337,7 +331,7 @@ class PostDelete( View):
             post=Post.objects.get(id=pk)
         except Post.DoesNotExist:
             file_logger.debug('failed to delete post',extra={'id':pk})
-            return Http404()
+            raise Http404()
         post.delete()
         return redirect(reverse('post_list'))
 
@@ -347,26 +341,23 @@ class ContentDeleteView(View):
     """
 
     def post(self, request:HttpRequest, post_id:uuid.UUID, id:int)->JsonResponse:
-        file_logger.info('Trying to delete content in post...', extra={
+        console_logger.info('Trying to delete content in post...', extra={
             'post_id': post_id,
             'content_id': id,
             'request_user': request.user
         })
-        post = get_object_or_404(Post,
-                                 id=post_id,)
-
         content:Content= get_object_or_404(Content,
                                     id=id,
-                                    post=post)
+                                    post=post_id)
         if content:
             content.item.delete()
             content.delete()
-        file_logger.info('Successful delete content in post', extra={
+        console_logger.info('Successful delete content in post', extra={
             'post_id': post_id,
             'content_id': id,
             'request_user': request.user
         })
-        return JsonResponse({'answer': 'yes'})
+        return JsonResponse({'answer': 'success'})
 
 
 # def delete_comment(request,comment_id):
