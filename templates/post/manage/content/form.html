@@ -462,6 +462,7 @@ for (let i = 0; i < add_item.length; i++) {
                     let data = el.querySelector('#id_video').value
                     form.append('video', data);
                     let video_url = el.querySelector('#id_video').value
+                    let url='/blog/'+ '{{object.id}}' +'/content/create/'+model+'/'+order
                     let source_url = fetch(url, {
                         method: 'POST',
                         body:form,

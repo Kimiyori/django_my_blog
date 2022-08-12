@@ -5,6 +5,8 @@ register = template.Library()
 
 @register.filter(name='get_url_name')
 def get_url_name(url):
+    if not url or type(url)!=str:
+        return None
     mapper = {'shikimori.one': 'Shikimori',
               'myanimelist.net': 'MyAnimeList',
               'mangaupdates.com': 'MangaUpdates',
@@ -14,5 +16,5 @@ def get_url_name(url):
               'mangalib.me': 'MangaLib'}
     regex = re.compile(
         r"^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)")
-    # regex.search(url)
-    return mapper[regex.search(url).group(1)]
+    ser=regex.search(url).group(1)
+    return mapper[ser] if ser and ser in mapper  else None

@@ -6,11 +6,12 @@ from django.utils import timezone
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,  GenericRelation
-from .fields import OrderField
+from .fields import  OrderField
 from django.template.loader import render_to_string
 from django.apps import apps
 from django_cleanup import cleanup
 from mptt.models import MPTTModel, TreeForeignKey
+from embed_video.backends import YoutubeBackend
 
 # Create your models here.
 User = get_user_model()
@@ -119,11 +120,14 @@ class Image(ItemBase):
     relation = GenericRelation(Content, content_type_field='content_type',
                                object_id_field='object_id', related_query_name='image')
 
-
 class Video(ItemBase):
     video = models.URLField()
     relation = GenericRelation(Content, content_type_field='content_type',
                                object_id_field='object_id', related_query_name='video')
+    
+    def save(self, *args,**kwargs) -> None:
+        self.video = YoutubeBackend(url=self.video).get_url()
+        return super().save( *args,**kwargs)
 
 
 

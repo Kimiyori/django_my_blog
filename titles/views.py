@@ -57,12 +57,14 @@ class TitleList(ListView):
         # check if in cache and if not, create filter_dict and put it in cache
         filter_dict: str = cache.get(cache_key)
         if filter_dict is None:
-            filter_list_models: Dict[str, Dict[str, QuerySet]] = {'manga':
-                                                                  {'Theme': Theme, 'Genre': Genre, 'Type': MangaType,
-                                                                   'Demographic': Demographic, 'Publisher': Publisher},
-                                                                  'anime':
-                                                                  {'Theme': Theme, 'Genre': Genre,
-                                                                   'Type': AnimeType, 'Studio': Studio}}
+            filter_list_models: Dict[str, Dict[str, QuerySet]] = {
+                'manga':
+                        {'Theme': Theme, 'Genre': Genre, 'Type': MangaType,
+                        'Demographic': Demographic, 'Publisher': Publisher},
+                'anime':
+                        {'Theme': Theme, 'Genre': Genre,
+                        'Type': AnimeType, 'Studio': Studio}
+                                                                }
             filter_dict: Dict[str, QuerySet] = {}
             for key, item in filter_list_models[self.type].items():
                 filter_dict[key] = item.objects.all().values(

@@ -6,6 +6,7 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 from django.db.models import QuerySet
+
 if TYPE_CHECKING:
     from .models import Post, Content
 
@@ -55,4 +56,4 @@ class OrderField(models.PositiveIntegerField):
             file_logger.warning(
                 f'Can\'t update content order because of the following error - {e}')
             raise e
-            
+

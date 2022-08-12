@@ -1,5 +1,6 @@
 from io import BytesIO
 import shutil
+from uuid import uuid4
 from django.test import TestCase
 from ..models import *
 from ..views import PostDetail, PostList
@@ -16,7 +17,7 @@ from django.core.files.base import File as FileImg
 
 
 
-class PostTests(TestCase):
+class PostDetailTests(TestCase):
 
     def setUp(self):
         self.title = 'Test Post'
@@ -58,4 +59,8 @@ class PostTests(TestCase):
         self.assertEqual(self.response.context['post']['id'],self.post.id)
         self.assertEqual(self.response.context['post']['title'],self.post.title)
         self.assertEqual(self.response.context['post']['main_image'],self.post.main_image)
-
+    
+    def test_wrong_id(self):
+        url=reverse('post_detail', args=[uuid4()])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code,404)

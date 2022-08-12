@@ -34,6 +34,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 file_logger = logging.getLogger('file_logger')
@@ -107,11 +108,12 @@ class PostDetail(TemplateResponseMixin, View):
         post= cache.get(cache_post_key)
         # if not, then create and cache it
         if post is None:
-            post = Post.objects.values(
+            try:
+                post = Post.objects.values(
                 'id', 'title', 'main_image').get(id=pk)
-            if not post:
+                cache.set(cache_post_key, post)
+            except Post.DoesNotExist:
                 raise Http404('Cannot find post with given id')
-            cache.set(cache_post_key, post)
 
         # search in cache content fo given post by key
         cache_content_key = f'contentpostid:{pk}'
@@ -195,7 +197,6 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
             model_name:str, 
             id:Optional[int]=None, 
             order:Optional[int]=None)->JsonResponse:
-
         data = {}
         data['user_id'] = request.user.id
         # create form for current item model with data from request
@@ -209,6 +210,7 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
             if not hasattr(obj, 'post'):
                 obj.post = self.post_obj
             obj.save()
+            
             # if we have id attribute, then we need just update out item and code below doesnt need for us, its for new obj
             if not id:
                 # if we dont have order, then create content withoud order. Its case when we create first obj and assign it order 1
@@ -224,13 +226,13 @@ class ContentCreateUpdateView(GetModelAndForm, TemplateResponseMixin, View):
                                                      item=obj)
                     data['id'] = content.id
                     data['order'] = order
+                    
+            if model_name=='video':
+                data['url']=obj.video
+
         else:
             file_logger.debug(f'Get following error for given post id {post_id} and content id {id} {form.errors}')
-        # this specific case theck if our item is video and if yes, then convert url to embed format
-        if isinstance(obj, Video):
-            y = YoutubeBackend(url=obj.video)
-            data['url'] = y.get_url()
-
+            raise ValidationError('invalid form')
         return JsonResponse(data)
 
 class PostCreate(GetModelAndForm, TemplateResponseMixin, View):
@@ -267,8 +269,7 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         except Post.DoesNotExist:
             file_logger.warning(f'Post does not exist', extra={
-                    'request_user': request.user,
-                    'author': getattr(self.module,'author',None)})
+                    'post_id':pk})
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return super().dispatch(request, pk)
 
@@ -320,6 +321,7 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
             form.save()
         else:
             file_logger.warning('Form isn\'t valid for update post instance')
+            raise ValidationError('invalid form')
         file_logger.info(f'Successful  update post instance')
         return JsonResponse({request.POST['type']: 'ok'})
 

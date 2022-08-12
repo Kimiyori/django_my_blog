@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError,FieldError
+from embed_video.backends import YoutubeBackend
 from io import BytesIO
 import shutil
 from uuid import uuid4
@@ -14,6 +16,7 @@ from unittest import mock
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.base import File as FileImg
 from..forms import PostForm
+
 # Create your tests here.
 
 TEST_DIR = 'test_data'
@@ -72,6 +75,26 @@ class PostModelTests(TestCase):
         self.content_video = Content.objects.create(
             post=self.post, item=self.video_obj, order=4)
 
+    def test_create_post_post(self):
+        self.client.force_login(self.user)
+        img = image = get_temporary_image(
+            'text image for create url', height=456)
+        response = self.client.post(
+            reverse('post_detail_create'),
+            data={'title': 'test', 'main_image': img})
+        self.assertEqual(response.status_code, 302)
+        post = Post.objects.first()
+        self.assertEqual(Post.objects.count(), 2)
+        self.assertEqual(post.title, 'test')
+
+    def test_create_post_get(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            reverse('post_detail_create'),
+          )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'post/manage/content/form_create.html')
+
     def test_post_delete_success(self):
         self.client.force_login(self.user)
         post_id = self.post.pk
@@ -87,7 +110,6 @@ class PostModelTests(TestCase):
             reverse('post_delete', args=[uuid4()]))
         self.assertEqual(response.status_code, 404)
 
-
     def test_post_detail_change_get(self):
         self.client.force_login(self.user)
         response_get = self.client.get(
@@ -95,13 +117,40 @@ class PostModelTests(TestCase):
         self.assertEqual(response_get.status_code, 200)
         self.assertTemplateUsed(
             response_get, 'post/manage/content/form.html')
-        self.assertTrue(isinstance(response_get.context['main_form'],PostForm))
-        self.assertEqual(len(response_get.context['items']),4)
-        self.assertEqual(response_get.context['object'].id,self.post.id)
-        self.assertEqual(response_get.context['items'][0]['id'],self.content_text.id)
-        self.assertEqual(response_get.context['items'][0]['order'],self.content_text.order)
-        self.assertEqual(response_get.context['items'][0]['model'],self.text_obj._meta.model_name)
-        self.assertEqual(response_get.context['items'][0]['item_id'],str(self.text_obj.id))
+        self.assertTrue(isinstance(
+            response_get.context['main_form'], PostForm))
+        self.assertEqual(len(response_get.context['items']), 4)
+        self.assertEqual(response_get.context['object'].id, self.post.id)
+        self.assertEqual(
+            response_get.context['items'][0]['id'], self.content_text.id)
+        self.assertEqual(
+            response_get.context['items'][0]['order'], self.content_text.order)
+        self.assertEqual(
+            response_get.context['items'][0]['model'], self.text_obj._meta.model_name)
+        self.assertEqual(
+            response_get.context['items'][0]['item_id'], str(self.text_obj.id))
+
+    def test_post_detail_change_wrong_id(self):
+        self.client.force_login(self.user)
+        response_get = self.client.get(
+            reverse('post_detail_change', args=[uuid4()]))
+        self.assertEqual(response_get.status_code, 302)
+
+    def test_post_detail_change_wrong_user(self):
+        user = get_user_model().objects.create_user(
+            username='test2', password='12test12', email='test2@example.com')
+        self.client.force_login(user)
+        response_get = self.client.get(
+            reverse('post_detail_change', args=[self.post.pk]))
+        self.assertEqual(response_get.status_code, 302)
+
+    # def test_post_detail_change_post_invalid_form(self):
+    #     self.client.force_login(self.user)
+    #     data_title = {'type': 'main_image', 'title': 'Test post request', }
+    #     with self.assertRaises(ValidationError,msg='invalid form'):
+    #         self.client.post(reverse('post_detail_change', 
+    #                             args=[self.post.pk]), 
+    #                             data=data_title,)
 
     def test_post_detail_change_post_title(self):
         self.client.force_login(self.user)
@@ -122,6 +171,24 @@ class PostModelTests(TestCase):
         self.assertEqual(response_post_img.status_code, 200)
         self.post.refresh_from_db()
         self.assertEqual(self.post.main_image.height, 500)
+
+    def test_modules_create_wrong_model_name(self):
+        self.client.force_login(self.user)
+        with self.assertRaises(ValidationError, msg='validation error'):
+            response = self.client.post(reverse('module_content_create', kwargs={
+                'post_id': self.post.pk,
+                'model_name': 'video',
+                'order': 2}), data={'text': 'hello'})
+
+    def test_modules_create_text_without_order(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('module_content_create', kwargs={
+            'post_id': self.post.pk,
+            'model_name': 'text', }), data={'text': 'hello'})
+        self.assertEqual(response.status_code, 200)
+        self.content_image.refresh_from_db()
+        self.assertEqual(Content.objects.get(
+            post=self.post.pk, order=5).item.text, 'hello')
 
     def test_modules_create_text(self):
         self.client.force_login(self.user)
@@ -164,7 +231,7 @@ class PostModelTests(TestCase):
         self.assertEqual(Content.objects.get(
             post=self.post, order=2).item.text, 'Some tests')
         self.assertEqual(Content.objects.get(
-            post=self.post, order=1).item.video, url)
+            post=self.post, order=1).item.video, YoutubeBackend(url=url).get_url())
 
     def test_model_create_file(self):
         self.client.force_login(self.user)
@@ -180,8 +247,8 @@ class PostModelTests(TestCase):
         self.assertEqual(Content.objects.get(
             post=self.post, order=2).item.file.name.split("/")[-1], new_file.name)
         self.content_file.refresh_from_db()
-        self.assertEqual(self.content_file.order,3)
-            
+        self.assertEqual(self.content_file.order, 3)
+
     def test_model_update_text(self):
         self.client.force_login(self.user)
         self.assertEqual(self.content_text.item.text, 'Some tests')
@@ -207,7 +274,8 @@ class PostModelTests(TestCase):
     def test_model_update_video(self):
         self.client.force_login(self.user)
         self.assertEqual(Content.objects.get(
-            post=self.post, order=4).item.video, self.video_obj.video)
+            post=self.post, order=4).item.video,
+            YoutubeBackend(url='https://youtu.be/xahEdP2eJs4?list=RDxahEdP2eJs4').get_url())
         video = 'https://www.youtube.com/watch?v=Wz-pNcgYo0c&list=RDWz-pNcgYo0c&start_radio=1&ab_channel=Nyanperona21'
         response_video = self.client.post(reverse('module_content_update', kwargs={
             'post_id': self.post.pk,
@@ -215,7 +283,7 @@ class PostModelTests(TestCase):
             'id': self.video_obj.id}), data={'video': video})
         self.assertEqual(response_video.status_code, 200)
         self.assertEqual(Content.objects.get(
-            post=self.post, order=4).item.video, video)
+            post=self.post, order=4).item.video, YoutubeBackend(url=video).get_url())
 
     def test_model_update_file(self):
         self.client.force_login(self.user)
