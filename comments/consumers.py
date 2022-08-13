@@ -10,12 +10,13 @@ import redis
 from django.conf import settings
 import re
 from django.contrib.contenttypes.models import ContentType
-
-
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 class PostCommentsConsumer(AsyncWebsocketConsumer):
 
-    async def connect(self):
 
+    async def connect(self):
         self.model_type = re.search(r'^\/(\w+)\/', self.scope['path']).group(1)
         self.id = self.scope['url_route']['kwargs']['id']
         self.post_group_name = f'{self.model_type}_{self.id}'
@@ -31,6 +32,9 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
         else:
             self.model = apps.get_model(app_label='titles',
                                         model_name=self.model_type)
+        self.r = redis.Redis(host=settings.REDIS_HOST,
+                        port=settings.REDIS_PORT,
+                        db=settings.REDIS_DB)
         await self.accept()
 
     async def disconnect(self, code):
@@ -44,9 +48,11 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
         if text_json_load['type'] == 'increment_views':
             new_comment = await self.increment()
         elif text_json_load['type'] == 'new_comment':
-            new_comment = await self.create_new_comment(text_json_load)
+            new_comment = await self._new_comment(text_json_load)
         elif text_json_load['type'] == 'delete_comment':
             new_comment = await self._delete_comment(text_json_load)
+        else:
+            raise ValueError
         await self.channel_layer.group_send(
             self.post_group_name,
             {
@@ -83,16 +89,27 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_comment(self, data: Dict[str, str]) -> Dict[str, Union[str, int]]:
+    def _new_comment(self, data: Dict[str, str]) -> Dict[str, Union[str, int]]:
         get_parent = data.get('parent', None)
-        parent = self.comment_model.objects.get(
+        try:
+            parent = self.comment_model.objects.get(
             id=get_parent) if get_parent else None
-        new_comment = self.comment_model.objects.create(
-            model=self.model.objects.get(id=self.id),
-            parent=parent,
-            author=self.scope['user'],
-            content=data['content']
-        )
+        except self.comment_model.DoesNotExist:
+            raise ObjectDoesNotExist
+        try:
+            user=get_user_model().objects.get(id=data['author'])
+        except get_user_model().DoesNotExist:
+            raise ObjectDoesNotExist
+        try:
+            new_comment = self.comment_model.objects.create(
+                model=self.model.objects.get(id=self.id),
+                parent=parent,
+                author=user,
+                content=data['content']
+            )
+        except IntegrityError:
+            raise IntegrityError
+    
         return {
             'id': new_comment.id,
             'author_id': new_comment.author.id,
@@ -112,19 +129,15 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
             data = {
                 'id': data['comment_id']
             }
-        except CommentPost.DoesNotExist:
-            data = {
-                'id': f"Cannot find comment with given id {data['comment_id']}"
-            }
-        return data
+            return data
+        except self.comment_model.DoesNotExist:
+            raise ObjectDoesNotExist
+
 
     @database_sync_to_async
     def increment(self):
-        r = redis.Redis(host=settings.REDIS_HOST,
-                        port=settings.REDIS_PORT,
-                        db=settings.REDIS_DB)
         # increate in redis number of views in post
-        total_views = r.incr(f'post:{self.id}:views')
+        total_views = self.r.incr(f'post:{self.id}:views')
 
         return {
             'count': total_views

@@ -3,8 +3,6 @@ from . import consumers
 
 
 websocket_urlpatterns=[
-    path(r'post/<id>/',consumers.PostCommentsConsumer.as_asgi()),
-    path(r'manga/<uuid:id>/',consumers.PostCommentsConsumer.as_asgi()),
-    path(r'anime/<uuid:id>/',consumers.PostCommentsConsumer.as_asgi()),
+    re_path(r'(manga|anime|post)/(?P<id>[a-zA-Z0-9-]+)/',consumers.PostCommentsConsumer.as_asgi())
 
 ]
