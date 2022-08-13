@@ -16,6 +16,7 @@ from django.db import IntegrityError
 class PostCommentsConsumer(AsyncWebsocketConsumer):
 
 
+
     async def connect(self):
         self.model_type = re.search(r'^\/(\w+)\/', self.scope['path']).group(1)
         self.id = self.scope['url_route']['kwargs']['id']
@@ -51,6 +52,8 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
             new_comment = await self._new_comment(text_json_load)
         elif text_json_load['type'] == 'delete_comment':
             new_comment = await self._delete_comment(text_json_load)
+        else:
+            raise ValueError
         else:
             raise ValueError
         await self.channel_layer.group_send(
