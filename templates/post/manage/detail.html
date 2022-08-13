@@ -155,9 +155,9 @@ function comment_submit(e, id ) {
     data['author']= {{request.user.id}}
     data['content']= content
     data['type']= 'new_comment'
-    data['model_type']= 'post'
     if (parent) {
         parent = parent.options[parent.selectedIndex].value;
+        console.log(parent)
         data['parent']= parent
         }
     commentsConsumer.send(JSON.stringify(
