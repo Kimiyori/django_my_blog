@@ -30,3 +30,5 @@ coverage.xml
 .pytest_cache/
 celerybeat-schedule
 .env
+
+.vscode/
