@@ -1,18 +1,11 @@
-from io import BytesIO
-import shutil
+
 from uuid import uuid4
 from django.test import TestCase
 from ..models import *
-from ..views import PostDetail, PostList
+from ..views import PostDetail
 from django.urls import reverse, resolve
-from django.test import override_settings
-from PIL import Image as ImageTest
-import tempfile
-import datetime
 from django.contrib.auth import get_user_model
-from unittest import mock
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.files.base import File as FileImg
+
 # Create your tests here.
 
 
@@ -53,13 +46,12 @@ class PostDetailTests(TestCase):
             PostDetail.as_view().__name__
         )
     def test_total_views(self):
-        self.assertEqual(self.response.context['total_views'],1)
+        self.assertEqual(self.response.context['total_views'],0)
     
     def test_context_post(self):
         self.assertEqual(self.response.context['post']['id'],self.post.id)
         self.assertEqual(self.response.context['post']['title'],self.post.title)
-        self.assertEqual(self.response.context['post']['main_image'],self.post.main_image)
-    
+
     def test_wrong_id(self):
         url=reverse('post_detail', args=[uuid4()])
         response = self.client.get(url)

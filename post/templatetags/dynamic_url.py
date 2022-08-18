@@ -1,5 +1,4 @@
 from django import template
-from urllib.parse import urlencode
 from django.urls import reverse
 
 register = template.Library()

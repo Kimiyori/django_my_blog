@@ -1,20 +1,18 @@
-from django.core.exceptions import ValidationError,FieldError
+
 from embed_video.backends import YoutubeBackend
 from io import BytesIO
 import shutil
 from uuid import uuid4
 from django.test import TestCase
 from ..models import *
-from ..views import PostList
-from django.urls import reverse, resolve
+from django.urls import reverse
 from django.test import override_settings
 from PIL import Image as ImageTest
-import tempfile
 import datetime
 from django.contrib.auth import get_user_model
 from unittest import mock
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.files.base import File as FileImg
+from django.core.exceptions import ValidationError
 from..forms import PostForm
 
 # Create your tests here.

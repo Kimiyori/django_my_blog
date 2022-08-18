@@ -1,17 +1,15 @@
 from io import BytesIO
 from django.test import TestCase
-from django.urls import reverse, resolve
-
-from post.templatetags.urlparams import urlparams
-from ..views import TitleList
 from ..models import *
 from django.template.defaultfilters import slugify
 from django.test import override_settings
 from PIL import Image as ImageTest
-import tempfile
+
 import datetime
-from django.core.files.base import ContentFile, File
+
+from django.core.files.images import ImageFile
 import shutil
+
 # Create your tests here.
 
 TEST_DIR = 'test_data'
@@ -25,7 +23,7 @@ def get_temporary_image():
     image = ImageTest.new("RGBA", size, color)
     image.save(temp_file, 'png')
     temp_file.seek(0)
-    return File(temp_file, name='test')
+    return ImageFile(temp_file, name='test')
 
 
 class BaseTitleTests(object):
@@ -60,6 +58,7 @@ class BaseTitleTests(object):
 
 
 class MangaModelTests(BaseTitleTests, TestCase):
+
 
     @override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
     def setUp(self):

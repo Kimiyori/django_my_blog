@@ -1,8 +1,7 @@
 from django import forms
 from .models import Profile,CustomUser
 from allauth.account.forms import SignupForm
-import json
-from django.contrib.auth.models import Group
+
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from .models import CustomUser

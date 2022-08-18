@@ -2,12 +2,10 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from django.apps import apps
-from titles.models import Anime, Genre, Manga, Title
+from titles.models import  Genre,  Title
 from django.template.defaultfilters import slugify
 from django.urls import reverse, resolve
-
 from post.templatetags.urlparams import urlparams
-
 from ..views import TitleList
 
 

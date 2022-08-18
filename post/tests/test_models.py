@@ -2,16 +2,14 @@ from io import BytesIO
 import shutil
 from django.test import TestCase
 from ..models import *
-from ..views import PostList
-from django.urls import reverse, resolve
+
 from django.test import override_settings
 from PIL import Image as ImageTest
-import tempfile
+
 import datetime
 from django.contrib.auth import get_user_model
 from unittest import mock
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.files.base import File as FileImg
 # Create your tests here.
 
 TEST_DIR = 'test_data'

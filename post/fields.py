@@ -1,9 +1,7 @@
 
-from typing import Any, NoReturn, Sequence, Union, TYPE_CHECKING
-from typing_extensions import reveal_type
+from typing import Any, Sequence, Union, TYPE_CHECKING
 from django.apps import apps
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
 import logging
 from django.db.models import QuerySet
 

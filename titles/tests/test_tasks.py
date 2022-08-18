@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.test import TransactionTestCase
-from ..tasks import add_score, update_scores, CustomError
+from ..tasks import add_score, update_scores
 from ..models import *
 from django.test import override_settings
 from django.apps import apps
@@ -60,7 +60,7 @@ class SetScoreTaskTestCase(object):
             score=3.33,
             urls=self.urls)
         task = add_score.delay(id=item.id, type=self.model)
-        self.assertTrue(isinstance(task.result, CustomError))
+        self.assertTrue(isinstance(task.result, AttributeError))
 
 
 @override_settings(CELERY_TASK_ALWAYS_EAGER=True, CELERY_TASK_EAGER_PROPOGATES=True)

@@ -6,7 +6,7 @@ from channels.testing import WebsocketCommunicator
 from django.contrib.auth import get_user_model
 
 
-from channels.routing import  URLRouter
+from channels.routing import URLRouter
 
 from ..routing import websocket_urlpatterns
 
@@ -15,19 +15,21 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.apps import apps
 
+
 class TestCreateCommentBase(object):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username='test', password='12test12', email='test@example.com')
-        self.model=apps.get_model(app_label=self.app_label,
-                        model_name=self.model_name)
-        self.comment_model=apps.get_model(app_label='comments',
-                        model_name=f'comment{self.model_name}')
-        self.post = self.model.objects.create(author=self.user) if self.model_name=='post' else self.model.objects.create()
+        self.model = apps.get_model(app_label=self.app_label,
+                                    model_name=self.model_name)
+        self.comment_model = apps.get_model(app_label='comments',
+                                            model_name=f'comment{self.model_name}')
+        self.post = self.model.objects.create(
+            author=self.user) if self.model_name == 'post' else self.model.objects.create()
         self.application = URLRouter(websocket_urlpatterns)
-        self.url=f"/{self.model_name}/{self.post.id}/"
-    
+        self.url = f"/{self.model_name}/{self.post.id}/"
+
     @sync_to_async
     def get_model_count(self, model):
         return model.objects.count()
@@ -141,26 +143,26 @@ class TestCreateCommentBase(object):
             await communicator.send_json_to(data)
             await communicator.receive_json_from()
 
-class TestCreateCommentPost(TestCreateCommentBase,TransactionTestCase):
-    
+
+class TestCreateCommentPost(TestCreateCommentBase, TransactionTestCase):
+
     def setUp(self) -> None:
-        self.model_name='post'
-        self.app_label='post'
+        self.model_name = 'post'
+        self.app_label = 'post'
         super().setUp()
 
 
-class TestCreateCommentManga(TestCreateCommentBase,TransactionTestCase):
-    
+class TestCreateCommentManga(TestCreateCommentBase, TransactionTestCase):
+
     def setUp(self) -> None:
-        self.model_name='manga'
-        self.app_label='titles'
+        self.model_name = 'manga'
+        self.app_label = 'titles'
         super().setUp()
 
 
+class TestCreateCommentAnime(TestCreateCommentBase, TransactionTestCase):
 
-class TestCreateCommentAnime(TestCreateCommentBase,TransactionTestCase):
-    
     def setUp(self) -> None:
-        self.model_name='anime'
-        self.app_label='titles'
+        self.model_name = 'anime'
+        self.app_label = 'titles'
         super().setUp()

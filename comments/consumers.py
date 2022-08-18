@@ -1,15 +1,12 @@
 import json
 from typing import Dict, Union
 from django.apps import apps
-from django.http import Http404
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from post.models import Post
-from .models import CommentPost
 import redis
 from django.conf import settings
 import re
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
@@ -53,9 +50,7 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
         elif text_json_load['type'] == 'delete_comment':
             new_comment = await self._delete_comment(text_json_load)
         else:
-            raise ValueError
-        else:
-            raise ValueError
+            raise ValueError 
         await self.channel_layer.group_send(
             self.post_group_name,
             {
@@ -143,5 +138,5 @@ class PostCommentsConsumer(AsyncWebsocketConsumer):
         total_views = self.r.incr(f'post:{self.id}:views')
 
         return {
-            'count': total_views
+            'count': int(total_views)
         }

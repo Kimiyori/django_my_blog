@@ -1,9 +1,8 @@
 
-from inspect import getargvalues
 import logging
 from typing import Any, NoReturn
 
-from django.db.models.signals import pre_save,post_delete,pre_delete
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.db.models import QuerySet
 from post.models import Content
@@ -24,6 +23,5 @@ def delete_files(sender: Any, instance: QuerySet, **kwargs: Any) -> NoReturn:
             content.save()
             break
         min_order+=1
-    
     
     

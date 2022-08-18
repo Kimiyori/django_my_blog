@@ -2,11 +2,10 @@ from celery import shared_task
 from .models import Anime, Manga
 from .api_urls import myanimelist
 import re
-from django.core.exceptions import ValidationError
 import logging
 from django.apps import apps
 from uuid import UUID
-from typing import  List,  Optional, Any,NoReturn,Type
+from typing import  List,  Optional,NoReturn,Type
 
 # logging
 file_logger = logging.getLogger('file_logger')
@@ -24,10 +23,6 @@ def is_valid_uuid(val: str|int)-> bool:
         return False
 
 
-class CustomError(Exception):
-    pass
-
-
 @shared_task
 def add_score(id: UUID, type: str) -> Optional[int]:
     """
@@ -39,15 +34,18 @@ def add_score(id: UUID, type: str) -> Optional[int]:
     """
     if type not in ['anime', 'manga']:
         raise ValueError('Incorrect type of title, only manga or anime')
+
     if not is_valid_uuid(id):
         raise ValueError('Incorrect type if id,needed UUID')
 
     model:Type[Anime | Manga] = apps.get_model(app_label='titles',
                            model_name=type)
+
     try:
         instance = model.objects.get(id=id)
     except model.DoesNotExist:
         raise ValueError(f'Did not find an instance for given {type} id')
+        
     if not getattr(instance, 'score'):
         if getattr(instance, 'urls') and getattr(instance.urls, 'mal'):
             try:
@@ -77,7 +75,7 @@ def add_score(id: UUID, type: str) -> Optional[int]:
             raise AttributeError(
                 'Instance doesnt have either urls field or urls.mal field')
     else:
-        raise CustomError('Instance already has score')
+        raise AttributeError('Instance already has score')
 
 
 @shared_task
