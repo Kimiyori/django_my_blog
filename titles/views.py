@@ -1,11 +1,11 @@
 
 from typing import Any, Dict, Optional, Type, Union
 from uuid import uuid4
-from django.http import Http404, HttpRequest, HttpResponseBadRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.views.generic import ListView
 
 from comments.forms import CommentForm
-from .models import Anime, Genre,  Demographic, AnimeType, Manga, MangaType, Publisher, Studio, Theme, Urls
+from .models import Anime, Genre,  Demographic, AnimeType, Manga, MangaType, Publisher, Studio, Theme
 import logging
 from .filters import filter_by_name, annotate_acc, get_comments, values_acc, filter_by_models
 from django.core.cache import cache
@@ -13,6 +13,7 @@ from django.apps import apps
 from django.views.generic.base import TemplateResponseMixin, View
 from .paginator import LargeTablePaginator
 from django.db.models import QuerySet
+from django.db import models
 
 # logging
 file_logger = logging.getLogger('file_logger')
@@ -36,35 +37,33 @@ class TitleList(ListView):
 
     def get_queryset(self) -> QuerySet[Union[Manga, Anime]]:
         console_logger.info(f'Trying to get list of {self.type}\'s')
-        # get model based on type
         model: Type[Anime | Manga] = apps.get_model(app_label='titles',
                                                     model_name=self.type).objects.all()
         # filter instance based on attributes
         model, params = filter_by_models(request=self.request, instance=model)
-        # get q if need filter by title and then filter
+
+        # get q if need filter by title
         model, title_name = filter_by_name(request=self.request,  item=model)
 
         model = model.values('id', 'title__original_name',
                              'image__thumbnail').order_by('title__original_name')
         console_logger.info(f'Successfil get list of {self.type}', extra={
-                            'filers': params, 'title_filter': title_name})
+                                'filers': params, 'title_filter': title_name})
         return model
 
     def get_context_data(self, **kwargs: Any) -> HttpResponse:
         context: dict = super().get_context_data(**kwargs)
-        # inicialize cache key for filter bar
         cache_key: str = f'filterdict:{self.type}'
-        # check if in cache and if not, create filter_dict and put it in cache
         filter_dict: str = cache.get(cache_key)
         if filter_dict is None:
-            filter_list_models: Dict[str, Dict[str, QuerySet]] = {
+            filter_list_models: Dict[str, Dict[str, models.Model]] = {
                 'manga':
-                        {'Theme': Theme, 'Genre': Genre, 'Type': MangaType,
-                        'Demographic': Demographic, 'Publisher': Publisher},
+                    {'Theme': Theme, 'Genre': Genre, 'Type': MangaType,
+                    'Demographic': Demographic, 'Publisher': Publisher},
                 'anime':
-                        {'Theme': Theme, 'Genre': Genre,
-                        'Type': AnimeType, 'Studio': Studio}
-                                                                }
+                    {'Theme': Theme, 'Genre': Genre,
+                    'Type': AnimeType, 'Studio': Studio}
+            }
             filter_dict: Dict[str, QuerySet] = {}
             for key, item in filter_list_models[self.type].items():
                 filter_dict[key] = item.objects.all().values(
@@ -91,16 +90,16 @@ class TitleDetail(TemplateResponseMixin, View):
     def get(self, request: HttpRequest, pk: uuid4) -> HttpResponse:
         # get tab(info or related,depending of query params)
         tab: str = self.request.GET.get('tab', 'info')
-        if tab!='info' and tab !='related': 
-            tab='info'
+        #if neither is given
+        if tab != 'info' and tab != 'related':
+            tab = 'info'
         # get type if url(anime or manga)
         type: str = self.request.resolver_match.url_name.split('_')[0]
-        modeltype: Type[Anime|Manga] =apps.get_model(app_label='titles',
-                                    model_name=type)
         console_logger.info(f'Trying get detail about {type} with id {pk}')
-        key: str = f'titledetail:{tab}:{self.kwargs["pk"]}'  # create cache key
-        model: Optional[str] = cache.get(key)
-        # if got in cache, then create queryset in cache it
+        modeltype: Type[Anime | Manga] = apps.get_model(app_label='titles',
+                                                        model_name=type)
+        key: str = f'titledetail:{tab}:{self.kwargs["pk"]}' 
+        model: Optional[QuerySet] = cache.get(key)
         if model is None:
             try:
                 # get info from model based on type and tab
@@ -109,12 +108,12 @@ class TitleDetail(TemplateResponseMixin, View):
                 ).values(*values_acc(type, tab)).get(id=self.kwargs['pk'])
             except modeltype.DoesNotExist:
                 raise Http404('Cannot find title with given id')
-            cache.set(key, model, CACHE_TIME)  # cache queryset
-        comments: QuerySet= get_comments(type, pk)
+            cache.set(key, model, CACHE_TIME)  
+        comments: QuerySet = get_comments(type, pk)
         comment_form = CommentForm(apps.get_model(app_label='comments',
                                                   model_name=f'comment{type}'
                                                   ))
-        console_logger.info(f'Successful get detail about {type} with id {pk}')
+        console_logger.info(f'Successful get  {type} detail with id: {pk}')
         return self.render_to_response({'item': model,
                                         'model': type,
                                         'tab': tab,

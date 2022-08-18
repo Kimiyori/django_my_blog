@@ -1,5 +1,4 @@
 
-from typing_extensions import reveal_type
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.fields import CharField, TextField
 from django.db.models.functions import Cast
@@ -8,10 +7,10 @@ from django.db.models import F, Q, Value
 from django.db.models.expressions import Func
 from urllib.parse import urlsplit, parse_qs
 from django.db.models import QuerySet
-
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Type, Union
 from django.http import HttpRequest
 from django.apps import apps
+from comments.models import CommentAnime, CommentManga
 from titles.models import Anime, Manga
 
 
@@ -19,7 +18,6 @@ class Filter:
     """
     Calling class for filtering
     """
-
     def __call__(self, name: str, item: str) -> Dict[str, str]:
         return {
             f'{name}__name__icontains': item
@@ -28,7 +26,7 @@ class Filter:
 
 def filter_by_name(request: HttpRequest, item: QuerySet[Union[Manga, Anime]]) -> Tuple[QuerySet, Optional[str]]:
     """
-    Function for filtering by title name if it given in request.
+    Function for filtering by title name if 'q' given in request.
 
     :param HttpRequest request: send request from main method to get q query param
 
@@ -63,8 +61,9 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
     """
 
     def create_wrapper(name: str) -> Union[Value, F, Cast]:
-        # if name just anime or manga, then wrap in into Value() to pass itw original name into template.
-        # This field need for defining type when referncing for adaptation or based_on, when can be either anime and manga
+        # if name just anime or manga, then wrap in into Value() to pass original name into template.
+        # This field is required to determine the type when referring 
+        # to 'adapted' or 'based on' when it could be either anime or manga.
         if name in ['anime', 'manga']:
             return Value(name)
         # if not id field, use default F()
@@ -75,11 +74,11 @@ def annotate_acc(type: str, tab: str) -> Dict[str,  ArrayAgg]:
             return Cast(F(name), output_field=TextField(max_length=40))
 
     def create_array(list: list[str]) -> ArrayAgg:
-        # if let <=1, then use default ArrayAgg for values
+        # use default ArrayAgg for values
         if len(list) <= 1:
             arr = [create_wrapper(name) for name in list]
             r = ArrayAgg(*arr, distinct=True)
-        # if values more that 1, then use psql Array func to 6wrap it
+        # if values more that 1, then use psql Array func to wrap it
         else:
             arr = Array(*[create_wrapper(name) for name in list],
                         output_field=ArrayField(CharField(max_length=200)))
@@ -179,24 +178,20 @@ def filter_by_models(
     # get attirubtes from query parameters
     params: Dict[str, List[str]] = parse_qs(
         urlsplit(request.get_full_path()).query)
-    # check if  in url params exist page attr
     if 'page' in params:
         del params['page']
     if 'q' in params:
         del params['q']
-    # iterate through params list to filter instance
-
     for model, list in params.items():
         for item in list:
             instance = instance.filter(**fil(name=model, item=item))
     return instance, params
 
 
-def get_comments(type: str, id: int) -> QuerySet[Union[Manga, Anime]]:
+def get_comments(type: str, id: int) -> Type[Union[CommentManga, CommentAnime|None]]:
     """
-    Get comments for title
+    Get comments for title instance
     """
-    mapper = {'manga': 'commentmanga', 'anime': 'commentmanga'}
     return apps.get_model(app_label='comments',
                           model_name=f'comment{type}'
                           ).objects.select_related('author__profile').filter(model=id)

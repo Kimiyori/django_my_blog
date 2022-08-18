@@ -125,7 +125,6 @@ def regis():
 def log():
     with open('titles/api_urls/mal_token.json') as f:
         token = json.load(f)
-
     session = MyAnimeList('web',
                           client_id=MAL_CLIENT_ID,
                           client_secret=MAL_CLIENT_SECRET,

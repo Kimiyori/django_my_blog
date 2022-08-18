@@ -1,15 +1,18 @@
 # posts/serializers.
+
 from django.apps import apps
 from django.db import transaction
-from requests import post
 from post.models import Content, File, Post, Text, Video
 from post.models import Image as ImageContent
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 import logging
 from titles.models import Anime, AnimeType, Magazine, Studio, Theme, Title, Manga, AuthorTable, Publisher, Demographic, MangaType, Genre, Authors, AuthorTable, Image
+from django.contrib.auth import get_user_model
+
 file_logger = logging.getLogger('file_logger')
 console_logger = logging.getLogger('console_logger')
+
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """
@@ -31,27 +34,24 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
+
 class TitleSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Title
         fields = ['original_name', 'english_name', 'russian_name']
 
     @transaction.atomic
     def create(self, validated_data):
-        file_logger.info(
-            f'Trying create instance of title model with following fields',extra={'fields':{*[x for x in validated_data.keys()],}})
-
         original_name = validated_data.pop('original_name', None)
         english_name = validated_data.pop('english_name', None)
         russian_name = validated_data.pop('russian_name', None)
         title = Title.objects.create(
             original_name=original_name, english_name=english_name, russian_name=russian_name)
-        file_logger.info('Successful create instance of title model')
+        console_logger.info('Successful create instance of title model')
         return title
 
     def update(self, instance, validated_data):
-        file_logger.info(
-            f'Starting update instance of title model with folloving fields:{*[x for x in validated_data.keys()],}')
         instance.original_name = validated_data.pop(
             'original_name', instance.original_name)
         instance.english_name = validated_data.pop(
@@ -59,7 +59,7 @@ class TitleSerializer(serializers.ModelSerializer):
         instance.russian_name = validated_data.pop(
             'russian_name', instance.russian_name)
         instance.save()
-        file_logger.info('Successful update instance of title model')
+        console_logger.info('Successful update instance of title model')
         return instance
 
 
@@ -103,30 +103,37 @@ class GenreSerializer(serializers.ModelSerializer):
         model = Genre
         fields = ['name']
 
+
 class ThemeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Theme
         fields = ['name']
+
+
 class PublisherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Publisher
         fields = ['name']
+
+
 class DemographicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Demographic
         fields = ['name']
 
+
 class MagazineSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Magazine    
+        model = Magazine
         fields = ['name']
 
+
 class MangaSerializer(DynamicFieldsModelSerializer):
-    title = TitleSerializer()
+    title = TitleSerializer(required=False)
     premiere = serializers.DateField(required=False)
     volumes = serializers.IntegerField(required=False)
     chapters = serializers.IntegerField(required=False)
@@ -142,14 +149,15 @@ class MangaSerializer(DynamicFieldsModelSerializer):
     demographic = serializers.SlugRelatedField(
         queryset=Demographic.objects.all(), slug_field='name', required=False)
     type = serializers.SlugRelatedField(
-        queryset=MangaType.objects.all(), slug_field='name',required=False)
+        queryset=MangaType.objects.all(), slug_field='name', required=False)
 
     image = ImageSerializer(required=False)
     description = serializers.CharField(required=False)
 
     class Meta:
-        model=Manga
-        fields=('__all__')
+        model = Manga
+        fields = ('id', 'title', 'type', 'publisher', 'magazine',
+                  'chapters', 'volumes', 'genre', 'authors', 'theme', 'demographic', 'premiere', 'image', 'description',)
 
     def get_values(self, field, data):
         model = apps.get_model(app_label='titles', model_name=field)
@@ -159,11 +167,12 @@ class MangaSerializer(DynamicFieldsModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         file_logger.info(
-            f'Starting create instance of manga model with folloving fields',extra={'fields':{*[x for x in validated_data.keys()],}})
+            f'Starting create instance of manga model with folloving fields',
+            extra={'fields': {*[x for x in validated_data.keys()], }})
+        title = validated_data.pop('title')
+        #title = Title.objects.create(**validated_data.pop('title'))
 
-        title = Title.objects.create(**validated_data.pop('title'))
-
-        authors = validated_data.pop('authors',None)
+        authors = validated_data.pop('authors', None)
         if authors:
             author = authors.pop('author', None)
             if author:
@@ -177,15 +186,22 @@ class MangaSerializer(DynamicFieldsModelSerializer):
         theme = validated_data.pop('theme', [])
         publisher = validated_data.pop('publisher', [])
         magazine = validated_data.pop('magazine', [])
+
         manga = Manga.objects.create(**validated_data)
+
         if authors:
             manga.authors = authors
-        manga.title = title
+        if title:
+            title = TitleSerializer(data=title)
+            if title.is_valid():
+                title = title.save()
+                manga.title = title
         manga.genre.set(genre)
         manga.theme.set(theme)
         manga.publisher.set(publisher)
         manga.magazine.set(magazine)
         if image:
+
             image = Image.objects.create(**image)
             manga.image = image
         manga.save()
@@ -202,38 +218,29 @@ class MangaSerializer(DynamicFieldsModelSerializer):
                   'volumes', 'chapters',  'demographic',
                   'description', ]
         for field in fields:
-            try:
-                data = validated_data.pop(field, getattr(instance, field))
-                if data:
-                    setattr(instance, field, data)
-            except KeyError as e:  # validated_data may not contain all fields during HTTP PATCH
-                file_logger.warning(f'{e}')
-
+            data = validated_data.pop(field, None)
+            if data:
+                setattr(instance, field, data)
         # manytomant fields
         manytomany_fields = ['genre', 'theme', 'publisher', 'magazine']
         for field in manytomany_fields:
-            try:
-                data = validated_data.pop(field, [])
-                if data:
-                    field_instance = getattr(instance, field)
-                    field_instance.set(self.get_values(field=field, data=data))
-            except Exception as e:
-                file_logger.warning(f'{e}')
+            data = validated_data.pop(field, None)
+            if data:
+                data = list(getattr(instance, field).values_list(
+                    'name', flat=True))+data
+                field_instance = getattr(instance, field)
+                field_instance.set(self.get_values(field=field, data=data))
 
         # nested fields
         nested_fields = {'title': TitleSerializer,
                          'authors': AuthorsSerializer, 'image': ImageSerializer}
         for field, serializer in nested_fields.items():
-            try:
+            data = validated_data.pop(field, None)
+            if data:
                 get_field = getattr(instance, field)
-                data = validated_data.pop(field, None)
-                if data:
-                    obj = serializer(instance=get_field, data=data)
-                    if obj.is_valid():
-                        obj.save()
-            except Exception as e:
-                file_logger.warning(f'{e}')
-
+                obj = serializer(instance=get_field, data=data)
+                if obj.is_valid():
+                    obj.save()
         instance.save()
 
         file_logger.info('Successful update instance of manga model')
@@ -241,13 +248,13 @@ class MangaSerializer(DynamicFieldsModelSerializer):
 
 
 class AnimeSerializer(DynamicFieldsModelSerializer):
-    title = TitleSerializer()
+    title = TitleSerializer(required=False)
     genre = serializers.SlugRelatedField(
         queryset=Genre.objects.all(), many=True, slug_field='name', required=False)
     theme = serializers.SlugRelatedField(
         queryset=Theme.objects.all(), many=True, slug_field='name', required=False)
     type = serializers.SlugRelatedField(
-        queryset=AnimeType.objects.all(), slug_field='name',required=False)
+        queryset=AnimeType.objects.all(), slug_field='name', required=False)
     studio = serializers.SlugRelatedField(
         queryset=Studio.objects.all(), many=True, slug_field='name', required=False)
     image = ImageSerializer(required=False)
@@ -265,16 +272,20 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         file_logger.info(
-            f'Starting create instance of anime model with folloving fields',extra={'fields':{*[x for x in validated_data.keys()],}})
-        title = Title.objects.create(**validated_data.pop('title'))
-        
+            f'Starting create instance of anime model with folloving fields',
+            extra={'fields': {*[x for x in validated_data.keys()], }})
+        title = validated_data.pop('title')
         image = validated_data.pop('image', None)
         genre = validated_data.pop('genre', [])
         theme = validated_data.pop('theme', [])
         studio = validated_data.pop('studio', [])
         anime = Anime.objects.create(**validated_data)
 
-        anime.title = title
+        if title:
+            title = TitleSerializer(data=title)
+            if title.is_valid():
+                title = title.save()
+                anime.title = title
         anime.genre.set(genre)
         anime.theme.set(theme)
         anime.studio.set(studio)
@@ -290,43 +301,34 @@ class AnimeSerializer(DynamicFieldsModelSerializer):
     def update(self, instance, validated_data):
 
         console_logger.info(
-            f'Starting update instance of anime model with folloving fields:',
-            extra={'fields':{*[x for x in validated_data.keys()],}})
+            f'Starting update instance of anime model with following fields:',
+            extra={'fields': {*[x for x in validated_data.keys()], }})
         # default fields
         fields = ['type',  'premiere',
                   'episodes',
                   'description', ]
         for field in fields:
-            try:
-                data = validated_data.pop(field, getattr(instance, field))
-                if data:
-                    setattr(instance, field, data)
-            except KeyError as e:  # validated_data may not contain all fields during HTTP PATCH
-                file_logger.warning(f'{e}')
-
+            data = validated_data.pop(field, None)
+            if data:
+                setattr(instance, field, data)
         # manytomant fields
         manytomany_fields = ['genre', 'theme', 'studio']
         for field in manytomany_fields:
-            try:
-                data = validated_data.pop(field, [])
-                if data:
-                    field_instance = getattr(instance, field)
-                    field_instance.set(self.get_values(field=field, data=data))
-            except Exception as e:
-                file_logger.warning(f'{e}')
-
+            data = validated_data.pop(field, None)
+            if data:
+                data = list(getattr(instance, field).values_list(
+                    'name', flat=True))+data
+                field_instance = getattr(instance, field)
+                field_instance.set(self.get_values(field=field, data=data))
         # nested fields
         nested_fields = {'title': TitleSerializer, 'image': ImageSerializer}
         for field, serializer in nested_fields.items():
-            try:
+            data = validated_data.pop(field, None)
+            if data:
                 get_field = getattr(instance, field)
-                data = validated_data.pop(field, None)
-                if data:
-                    obj = serializer(instance=get_field, data=data)
-                    if obj.is_valid():
-                        obj.save()
-            except Exception as e:
-                file_logger.warning(f'{e}')
+                obj = serializer(instance=get_field, data=data)
+                if obj.is_valid():
+                    obj.save()
 
         instance.save()
 
@@ -394,13 +396,23 @@ class ContentSerializer(serializers.ModelSerializer):
         fields = ('order', 'content_type', 'content',)
 
 
-class PostSerializer(DynamicFieldsModelSerializer):
+class UserSerializator(serializers.Serializer):
+    id=serializers.IntegerField(required=False)
+    username=serializers.CharField(required=False)
 
-    author = serializers.CharField(
-        source='author.username', default='', read_only=True)
-    contents = ContentSerializer(many=True)
-    count_contents = serializers.IntegerField(source="contents.count", read_only=True)
+    class Meta:
+        #model=get_user_model()
+        fields= ('id','username')
+
+class PostSerializer(DynamicFieldsModelSerializer):
+    author = UserSerializator()
+    contents = ContentSerializer(many=True, required=False)
+    count_contents = serializers.IntegerField(
+        source="contents.count", read_only=True)
+
     class Meta:
         model = Post
         fields = ('id', 'title', 'main_image',
-                  'author', 'publish', 'created', 'updated', 'status', 'count_contents' ,'contents')
+                  'author', 'publish', 'created', 'updated', 'status', 'count_contents', 'contents')
+
+

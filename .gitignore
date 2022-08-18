@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 # Media and Static directories
 /media/
 !/media/.gitkeep
@@ -27,6 +28,5 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
-
-
+celerybeat-schedule
 .env

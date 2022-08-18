@@ -3,17 +3,14 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from ...models import Post,Content
 from titles.models import Image as ImageModel
-from titles.models import Anime, Manga
-from titles.management.commands.create_titles_data import NUMBER_ANIME, NUMBER_MANGA
 from django.db import transaction
-from django.db.models import Max, Min
 from config import settings
 import os
 from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from django.apps import apps
 
-NUMBER_POST = 50
+NUMBER_POST = 10
 
 NUMBER_USERS = 10
 
@@ -139,9 +136,9 @@ class Command(BaseCommand):
 
         models = [Post,Content]
 
-        self.delete_all_data(models)
+        #self.delete_all_data(models)
 
-        self.create_users()
+        #self.create_users()
 
         self.create_post()
 

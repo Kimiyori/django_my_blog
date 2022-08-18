@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, Profile
 from .forms import UserCreationForm, UserChangeForm
-import json
 from django.contrib.auth.models import Permission
 
 # Register your models here.

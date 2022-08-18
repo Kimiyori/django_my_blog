@@ -1,14 +1,7 @@
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.generic.base import TemplateResponseMixin, View
-from django.views.generic import TemplateView,DetailView
-from requests import get
-
 from accounts.forms import ProfileForm
-from post.models import Post
 from .models import Profile, CustomUser
-from allauth.account.views import SignupView
-from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 

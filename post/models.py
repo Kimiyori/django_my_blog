@@ -3,17 +3,14 @@ from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,  GenericRelation
 from .fields import  OrderField
 from django.template.loader import render_to_string
-from django.apps import apps
 from django_cleanup import cleanup
-from mptt.models import MPTTModel, TreeForeignKey
 from embed_video.backends import YoutubeBackend
 
-# Create your models here.
+
 User = get_user_model()
 
 
@@ -34,7 +31,7 @@ class Post(models.Model):
         (PUBLISHED, 'Published'),
     )
     title = models.CharField(max_length=500)
-    main_image = models.ImageField(upload_to=main_path)
+    main_image = models.ImageField(upload_to=main_path,blank=True,null=True)
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,

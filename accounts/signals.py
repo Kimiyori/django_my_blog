@@ -6,6 +6,9 @@ from django.db.models.signals import pre_save,post_save
 from django.dispatch import receiver
 from .models import CustomUser, Profile
 THUMBNAIL_SIZE = (400,400)
+# logging
+file_logger = logging.getLogger('file_logger')
+console_logger = logging.getLogger('console_logger')
 
 @receiver(pre_save, sender=Profile)
 def generate_thumbnail(sender, instance, **kwargs):
@@ -27,4 +30,5 @@ def generate_thumbnail(sender, instance, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, **kwargs):
     if not hasattr(instance,'profile'):
+        console_logger.info(f'Create profile for user with id {instance.id}')
         Profile.objects.create(user=instance)
