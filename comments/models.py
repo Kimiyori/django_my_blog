@@ -25,6 +25,11 @@ class CommentMeta(MPTTModel):
 
     def __str__(self) -> str:
         return f'Comment by {self.author}'
+    
+    @classmethod
+    def get_comments_for_post(cls,pk):
+        return cls.objects.select_related(
+            'author__profile').filter(model=pk)
 
 
 class CommentPost(CommentMeta):

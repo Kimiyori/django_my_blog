@@ -4,6 +4,7 @@ import uuid
 from django.urls import reverse
 from django.core.files.base import ContentFile
 from PIL import Image as PILImage
+
 # Create your models here.
 
 

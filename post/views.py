@@ -3,7 +3,6 @@ import json
 from typing import Any, Dict, Optional, Type, Union
 import uuid
 from django.forms import  ModelForm
-
 from django.forms.models import modelform_factory
 from django.apps import apps
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse, HttpResponseRedirect
@@ -16,10 +15,9 @@ from django.views.generic import ListView
 from .forms import PostForm
 from comments.forms import CommentForm
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import F
+from django.db.models import F,Case, When, Value
 from django.db.models.fields import CharField, TextField
 from django.db.models.functions import Cast
-from django.db.models import Case, When, Value
 from titles.filters import Array
 import redis
 from django.conf import settings
@@ -82,7 +80,7 @@ def get_views(pk: uuid.UUID) -> int:
 
         total_views: int = r.get(f'post:{pk}:views')
         if not total_views:
-            total_views: int = 0
+            total_views = 0
         return int(total_views)
     except redis.ConnectionError:
         file_logger.debug('Connect redis error')
@@ -104,8 +102,7 @@ class PostDetail(TemplateResponseMixin, View):
         post = cache.get(cache_post_key)
         if post is None:
             try:
-                post = Post.objects.values(
-                    'id', 'title', 'main_image').get(id=pk)
+                post = Post.get_instance(pk)
                 cache.set(cache_post_key, post)
             except Post.DoesNotExist:
                 raise Http404('Cannot find post with given id')
@@ -113,27 +110,14 @@ class PostDetail(TemplateResponseMixin, View):
         cache_content_key = f'contentpostid:{pk}'
         content: Optional[QuerySet] = cache.get(cache_content_key)
         if content is None:
-            content = Content.objects.filter(post__id=pk).annotate(
-                cont=Case(
-                    When(text__gte=1, then=ArrayAgg(
-                        Array(F('text__text'), Value('text')))),
-                    When(image__gte=1, then=ArrayAgg(
-                        Array(F('image__image'), Value('image')))),
-                    When(file__gte=1, then=ArrayAgg(
-                        Array(F('file__file'), Value('file')))),
-                    When(video__gte=1, then=ArrayAgg(
-                        Array(F('video__video'), Value('video')))),
-                    output_field=TextField())).\
-                order_by('order').values('cont')
+            content = Content.get_instance(pk)
             cache.set(cache_content_key, content)
 
-        comments = CommentPost.objects.select_related(
-            'author__profile').filter(model=pk)
-
+        comments = CommentPost.get_comments_for_post(pk)
+        comment_form = CommentForm(CommentPost)
         total_views: int = get_views(pk)
 
         console_logger.info(f'Successful get detail post with id - {pk}')
-        comment_form = CommentForm(CommentPost)
         return self.render_to_response({'post': post,
                                         'content': content,
                                         'total_views': total_views,
@@ -278,16 +262,7 @@ class PostDetailChange(GetModelAndForm, TemplateResponseMixin, View):
         console_logger.info(
             f'Trying to get detail post with id - {pk} for editing')
 
-        self.contents = Content.objects.filter(post=self.module).annotate(content=Case(
-            When(text__gte=1, then=ArrayAgg(Array(Cast(F('text__id'), output_field=CharField()), F(
-                'text__text'), Value('text'), output_field=TextField()))),
-            When(image__gte=1, then=ArrayAgg(Array(Cast(F('image__id'), output_field=CharField()), F(
-                'image__image'), Value('image'), output_field=TextField()))),
-            When(file__gte=1, then=ArrayAgg(Array(Cast(F('file__id'), output_field=CharField()), F(
-                'file__file'), Value('file'), output_field=TextField()))),
-            When(video__gte=1, then=ArrayAgg(Array(Cast(F('video__id'), output_field=CharField()), F(
-                'video__video'), Value('video'), output_field=TextField()))))).\
-            values('id', 'order', 'content').order_by('order')
+        self.contents = Content.get_instance_for_edit_page(self.module)
         list_of_values = []
         console_logger.info('Collect content for post in list...')
         for x in self.contents:

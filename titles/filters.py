@@ -3,10 +3,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.fields import CharField, TextField
 from django.db.models.functions import Cast
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import F, Q, Value
+from django.db.models import F, Q, Value,QuerySet
 from django.db.models.expressions import Func
 from urllib.parse import urlsplit, parse_qs
-from django.db.models import QuerySet
 from typing import Dict, List, Optional, Tuple, Type, Union
 from django.http import HttpRequest
 from django.apps import apps
@@ -195,3 +194,8 @@ def get_comments(type: str, id: int) -> Type[Union[CommentManga, CommentAnime|No
     return apps.get_model(app_label='comments',
                           model_name=f'comment{type}'
                           ).objects.select_related('author__profile').filter(model=id)
+
+def get_instance(model,type,tab,id):
+    return model.objects.annotate(
+                **annotate_acc(type, tab)
+            ).values(*values_acc(type, tab)).get(id=id)

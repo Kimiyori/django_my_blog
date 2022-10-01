@@ -7,7 +7,7 @@ from django.views.generic import ListView
 from comments.forms import CommentForm
 from .models import Anime, Genre,  Demographic, AnimeType, Manga, MangaType, Publisher, Studio, Theme
 import logging
-from .filters import filter_by_name, annotate_acc, get_comments, values_acc, filter_by_models
+from .filters import filter_by_name, annotate_acc, get_comments, get_instance, values_acc, filter_by_models
 from django.core.cache import cache
 from django.apps import apps
 from django.views.generic.base import TemplateResponseMixin, View
@@ -103,9 +103,7 @@ class TitleDetail(TemplateResponseMixin, View):
         if model is None:
             try:
                 # get info from model based on type and tab
-                model = modeltype.objects.annotate(
-                    **annotate_acc(type, tab)
-                ).values(*values_acc(type, tab)).get(id=self.kwargs['pk'])
+                model=get_instance(modeltype,type,tab,self.kwargs['pk'])
             except modeltype.DoesNotExist:
                 raise Http404('Cannot find title with given id')
             cache.set(key, model, CACHE_TIME)  
