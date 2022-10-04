@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile,CustomUser
+from .models import Profile, CustomUser
 from allauth.account.forms import SignupForm
 
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -8,10 +8,11 @@ from .models import CustomUser
 
 
 class RegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+
     class Meta:
         model = CustomUser
-        fields = ('email', 'username',  'password')
+        fields = ("email", "username", "password")
 
     def save(self, commit=True):
         # Save the provided password in hashed format
@@ -23,12 +24,20 @@ class RegistrationForm(forms.ModelForm):
 
 
 class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username','password', 'is_staff', 'is_superuser',)
+        fields = (
+            "email",
+            "username",
+            "password",
+            "is_staff",
+            "is_superuser",
+        )
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -52,7 +61,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username',  'password', 'is_active', 'is_superuser')
+        fields = ("email", "username", "password", "is_active", "is_superuser")
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -60,8 +69,8 @@ class UserChangeForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial["password"]
 
-class SignupForm(SignupForm):
 
+class SignupForm(SignupForm):
     def save(self, request):
 
         # Ensure you call the parent class's save.
@@ -72,8 +81,8 @@ class SignupForm(SignupForm):
         # You must return the original result.
         return user
 
-class ProfileForm(forms.ModelForm):
 
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model=Profile
-        fields=['photo','info']
+        model = Profile
+        fields = ["photo", "info"]

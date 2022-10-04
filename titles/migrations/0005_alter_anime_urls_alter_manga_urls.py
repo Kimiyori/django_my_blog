@@ -7,18 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('titles', '0004_alter_anime_urls_alter_manga_urls'),
+        ("titles", "0004_alter_anime_urls_alter_manga_urls"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='anime',
-            name='urls',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s', to='titles.urls'),
+            model_name="anime",
+            name="urls",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="%(class)s",
+                to="titles.urls",
+            ),
         ),
         migrations.AlterField(
-            model_name='manga',
-            name='urls',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s', to='titles.urls'),
+            model_name="manga",
+            name="urls",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="%(class)s",
+                to="titles.urls",
+            ),
         ),
     ]

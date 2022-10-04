@@ -12,7 +12,7 @@ import shutil
 
 # Create your tests here.
 
-TEST_DIR = 'test_data'
+TEST_DIR = "test_data"
 
 
 def get_temporary_image():
@@ -21,27 +21,26 @@ def get_temporary_image():
     size = (1000, 1000)
     color = (255, 0, 0, 0)
     image = ImageTest.new("RGBA", size, color)
-    image.save(temp_file, 'png')
+    image.save(temp_file, "png")
     temp_file.seek(0)
-    return ImageFile(temp_file, name='test')
+    return ImageFile(temp_file, name="test")
 
 
 class BaseTitleTests(object):
-
     def setUp(self):
         self.title = Title.objects.create(
-            original_name='Tetsugaka Letra', russian_name='первый тест', english_name='first test')
+            original_name="Tetsugaka Letra",
+            russian_name="первый тест",
+            english_name="first test",
+        )
 
         self.test_image = get_temporary_image()
         self.image = Image.objects.create(image=self.test_image)
-        self.genre1 = Genre.objects.create(
-            name='Romance', slug=slugify('Romance'))
-        self.genre2 = Genre.objects.create(
-            name='Action', slug=slugify('Action'))
+        self.genre1 = Genre.objects.create(name="Romance", slug=slugify("Romance"))
+        self.genre2 = Genre.objects.create(name="Action", slug=slugify("Action"))
 
-        self.theme1 = Theme.objects.create(
-            name='School', slug=slugify('School'))
-        self.theme2 = Theme.objects.create(name='Garem', slug=slugify('Garem'))
+        self.theme1 = Theme.objects.create(name="School", slug=slugify("School"))
+        self.theme2 = Theme.objects.create(name="Garem", slug=slugify("Garem"))
 
         self.description = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu lectus arcu. Donec sit amet orci eget sapien tempor vehicula. 
         Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque vitae pellentesque nibh, nec fermentum tortor.
@@ -50,41 +49,42 @@ class BaseTitleTests(object):
 
     def tearDown(self):
         try:
-            print(f'Delete test folder from {self.__class__.__name__}')
+            print(f"Delete test folder from {self.__class__.__name__}")
             shutil.rmtree(TEST_DIR)
         except OSError:
-            print('Fail to delete test folder')
+            print("Fail to delete test folder")
             pass
 
 
 class MangaModelTests(BaseTitleTests, TestCase):
-
-
-    @override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
+    @override_settings(MEDIA_ROOT=(TEST_DIR + "/media"))
     def setUp(self):
         super().setUp()
-        self.manga_type = MangaType.objects.create(
-            name='manga', slug=slugify('manga'))
+        self.manga_type = MangaType.objects.create(name="manga", slug=slugify("manga"))
 
         self.author = AuthorTable.objects.create(
-            name='Sui Ishida', pseudonym='Sui Ishida', photo=self.test_image)
+            name="Sui Ishida", pseudonym="Sui Ishida", photo=self.test_image
+        )
         self.artist = AuthorTable.objects.create(
-            name='Ius Adihsi', pseudonym='Ius Adihsi', photo=self.test_image)
-        self.authors = Authors.objects.create(
-            author=self.author, artist=self.artist)
+            name="Ius Adihsi", pseudonym="Ius Adihsi", photo=self.test_image
+        )
+        self.authors = Authors.objects.create(author=self.author, artist=self.artist)
 
         self.publisher1 = Publisher.objects.create(
-            name='Kodansha', slug=slugify('Kodansha'), image=self.test_image)
+            name="Kodansha", slug=slugify("Kodansha"), image=self.test_image
+        )
         self.publisher2 = Publisher.objects.create(
-            name='Shueisha', slug=slugify('Shueisha'), image=self.test_image)
+            name="Shueisha", slug=slugify("Shueisha"), image=self.test_image
+        )
 
         self.magazine1 = Magazine.objects.create(
-            name='Shounen Jump', slug=slugify('Shounen Jump'))
-        self.magazine2 = Magazine.objects.create(
-            name='Jump +', slug=slugify('Jump +'))
+            name="Shounen Jump", slug=slugify("Shounen Jump")
+        )
+        self.magazine2 = Magazine.objects.create(name="Jump +", slug=slugify("Jump +"))
 
         self.demographic = Demographic.objects.create(
-            name='Shounen', slug=slugify('Shounen'))
+            name="Shounen", slug=slugify("Shounen")
+        )
 
         self.manga = Manga.objects.create(
             title=self.title,
@@ -95,7 +95,7 @@ class MangaModelTests(BaseTitleTests, TestCase):
             chapters=96,
             image=self.image,
             demographic=self.demographic,
-            description=self.description
+            description=self.description,
         )
         self.manga2 = Manga.objects.create(
             type=self.manga_type,
@@ -128,15 +128,16 @@ class MangaModelTests(BaseTitleTests, TestCase):
 
     def test_string_representation(self):
         self.assertEqual(str(self.manga), str(self.title))
-        self.assertEqual(str(self.manga2), 'Name does not exist')
-        self.assertEqual(str(self.demographic), 'Shounen')
-        self.assertEqual(str(self.publisher1), 'Kodansha')
-        self.assertEqual(str(self.manga_type), 'manga')
-        self.assertEqual(str(self.author), 'Sui Ishida')
-        self.assertEqual(str(self.authors),
-                         f'Author-{self.author} Artist-{self.artist}')
-        self.assertEqual(str(self.theme1), 'School')
-        self.assertEqual(str(self.magazine1), 'Shounen Jump')
+        self.assertEqual(str(self.manga2), "Name does not exist")
+        self.assertEqual(str(self.demographic), "Shounen")
+        self.assertEqual(str(self.publisher1), "Kodansha")
+        self.assertEqual(str(self.manga_type), "manga")
+        self.assertEqual(str(self.author), "Sui Ishida")
+        self.assertEqual(
+            str(self.authors), f"Author-{self.author} Artist-{self.artist}"
+        )
+        self.assertEqual(str(self.theme1), "School")
+        self.assertEqual(str(self.magazine1), "Shounen Jump")
 
     def test_get_description_success(self):
         self.assertEqual(self.manga.get_desc(), self.description)
@@ -155,18 +156,20 @@ class MangaModelTests(BaseTitleTests, TestCase):
 
 
 class AnimeModelTests(BaseTitleTests, TestCase):
-
-    @override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
+    @override_settings(MEDIA_ROOT=(TEST_DIR + "/media"))
     def setUp(self):
         super().setUp()
 
         self.studio1 = Studio.objects.create(
-            name='KyoAni', slug=slugify('KyoAni'), image=self.test_image.name)
+            name="KyoAni", slug=slugify("KyoAni"), image=self.test_image.name
+        )
         self.studio2 = Studio.objects.create(
-            name='Ufotable', slug=slugify('Ufotable'), image=self.test_image.name)
+            name="Ufotable", slug=slugify("Ufotable"), image=self.test_image.name
+        )
 
         self.anime_type = AnimeType.objects.create(
-            name='TV Show', slug=slugify('TV Show'))
+            name="TV Show", slug=slugify("TV Show")
+        )
 
         self.anime = Anime.objects.create(
             title=self.title,
@@ -174,12 +177,14 @@ class AnimeModelTests(BaseTitleTests, TestCase):
             premiere=datetime.date.today(),
             episodes=12,
             image=self.image,
-            description=self.description)
+            description=self.description,
+        )
 
         self.anime2 = Anime.objects.create(
             type=self.anime_type,
             premiere=datetime.date.today(),
-            episodes=12,)
+            episodes=12,
+        )
 
         self.anime.genre.set([self.genre1.pk, self.genre2.pk])
         self.anime.theme.set([self.theme1.pk, self.theme2.pk])
@@ -196,9 +201,9 @@ class AnimeModelTests(BaseTitleTests, TestCase):
 
     def test_string_representation(self):
         self.assertEqual(str(self.anime), str(self.title))
-        self.assertEqual(str(self.anime2), 'Name does not exist')
-        self.assertEqual(str(self.anime_type), 'TV Show')
-        self.assertEqual(str(self.studio1), 'KyoAni')
+        self.assertEqual(str(self.anime2), "Name does not exist")
+        self.assertEqual(str(self.anime_type), "TV Show")
+        self.assertEqual(str(self.studio1), "KyoAni")
 
     def test_get_description_success(self):
         self.assertEqual(self.anime.get_desc(), self.description)
@@ -221,13 +226,17 @@ class RelationsTests(TestCase):
         self.anime2 = Anime.objects.create()
         self.manga2 = Manga.objects.create()
         self.adaptation = Adaptation.objects.create(
-            adaptation=self.anime, based_on=self.manga)
+            adaptation=self.anime, based_on=self.manga
+        )
         self.adaptation_reverse = AdaptationReverse.objects.create(
-            adaptation=self.manga, based_on=self.anime)
+            adaptation=self.manga, based_on=self.anime
+        )
         self.seq_preq_anime = SequelPrequelAnime.objects.create(
-            sequel=self.anime, prequel=self.anime2)
+            sequel=self.anime, prequel=self.anime2
+        )
         self.seq_preq_manga = SequelPrequelManga.objects.create(
-            sequel=self.manga, prequel=self.manga2)
+            sequel=self.manga, prequel=self.manga2
+        )
 
     def test_relation(self):
         self.assertEqual(self.adaptation.adaptation, self.anime)
@@ -243,8 +252,7 @@ class RelationsTests(TestCase):
 
 
 class ImageTests(TestCase):
-
-    @override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
+    @override_settings(MEDIA_ROOT=(TEST_DIR + "/media"))
     def setUp(self) -> None:
         self.test_image = get_temporary_image()
         self.image = Image.objects.create(image=self.test_image)
@@ -264,16 +272,20 @@ class ImageTests(TestCase):
 
     def tearDown(self):
         try:
-            print(f'Delete test folder from {self.__class__.__name__}')
+            print(f"Delete test folder from {self.__class__.__name__}")
             shutil.rmtree(TEST_DIR)
         except OSError:
-            print('Fail to delete test folder')
+            print("Fail to delete test folder")
             pass
+
 
 class TitleRepresenationTests(TestCase):
     def setUp(self) -> None:
         self.title = Title.objects.create(
-            original_name='Tetsugaka Letra', russian_name='первый тест', english_name='first test')
+            original_name="Tetsugaka Letra",
+            russian_name="первый тест",
+            english_name="first test",
+        )
 
     def test_original_name(self):
         self.assertEqual(str(self.title), self.title.original_name)

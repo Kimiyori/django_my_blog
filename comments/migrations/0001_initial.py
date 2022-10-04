@@ -11,67 +11,160 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('titles', '0007_urls_anilist_urls_manga_dex_urls_manga_lib_and_more'),
-        ('post', '0004_delete_comment'),
+        ("titles", "0007_urls_anilist_urls_manga_dex_urls_manga_lib_and_more"),
+        ("post", "0004_delete_comment"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CommentPost',
+            name="CommentPost",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_comments', to=settings.AUTH_USER_MODEL)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_children', to='comments.commentpost')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='post.post')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_comments",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_children",
+                        to="comments.commentpost",
+                    ),
+                ),
+                (
+                    "post",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="post.post",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='CommentManga',
+            name="CommentManga",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_comments', to=settings.AUTH_USER_MODEL)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_children', to='comments.commentmanga')),
-                ('title', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='titles.manga')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_comments",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_children",
+                        to="comments.commentmanga",
+                    ),
+                ),
+                (
+                    "title",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="titles.manga",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='CommentAnime',
+            name="CommentAnime",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_comments', to=settings.AUTH_USER_MODEL)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_children', to='comments.commentanime')),
-                ('title', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='titles.anime')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_comments",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(class)s_children",
+                        to="comments.commentanime",
+                    ),
+                ),
+                (
+                    "title",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="titles.anime",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

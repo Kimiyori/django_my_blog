@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('titles', '0005_alter_anime_urls_alter_manga_urls'),
+        ("titles", "0005_alter_anime_urls_alter_manga_urls"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='anime',
-            name='premiere',
+            model_name="anime",
+            name="premiere",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='manga',
-            name='premiere',
+            model_name="manga",
+            name="premiere",
             field=models.DateField(blank=True, null=True),
         ),
     ]

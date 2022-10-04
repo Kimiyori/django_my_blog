@@ -10,33 +10,37 @@ import datetime
 from django.contrib.auth import get_user_model
 from unittest import mock
 from django.core.files.uploadedfile import SimpleUploadedFile
+
 # Create your tests here.
 
-TEST_DIR = 'test_data'
+TEST_DIR = "test_data"
 
 
-def get_temporary_image(name='test', height=1000, weight=1000):
+def get_temporary_image(name="test", height=1000, weight=1000):
     temp_file = BytesIO()
     size = (weight, height)
     color = (255, 0, 0, 0)
     image = ImageTest.new("RGBA", size, color)
-    image.save(temp_file, 'png')
+    image.save(temp_file, "png")
     temp_file.seek(0)
     return SimpleUploadedFile(f"{name}.jpg", temp_file.getvalue())
 
 
-@override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
+@override_settings(MEDIA_ROOT=(TEST_DIR + "/media"))
 class PostModelTests(TestCase):
-
     def setUp(self):
-        self.test_image = get_temporary_image('test_img',)
-        self.title = 'Test Post'
+        self.test_image = get_temporary_image(
+            "test_img",
+        )
+        self.title = "Test Post"
         self.user = get_user_model().objects.create_user(
-            username='test', password='12test12', email='test@example.com')
+            username="test", password="12test12", email="test@example.com"
+        )
 
         self.date = datetime.datetime(
-            2022, 5, 16, 17, 53, 21, 780213, tzinfo=datetime.timezone.utc)
-        with mock.patch('django.utils.timezone.now') as mock_now:
+            2022, 5, 16, 17, 53, 21, 780213, tzinfo=datetime.timezone.utc
+        )
+        with mock.patch("django.utils.timezone.now") as mock_now:
             mock_now.return_value = self.date
             self.post = Post.objects.create(
                 title=self.title,
@@ -56,25 +60,30 @@ class PostModelTests(TestCase):
                 updated=self.date,
                 status=Post.PUBLISHED,
             )
-        self.text_obj = Text.objects.create(post=self.post, text='Some tests')
-        self.file_obj = File.objects.create(post=self.post, file=SimpleUploadedFile(
-            "best_file_eva.txt",
-            # note the b in front of the string [bytes]
-                                            b"these are the file contents!"
-                                            ))
-        self.img_obj = Image.objects.create(
-            post=self.post, image=self.test_image)
+        self.text_obj = Text.objects.create(post=self.post, text="Some tests")
+        self.file_obj = File.objects.create(
+            post=self.post,
+            file=SimpleUploadedFile(
+                "best_file_eva.txt",
+                # note the b in front of the string [bytes]
+                b"these are the file contents!",
+            ),
+        )
+        self.img_obj = Image.objects.create(post=self.post, image=self.test_image)
         self.video_obj = Video.objects.create(
-            post=self.post, video='https://youtu.be/xahEdP2eJs4?list=RDxahEdP2eJs4')
+            post=self.post, video="https://youtu.be/xahEdP2eJs4?list=RDxahEdP2eJs4"
+        )
 
-        self.content_text = Content.objects.create(
-            post=self.post, item=self.text_obj)
+        self.content_text = Content.objects.create(post=self.post, item=self.text_obj)
         self.content_file = Content.objects.create(
-            post=self.post, item=self.file_obj, order=2)
+            post=self.post, item=self.file_obj, order=2
+        )
         self.content_image = Content.objects.create(
-            post=self.post, item=self.img_obj, order=3)
+            post=self.post, item=self.img_obj, order=3
+        )
         self.content_video = Content.objects.create(
-            post=self.post, item=self.video_obj, order=4)
+            post=self.post, item=self.video_obj, order=4
+        )
 
     def test_post_listing(self):
         self.assertEqual(self.post.title, self.title)
@@ -99,14 +108,15 @@ class PostModelTests(TestCase):
         self.assertEqual(self.content_video.order, 4)
 
     def test_wrong_type_order(self):
-        with self.assertRaises(TypeError,msg='test with order as string'):
+        with self.assertRaises(TypeError, msg="test with order as string"):
             Content.objects.create(
-            post=self.post, item=self.text_obj, order='something wrong')
-        
+                post=self.post, item=self.text_obj, order="something wrong"
+            )
 
     def test_add_new_content_with_order_first(self):
         self.content_file1 = Content.objects.create(
-            post=self.post, item=self.file_obj, order=1)
+            post=self.post, item=self.file_obj, order=1
+        )
         self.content_text.refresh_from_db()
         self.content_file.refresh_from_db()
         self.content_image.refresh_from_db()
@@ -119,7 +129,8 @@ class PostModelTests(TestCase):
 
     def test_add_new_content_with_order_middle(self):
         self.content_file1 = Content.objects.create(
-            post=self.post, item=self.file_obj, order=3)
+            post=self.post, item=self.file_obj, order=3
+        )
         self.content_text.refresh_from_db()
         self.content_file.refresh_from_db()
         self.content_image.refresh_from_db()
@@ -132,7 +143,8 @@ class PostModelTests(TestCase):
 
     def test_add_new_content_with_order_last(self):
         self.content_file1 = Content.objects.create(
-            post=self.post, item=self.file_obj, order=5)
+            post=self.post, item=self.file_obj, order=5
+        )
         self.content_text.refresh_from_db()
         self.content_file.refresh_from_db()
         self.content_image.refresh_from_db()
@@ -144,8 +156,7 @@ class PostModelTests(TestCase):
         self.assertEqual(self.content_file1.order, 5)
 
     def test_add_new_content_without_order_last(self):
-        self.content_file1 = Content.objects.create(
-            post=self.post, item=self.file_obj)
+        self.content_file1 = Content.objects.create(post=self.post, item=self.file_obj)
         self.content_text.refresh_from_db()
         self.content_file.refresh_from_db()
         self.content_image.refresh_from_db()
@@ -157,7 +168,7 @@ class PostModelTests(TestCase):
         self.assertEqual(self.content_file1.order, 5)
 
     def test_update_order(self):
-        setattr(self.content_file, 'order', 3)
+        setattr(self.content_file, "order", 3)
         self.content_file.save()
         self.content_text.refresh_from_db()
         self.content_image.refresh_from_db()
@@ -206,23 +217,28 @@ class PostModelTests(TestCase):
 
     def test_post_str(self):
         self.assertEqual(str(self.post), self.title)
-        self.assertEqual(str(self.post2), '121212')
+        self.assertEqual(str(self.post2), "121212")
 
     def test_content_str(self):
-        self.assertEqual(str(self.content_text),
-                         f'{self.content_text.post} {self.content_text.order}')
+        self.assertEqual(
+            str(self.content_text),
+            f"{self.content_text.post} {self.content_text.order}",
+        )
 
     def test_item_str(self):
-        self.assertEqual(str(
-            self.text_obj), f'{self.text_obj.__class__.__name__} from {self.text_obj.post}')
+        self.assertEqual(
+            str(self.text_obj),
+            f"{self.text_obj.__class__.__name__} from {self.text_obj.post}",
+        )
 
     def test_item_get_model_name(self):
-        self.assertEqual(str(self.text_obj.get_model_name()),
-                         f'{self.text_obj._meta.model_name}')
+        self.assertEqual(
+            str(self.text_obj.get_model_name()), f"{self.text_obj._meta.model_name}"
+        )
 
     def tearDown(self):
         try:
             shutil.rmtree(TEST_DIR)
         except OSError:
-            print('Fail to delete test folder')
+            print("Fail to delete test folder")
             pass

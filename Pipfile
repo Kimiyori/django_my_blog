@@ -36,6 +36,8 @@ django-stubs-ext = "*"
 types-redis = "*"
 uvicorn = "*"
 gunicorn = "*"
+black = "*"
+flake8 = "*"
 
 [dev-packages]
 

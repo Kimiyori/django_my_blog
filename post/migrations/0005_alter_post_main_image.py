@@ -7,13 +7,15 @@ import post.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0004_delete_comment'),
+        ("post", "0004_delete_comment"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='main_image',
-            field=models.ImageField(blank=True, null=True, upload_to=post.models.main_path),
+            model_name="post",
+            name="main_image",
+            field=models.ImageField(
+                blank=True, null=True, upload_to=post.models.main_path
+            ),
         ),
     ]

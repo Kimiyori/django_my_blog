@@ -9,20 +9,21 @@ def CommentForm(dynamic_model):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields['parent'].widget=forms.HiddenInput()
-            self.fields['content'].label = ''
-            self.fields['parent'].label = ''
-            self.fields['parent'].required = False
+            self.fields["parent"].widget = forms.HiddenInput()
+            self.fields["content"].label = ""
+            self.fields["parent"].label = ""
+            self.fields["parent"].required = False
 
         class Meta:
             model = dynamic_model
-            fields = ( 'parent', 'content')
+            fields = ("parent", "content")
 
             widgets = {
-                'content': forms.Textarea(attrs={'class': 'form-control'}),
+                "content": forms.Textarea(attrs={"class": "form-control"}),
             }
 
-        def save(self, *args, **kwargs): 
+        def save(self, *args, **kwargs):
             dynamic_model.objects.rebuild()
             return super(NewCommentForm, self).save(*args, **kwargs)
+
     return NewCommentForm

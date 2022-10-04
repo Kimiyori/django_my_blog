@@ -7,45 +7,85 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('titles', '0001_initial'),
+        ("titles", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Urls',
+            name="Urls",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mal', models.URLField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("mal", models.URLField()),
             ],
         ),
         migrations.AlterField(
-            model_name='anime',
-            name='title',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s', to='titles.title'),
+            model_name="anime",
+            name="title",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s",
+                to="titles.title",
+            ),
         ),
         migrations.AlterField(
-            model_name='manga',
-            name='demographic',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='manga', to='titles.demographic'),
+            model_name="manga",
+            name="demographic",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="manga",
+                to="titles.demographic",
+            ),
         ),
         migrations.AlterField(
-            model_name='manga',
-            name='title',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s', to='titles.title'),
+            model_name="manga",
+            name="title",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s",
+                to="titles.title",
+            ),
         ),
         migrations.AlterField(
-            model_name='manga',
-            name='type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='manga', to='titles.mangatype'),
+            model_name="manga",
+            name="type",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="manga",
+                to="titles.mangatype",
+            ),
         ),
         migrations.AddField(
-            model_name='anime',
-            name='urls',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s', to='titles.urls'),
+            model_name="anime",
+            name="urls",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s",
+                to="titles.urls",
+            ),
         ),
         migrations.AddField(
-            model_name='manga',
-            name='urls',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s', to='titles.urls'),
+            model_name="manga",
+            name="urls",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s",
+                to="titles.urls",
+            ),
         ),
     ]

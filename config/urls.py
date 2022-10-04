@@ -21,18 +21,18 @@ from django.conf.urls.static import static
 from post.views import PostList
 
 
-urlpatterns= [
-    path('admin/', admin.site.urls),
-    path('users/', include('accounts.urls')),
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("users/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),
-    path('api/', include('api.urls')),
-     path("", PostList.as_view(), name="home"), 
-    path('',include('titles.urls'),name='titles'),
-    path('blog/',include('post.urls'),name='blog'),
+    path("api/", include("api.urls")),
+    path("", PostList.as_view(), name="home"),
+    path("", include("titles.urls"), name="titles"),
+    path("blog/", include("post.urls"), name="blog"),
 ]
-handler404 = 'config.general_views.error_404_view'
+handler404 = "config.general_views.error_404_view"
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
-    urlpatterns += static(settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT)
+
+    urlpatterns.append(path("__debug__/", include(debug_toolbar.urls)))
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

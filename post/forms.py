@@ -1,11 +1,15 @@
-
 from django import forms
 from .models import Post
+
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'main_image',]
+        fields = [
+            "title",
+            "main_image",
+        ]
+
+
 class SearchForm(forms.Form):
     query = forms.CharField()
-
